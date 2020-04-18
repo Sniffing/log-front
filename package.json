@@ -36,10 +36,7 @@
     "react-vis": "^1.11.7",
     "recharts": "^1.8.5",
     "regression": "^2.0.1",
-    "tslint": "^5.20.1",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-config-standard": "^8.0.1",
-    "tslint-react": "^4.2.0",
+    "eslint": "^6.8.0",
     "typescript": "^3.8.3"
   },
   "devDependencies": {

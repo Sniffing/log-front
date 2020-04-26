@@ -1,9 +1,9 @@
-import React from "react";
-import { Row, Col } from "antd";
-import { observable, computed, action } from "mobx";
-import { chunk } from "lodash";
-import { observer } from "mobx-react";
-import { KeywordTag } from "./";
+import React from 'react';
+import { Row, Col } from 'antd';
+import { observable, computed, action } from 'mobx';
+import { chunk } from 'lodash';
+import { observer } from 'mobx-react';
+import { KeywordTag } from './';
 
 interface IProps {
   list: any[];

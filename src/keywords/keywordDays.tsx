@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   BarChart,
   CartesianGrid,
@@ -7,11 +7,11 @@ import {
   Tooltip,
   Legend,
   Bar
-} from "recharts";
-import { computed } from "mobx";
-import { observer } from "mobx-react";
-import Heap from "heap";
-import { WordCount } from "./keyword.interfaces";
+} from 'recharts';
+import { computed } from 'mobx';
+import { observer } from 'mobx-react';
+import Heap from 'heap';
+import { WordCount } from './keyword.interfaces';
 
 interface IProps {
   data: any[];
@@ -19,13 +19,13 @@ interface IProps {
 }
 
 const DAYS: Record<string, string> = {
-  "0": "Sunday",
-  "1": "Monday",
-  "2": "Tuesday",
-  "3": "Wednesday",
-  "4": "Thursday",
-  "5": "Friday",
-  "6": "Saturday"
+  '0': 'Sunday',
+  '1': 'Monday',
+  '2': 'Tuesday',
+  '3': 'Wednesday',
+  '4': 'Thursday',
+  '5': 'Friday',
+  '6': 'Saturday'
 };
 
 const bars: number = 5;

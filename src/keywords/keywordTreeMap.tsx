@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { observer } from "mobx-react";
+import React, { Component } from 'react';
+import { observer } from 'mobx-react';
 import { Treemap } from 'recharts';
 
 interface IProps {
@@ -15,7 +15,7 @@ export class KeywordTreemap extends Component<IProps> {
 
     const keywords = Array.isArray(this.props.data)
       ? this.props.data.filter(({key, value}) => {
-          return value > this.props.minCount;
+        return value > this.props.minCount;
       }).map(({ key, value }) => {
         return {
           name: `${key} (${value})`,

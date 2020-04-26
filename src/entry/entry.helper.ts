@@ -7,7 +7,7 @@ export const defaultFormValues: IEntryFormValues = {
   [EntryFormFieldsEnum.FREE_EMOTIONS]: []
 };
 
-export const dateFormat = "DD-MM-YYYY";
+export const dateFormat = 'DD-MM-YYYY';
 export const booleanMetrics = ['happy', 'sad', 'sick', 'lonely', 'stressed', 'overate', 'dance', 'gym'];
 
 export const convertLogEntryToFormValues = (logEntry?: ILogEntry): IEntryFormValues => {
@@ -27,8 +27,8 @@ export const convertLogEntryToFormValues = (logEntry?: ILogEntry): IEntryFormVal
 };
 
 export const convertFormValuesToLogEntry = (
-    values: IEntryFormValues
-  ): ILogEntry => {
+  values: IEntryFormValues
+): ILogEntry => {
   // const booleanMetricState: Partial<Record<BooleanMetric, boolean>> = {};
   //something is removing my values along the way
   // console.log(values);
@@ -53,7 +53,7 @@ export const convertFormValuesToLogEntry = (
       keywords: values.FREE_EMOTIONS || []
     },
     textState: {
-      data: values.THOUGHTS || ""
+      data: values.THOUGHTS || ''
     }
   };
 };

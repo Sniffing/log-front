@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { Button, Card, message } from "antd";
-import { observable, runInAction, action } from "mobx";
-import { observer, inject } from "mobx-react";
-import { RootStore, Memory } from "../stores/rootStore";
+import React, { Component } from 'react';
+import { Button, Card, message } from 'antd';
+import { observable, runInAction, action } from 'mobx';
+import { observer, inject } from 'mobx-react';
+import { RootStore, Memory } from '../stores/rootStore';
 
 interface IProps {
   rootStore?: RootStore;
 }
 
-@inject("rootStore")
+@inject('rootStore')
 @observer
 class MemorySnippet extends Component<IProps> {
   @observable
@@ -33,7 +33,7 @@ class MemorySnippet extends Component<IProps> {
         this.current = this.props.rootStore.memories[0];
       });
     } catch (err) {
-      message.error("Could not fetch memory at this time");
+      message.error('Could not fetch memory at this time');
     }
   }
 

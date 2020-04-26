@@ -21,7 +21,7 @@ class NumericInput extends Component<IProps> {
 
     return (
       <Tooltip
-        trigger={"focus"}
+        trigger={'focus'}
         placement="topLeft"
         overlay={null}
         overlayClassName="numeric-input"

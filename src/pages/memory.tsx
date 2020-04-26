@@ -1,5 +1,5 @@
-import * as React from "react";
-import MemorySnippet from "../custom-components/memorySnippet";
+import * as React from 'react';
+import MemorySnippet from '../custom-components/memorySnippet';
 
 export class MemoryPage extends React.Component {
   public render() {

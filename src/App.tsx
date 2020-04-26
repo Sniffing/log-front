@@ -1,11 +1,11 @@
-import React from "react";
-import { Route, RouteComponentProps, withRouter } from "react-router-dom";
-import { Provider, observer } from "mobx-react";
-import "./App.css";
+import React from 'react';
+import { Route, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Provider, observer } from 'mobx-react';
+import './App.css';
 
-import rootStore from "./stores/rootStore";
-import { Home } from "./pages";
-import { IPageConfig, Constants } from "./App.constants";
+import rootStore from './stores/rootStore';
+import { Home } from './pages';
+import { IPageConfig, Constants } from './App.constants';
 import { NavigationHeader } from './navigation-header';
 
 @observer

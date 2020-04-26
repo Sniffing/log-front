@@ -1,7 +1,7 @@
-import { observable, runInAction, action } from "mobx";
-import get from "axios";
-import { ILogEntry } from "../entry";
-import { Constants } from "../App.constants";
+import { observable, runInAction, action } from 'mobx';
+import get from 'axios';
+import { ILogEntry } from '../entry';
+import { Constants } from '../App.constants';
 
 export interface WeightEntry {
   date: string;
@@ -46,7 +46,7 @@ export class RootStore {
   public async fetchWeightData() {
     this.isFetchingData = true;
     try {
-      const response = await get("/weight");
+      const response = await get('/weight');
       this.weightData = response.data;
     } catch (err) {
       throw new Error(err);
@@ -59,7 +59,7 @@ export class RootStore {
   public async fetchKeywords() {
     this.isFetchingData = true;
     try {
-      const response = await get("/keywords");
+      const response = await get('/keywords');
       runInAction(() => {
         this.keywordsData = response.data;
       });
@@ -74,7 +74,7 @@ export class RootStore {
   public async fetchMemory() {
     this.isFetchingData = true;
     try {
-      const response = await get("/text");
+      const response = await get('/text');
       runInAction(() => {
         this.memories = response.data;
       });
@@ -90,12 +90,12 @@ export class RootStore {
     this.setFetchingDates(true);
     try {
       const result: Response = await fetch(
-        Constants.DATABASE_URL + "/entries",
+        Constants.DATABASE_URL + '/entries',
         {
-          method: "GET",
+          method: 'GET',
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
           }
         }
       );
@@ -123,10 +123,10 @@ export class RootStore {
     this.setSavingData(true);
     try {
       await fetch(Constants.DATABASE_URL, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
       });

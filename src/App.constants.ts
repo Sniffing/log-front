@@ -1,15 +1,15 @@
-import { KeywordPage } from "./keywords";
-import { CalendarPage, MemoryPage, Home } from "./pages";
+import { KeywordPage } from './keywords';
+import { CalendarPage, MemoryPage, Home } from './pages';
 import { EntryPage } from './entry';
 import { WeightPage } from './weight';
 
 export enum Page {
-    HOME = "HOME",
-    WEIGHT = "WEIGHT",
-    KEYWORDS = "KEYWORDS",
-    CALENDAR = "CALENDAR",
-    MEMORY = "MEMORY",
-    ENTRY = "ENTRY",
+    HOME = 'HOME',
+    WEIGHT = 'WEIGHT',
+    KEYWORDS = 'KEYWORDS',
+    CALENDAR = 'CALENDAR',
+    MEMORY = 'MEMORY',
+    ENTRY = 'ENTRY',
 }
 export interface IPageConfig {
     page: string;
@@ -18,24 +18,24 @@ export interface IPageConfig {
 }
 
 const getComponent = (page: Page) => {
-    switch(page) {
-        case Page.HOME: return Home;
-        case Page.WEIGHT: return WeightPage;
-        case Page.KEYWORDS: return KeywordPage;
-        case Page.CALENDAR: return CalendarPage;
-        case Page.MEMORY: return MemoryPage;
-        case Page.ENTRY: return EntryPage;
-    }
-}
+  switch(page) {
+  case Page.HOME: return Home;
+  case Page.WEIGHT: return WeightPage;
+  case Page.KEYWORDS: return KeywordPage;
+  case Page.CALENDAR: return CalendarPage;
+  case Page.MEMORY: return MemoryPage;
+  case Page.ENTRY: return EntryPage;
+  }
+};
 
 const pageConfigs: IPageConfig[] = Object.values(Page).map((page: Page) => {
-    const comp = getComponent(page);
+  const comp = getComponent(page);
     
-    return {
-        page: page.toString(),
-        path: `/${page.toString().toLowerCase()}`,
-        component: comp,
-    }
+  return {
+    page: page.toString(),
+    path: `/${page.toString().toLowerCase()}`,
+    component: comp,
+  };
 });
 
 export class Constants {

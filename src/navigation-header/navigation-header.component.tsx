@@ -8,17 +8,17 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 class Header extends React.Component<RouteComponentProps> {
   @observable
-  private current: string = "home";
+  private current: string = 'home';
 
   @action
   private handleClick = (param: ClickParam) => {
-    this.current = param.key === "homeIcon" ? Page.HOME : param.key;
+    this.current = param.key === 'homeIcon' ? Page.HOME : param.key;
         
     const route = Constants.pageConfigs
       .map((config: IPageConfig) => config.page)
       .includes(this.current)
       ? this.current.toLowerCase()
-      : ""
+      : '';
     
     this.props.history.push(`/${route}`);
   };
@@ -36,33 +36,33 @@ class Header extends React.Component<RouteComponentProps> {
 
     return (
       <Menu
-            onClick={this.handleClick}
-            selectedKeys={[this.current]}
-            mode="horizontal"
-            theme="dark"
-          >
-            <Menu.Item key="homeIcon" style={{ float: 'left'}}>
-              <HomeOutlined />
-            </Menu.Item>
-            <Menu.SubMenu
-              style={{
-                width: '150px'
-              }}
-              title={
-                <div>
-                  <span style={{float: 'left'}}>
-                    <DownCircleOutlined />
-                  </span>
-                  <span>
-                    {this.capitalise(this.current)}
-                  </span>
-                </div>
-              }
-            >
-              {routeOptions}
-            </Menu.SubMenu>
-          </Menu>
-    )
+        onClick={this.handleClick}
+        selectedKeys={[this.current]}
+        mode="horizontal"
+        theme="dark"
+      >
+        <Menu.Item key="homeIcon" style={{ float: 'left'}}>
+          <HomeOutlined />
+        </Menu.Item>
+        <Menu.SubMenu
+          style={{
+            width: '150px'
+          }}
+          title={
+            <div>
+              <span style={{float: 'left'}}>
+                <DownCircleOutlined />
+              </span>
+              <span>
+                {this.capitalise(this.current)}
+              </span>
+            </div>
+          }
+        >
+          {routeOptions}
+        </Menu.SubMenu>
+      </Menu>
+    );
   }
 }
 

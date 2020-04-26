@@ -1,23 +1,23 @@
-import React from "react";
-import { message } from "antd";
-import { RootStore } from "../stores/rootStore";
-import { inject, observer } from "mobx-react";
-import { observable, runInAction, action } from "mobx";
-import NumericInput from "../custom-components/numericInput";
-import { pull } from "lodash";
+import React from 'react';
+import { message } from 'antd';
+import { RootStore } from '../stores/rootStore';
+import { inject, observer } from 'mobx-react';
+import { observable, runInAction, action } from 'mobx';
+import NumericInput from '../custom-components/numericInput';
+import { pull } from 'lodash';
 import {
   dummyData,
   WordCount,
   KeywordList,
   KeywordTreemap,
   KeywordMonths
-} from "./";
+} from './';
 
 interface IProps {
   rootStore?: RootStore;
 }
 
-@inject("rootStore")
+@inject('rootStore')
 @observer
 export class KeywordPage extends React.Component<IProps> {
   @observable
@@ -58,7 +58,7 @@ export class KeywordPage extends React.Component<IProps> {
         this.activeList = Object.keys(this.dictionary);
       });
     } catch (err) {
-      message.error("Could not fetch keywords");
+      message.error('Could not fetch keywords');
       console.log(err);
     }
   }
@@ -112,7 +112,7 @@ export class KeywordPage extends React.Component<IProps> {
   public render() {
     return (
       <div className="keyword-page">
-        <h2>Number of days recorded: {this.data.length || " loading ..."} </h2>
+        <h2>Number of days recorded: {this.data.length || ' loading ...'} </h2>
         {/* <KeywordDays data={this.data} dictionary={this.displayTerms}/> */}
         <KeywordMonths data={this.data} />
         <KeywordTreemap data={this.displayTerms} minCount={this.cutoff} />

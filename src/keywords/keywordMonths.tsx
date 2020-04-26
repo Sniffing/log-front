@@ -1,43 +1,43 @@
-import React from "react";
-import { observable, keys } from "mobx";
+import React from 'react';
+import { observable, keys } from 'mobx';
 import ReactMinimalPieChart, {
   PieChartData,
   LabelProps
-} from "react-minimal-pie-chart";
-import { clone, isEmpty } from "lodash";
+} from 'react-minimal-pie-chart';
+import { clone, isEmpty } from 'lodash';
 
 interface IProps {
   data: any[];
 }
 
 const months = {
-  "01": "January",
-  "02": "February",
-  "03": "March",
-  "04": "April",
-  "05": "May",
-  "06": "June",
-  "07": "July",
-  "08": "August",
-  "09": "September",
-  "10": "October",
-  "11": "November",
-  "12": "December"
+  '01': 'January',
+  '02': 'February',
+  '03': 'March',
+  '04': 'April',
+  '05': 'May',
+  '06': 'June',
+  '07': 'July',
+  '08': 'August',
+  '09': 'September',
+  '10': 'October',
+  '11': 'November',
+  '12': 'December'
 };
 
 const baseMonthWordMap: Record<string, Record<string, number>> = {
-  "01": {},
-  "02": {},
-  "03": {},
-  "04": {},
-  "05": {},
-  "06": {},
-  "07": {},
-  "08": {},
-  "09": {},
-  "10": {},
-  "11": {},
-  "12": {}
+  '01': {},
+  '02': {},
+  '03': {},
+  '04': {},
+  '05': {},
+  '06': {},
+  '07': {},
+  '08': {},
+  '09': {},
+  '10': {},
+  '11': {},
+  '12': {}
 };
 
 export class KeywordMonths extends React.Component<IProps> {
@@ -49,7 +49,7 @@ export class KeywordMonths extends React.Component<IProps> {
 
   private convertData(data: any[]) {
     data.forEach(datum => {
-      const date = datum.date.split("-");
+      const date = datum.date.split('-');
       const year = date[0];
 
       if (!this.yearMonthData.hasOwnProperty(year)) {
@@ -74,25 +74,25 @@ export class KeywordMonths extends React.Component<IProps> {
 
   private getJoinedMonthData = () => {
     const data: Record<string, PieChartData[]> = {
-      "01": [],
-      "02": [],
-      "03": [],
-      "04": [],
-      "05": [],
-      "06": [],
-      "07": [],
-      "08": [],
-      "09": [],
-      "10": [],
-      "11": [],
-      "12": []
+      '01': [],
+      '02': [],
+      '03': [],
+      '04': [],
+      '05': [],
+      '06': [],
+      '07': [],
+      '08': [],
+      '09': [],
+      '10': [],
+      '11': [],
+      '12': []
     };
 
     keys(this.yearMonthData).forEach((year: any) => {
       keys(this.yearMonthData[year]).forEach((month: any) => {
         keys(this.yearMonthData[year][month]).forEach((word: any) => {
           data[month].push({
-            color: "#E38627",
+            color: '#E38627',
             key: word,
             value: this.yearMonthData[year][month][word]
           });
@@ -100,14 +100,14 @@ export class KeywordMonths extends React.Component<IProps> {
       });
     });
 
-    return data["10"];
+    return data['10'];
   };
 
   private getYearData = () => {
     const data: any[] = [];
     keys(this.yearMonthData).forEach((year: any) => {
       keys(this.yearMonthData[year]).forEach((month: any) => {
-        console.log("fic");
+        console.log('fic');
       });
     });
   };
@@ -129,9 +129,9 @@ export class KeywordMonths extends React.Component<IProps> {
         }}
         labelPosition={50}
         labelStyle={{
-          fill: "#121212",
-          fontFamily: "sans-serif",
-          fontSize: "5px"
+          fill: '#121212',
+          fontFamily: 'sans-serif',
+          fontSize: '5px'
         }}
         lengthAngle={360}
         lineWidth={100}
@@ -139,7 +139,7 @@ export class KeywordMonths extends React.Component<IProps> {
         rounded={false}
         startAngle={0}
         style={{
-          height: "400px"
+          height: '400px'
         }}
       />
     );

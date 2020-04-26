@@ -28,6 +28,6 @@ export class KeywordTag extends React.Component<IProps> {
         checked={this.checked}
         onChange={this.handleChange}
       />
-    )
+    );
   }
 }

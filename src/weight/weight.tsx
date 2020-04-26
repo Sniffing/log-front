@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import { WeightLineGraph } from ".";
-import { inject } from "mobx-react";
-import { RootStore } from "../stores/rootStore";
+import { WeightLineGraph } from '.';
+import { inject } from 'mobx-react';
+import { RootStore } from '../stores/rootStore';
 
 interface IProps {
   rootStore?: RootStore;
 }
 
-@inject("rootStore")
+@inject('rootStore')
 export class WeightPage extends React.Component<IProps> {
   render() {
     return (

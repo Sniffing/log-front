@@ -141,6 +141,22 @@ export class WeightLineGraph extends Component<IProps> {
   }
 
   render() {
+    const pointLine = <LineSeries
+    color="red"
+    data={convertToGraphData(this.data)}
+    onNearestXY={this.updateCrosshairs}
+    onSeriesMouseOut={() => this.updateCrosshairs(null)}
+  />
+
+    const averageLine = <LineSeries color="green" data={computeLineOfAverage(this.data, this.averageWeight)} />;
+
+    const trendLine = <LineSeries
+    color="blue"
+    data={computeLineOfBestFit(this.data, this.fitCloseness)}
+    onNearestXY={this.updateCrosshairs}
+    onSeriesMouseOut={() => this.updateCrosshairs(null)}
+  />;
+  
     return this.data && this.data.length ? (
       <>
             <Slider
@@ -160,24 +176,14 @@ export class WeightLineGraph extends Component<IProps> {
               onChange={this.changeEndDate}
               format="YYYY-MM-DD"
             />
-            {
-              // <RangePicker
-              //   disabledDate={this.disabledDate}
-              //   onCalendarChange={this.changeDateRange}
-              //   format="YYYY-MM-DD"
-              // />
-            }
             <XYPlot xType="time" width={800} height={300}>
               <HorizontalGridLines />
               <VerticalGridLines />
-              <LineSeries
-                color="red"
-                data={convertToGraphData(this.data)}
-                onNearestXY={this.updateCrosshairs}
-                onSeriesMouseOut={() => this.updateCrosshairs(null)}
-              />
               <XAxis title="Date" />
               <YAxis title="Weight (kg)" />
+              {pointLine}
+              {averageLine}
+              {trendLine}
               <Crosshair
                 values={this.crosshairValues}
                 titleFormat={getTitleLinePoint}
@@ -185,16 +191,9 @@ export class WeightLineGraph extends Component<IProps> {
                   { title: "Weight", value: d[0].y.toFixed(1) }
                 ]}
               />
-              <LineSeries
-                color="blue"
-                data={computeLineOfBestFit(this.data, this.fitCloseness)}
-                onNearestXY={this.updateCrosshairs}
-                onSeriesMouseOut={() => this.updateCrosshairs(null)}
-              />
-              <LineSeries color="green" data={computeLineOfAverage(this.data, this.averageWeight)} />
             </XYPlot>
             <DiscreteColorLegend
-              orientation={"vertical"}
+              orientation="vertical"
               onItemClick={() => {}}
               items={[
                 {

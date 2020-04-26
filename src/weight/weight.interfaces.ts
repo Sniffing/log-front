@@ -1,9 +1,9 @@
 
 export interface IEntryDTO {
-  date: string,
+  date: string;
 }
 export interface IWeightDTO extends IEntryDTO {
-  weight: string,
+  weight: string;
 }
 export interface FormattedWeight {
   date: number;

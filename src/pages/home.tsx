@@ -7,8 +7,8 @@ export class Home extends React.Component {
 private pages: IPageConfig[];
 private count: number;
 
-private rows: number = 3;
-private cols: number = 2;
+private rows = 3;
+private cols = 2;
 
 constructor(props: any) {
   super(props);
@@ -20,7 +20,7 @@ private cards = () => {
   const r = Array.from(new Array(this.rows), (x, i) => i + 1);
   const c = Array.from(new Array(this.cols), (x, i) => i + 1);
 
-  let v = r.map((x, i) => (
+  const v = r.map((x, i) => (
     <Row key={`row-${x}`} gutter={[16, 16]}>
       {c.map((x, j) =>
         this.rowCards(this.pages[i * this.cols + j], 24 / this.cols)

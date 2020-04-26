@@ -38,15 +38,15 @@ class MemorySnippet extends Component<IProps> {
   }
 
   @action
-  rollNewMemory = () => {
-    var random = Math.random();
+  private rollNewMemory = () => {
+    let random = Math.random();
     random *= this.data.length - 1;
 
     console.log(this.data[random]);
     this.current = this.data[random];
   };
 
-  render() {
+  public render() {
     return (
       <div>
         <Button type="primary" icon="redo" onClick={this.rollNewMemory}>

@@ -1,3 +1,3 @@
-export interface dummy {
+export interface IDummy {
   dummy: string;
 }

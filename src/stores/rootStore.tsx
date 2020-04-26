@@ -25,13 +25,13 @@ export interface ILastDates {
 
 export class RootStore {
   @observable
-  public isFetchingData: boolean = false;
+  public isFetchingData = false;
 
   @observable
-  public isSavingData: boolean = false;
+  public isSavingData = false;
 
   @observable
-  public isFetchingDates: boolean = false;
+  public isFetchingDates = false;
 
   @observable
   public weightData: WeightEntry[] = [];

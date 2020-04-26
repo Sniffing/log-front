@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import React from 'react';
 import { observable, keys } from 'mobx';
 import ReactMinimalPieChart, {
@@ -66,7 +67,7 @@ export class KeywordMonths extends React.Component<IProps> {
     });
   }
 
-  public componentWillReceiveProps(newProps: IProps) {
+  public UNSAFE_componentWillReceiveProps(newProps: IProps) {
     if (isEmpty(this.yearMonthData) && !isEmpty(newProps.data)) {
       this.convertData(newProps.data);
     }
@@ -101,15 +102,6 @@ export class KeywordMonths extends React.Component<IProps> {
     });
 
     return data['10'];
-  };
-
-  private getYearData = () => {
-    const data: any[] = [];
-    keys(this.yearMonthData).forEach((year: any) => {
-      keys(this.yearMonthData[year]).forEach((month: any) => {
-        console.log('fic');
-      });
-    });
   };
 
   render() {

@@ -41,7 +41,7 @@ private currentData: FormattedWeight[] = [];
 private crosshairValues: any[] = [];
 
 @observable
-private fitCloseness: number = 4;
+private fitCloseness = 4;
 
 public async componentDidMount() {
   if (!this.props.rootStore) {

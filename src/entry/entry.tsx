@@ -1,6 +1,6 @@
-import * as React from "react";
-import { inject, observer } from "mobx-react";
-import { RootStore, ILastDates } from "../stores/rootStore";
+import * as React from 'react';
+import { inject, observer } from 'mobx-react';
+import { RootStore, ILastDates } from '../stores/rootStore';
 import {
   ILogEntry,
   IFormProps,
@@ -12,7 +12,7 @@ import {
   EntryFormFieldsEnum,
   BooleanMetric,
   booleanMetricKeys
-} from "./";
+} from './';
 import {
   message,
   Form,
@@ -23,22 +23,22 @@ import {
   Card,
   Row,
   Col
-} from "antd";
-import moment, { Moment } from "moment";
-import TextArea from "antd/lib/input/TextArea";
-import TagsInput from "react-tagsinput";
-import { FormInstance, Rule } from "antd/lib/form";
-import { ValidateErrorEntity } from "rc-field-form/lib/interface";
-import { observable, action } from "mobx";
+} from 'antd';
+import moment, { Moment } from 'moment';
+import TextArea from 'antd/lib/input/TextArea';
+import TagsInput from 'react-tagsinput';
+import { FormInstance, Rule } from 'antd/lib/form';
+import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
+import { observable, action } from 'mobx';
 
-import "react-tagsinput/react-tagsinput.css";
-import { remove, flatten } from "lodash";
+import 'react-tagsinput/react-tagsinput.css';
+import { remove, flatten } from 'lodash';
 
 interface IProps {
   rootStore?: RootStore;
 }
 
-@inject("rootStore")
+@inject('rootStore')
 @observer
 export class EntryPage extends React.Component<IProps> {
   private formRef: React.RefObject<FormInstance> = React.createRef();
@@ -67,8 +67,8 @@ export class EntryPage extends React.Component<IProps> {
       this.setNextDate(
         moment(dates.last)
           .utc()
-          .add(-moment().utcOffset(), "m")
-          .add(1, "day")
+          .add(-moment().utcOffset(), 'm')
+          .add(1, 'day')
       );
 
       this.setFormValues();
@@ -94,7 +94,7 @@ export class EntryPage extends React.Component<IProps> {
     const { rootStore } = this.props;
 
     if (!rootStore) {
-      console.log("Rootstore not defined");
+      console.log('Rootstore not defined');
       return;
     }
 
@@ -103,8 +103,8 @@ export class EntryPage extends React.Component<IProps> {
       message.success(`Saved data for ${entry.dateState?.date}`);
       this.formRef.current?.resetFields();
 
-      this.setNextDate(this.nextDate.add(1, "day"));
-      console.log("next", this.nextDate);
+      this.setNextDate(this.nextDate.add(1, 'day'));
+      console.log('next', this.nextDate);
       this.setFormValues();
     } catch (error) {
       message.error(`Error saving data for ${entry.dateState?.date}`);
@@ -121,6 +121,7 @@ export class EntryPage extends React.Component<IProps> {
       (entry: BooleanMetric | string) => {
         return (
           <Radio.Button
+            key={entry}
             value={entry}
             checked={this.selectedBooleanMetrics.includes(entry)}
             onClick={this.handleBooleanMetricChange}
@@ -158,7 +159,7 @@ export class EntryPage extends React.Component<IProps> {
   private handleTagChange = (value: string[]) => {
     const emotions = flatten(
       value.map((v: string) => {
-        return v.split(" ").filter(x => x.length > 0);
+        return v.split(' ').filter(x => x.length > 0);
       })
     );
 
@@ -186,7 +187,7 @@ export class EntryPage extends React.Component<IProps> {
   };
 
   private disableDatesAfterLastEntry = (current: Moment) => {
-    return current && current > moment(this.dates?.last).endOf("day");
+    return current && current > moment(this.dates?.last).endOf('day');
   };
 
   private getFormField = (field: EntryFormFieldsEnum) => {
@@ -194,40 +195,40 @@ export class EntryPage extends React.Component<IProps> {
     let component = <Input></Input>;
 
     switch (field) {
-      case EntryFormFieldsEnum.DATE:
-        component = (
-          <DatePicker
-            disabledDate={this.disableDatesAfterLastEntry}
-            onChange={this.handleDateChange}
-          />
-        );
-        break;
-      case EntryFormFieldsEnum.SET_EMOTIONS:
-        component = (
-          <Row gutter={8}>
-            {this.booleanMetricRadioElements.map((radio, index) => (
-              <Col key={index}>
-                <Form.Item noStyle>{radio}</Form.Item>
-              </Col>
-            ))}
-          </Row>
-        );
-        break;
-      case EntryFormFieldsEnum.FREE_EMOTIONS:
-        component = (
-          <TagsInput
-            value={[]}
-            inputProps={{ placeholder: "Add another emotion..." }}
-            onChange={this.handleTagChange}
-          />
-        );
-        break;
-      case EntryFormFieldsEnum.WEIGHT:
-        component = <Input onChange={this.handleWeightChange} />;
-        break;
-      case EntryFormFieldsEnum.THOUGHTS:
-        component = <TextArea onChange={this.handleThoughtsChange} rows={6} />;
-        break;
+    case EntryFormFieldsEnum.DATE:
+      component = (
+        <DatePicker
+          disabledDate={this.disableDatesAfterLastEntry}
+          onChange={this.handleDateChange}
+        />
+      );
+      break;
+    case EntryFormFieldsEnum.SET_EMOTIONS:
+      component = (
+        <Row gutter={8}>
+          {this.booleanMetricRadioElements.map((radio, index) => (
+            <Col key={index}>
+              <Form.Item noStyle>{radio}</Form.Item>
+            </Col>
+          ))}
+        </Row>
+      );
+      break;
+    case EntryFormFieldsEnum.FREE_EMOTIONS:
+      component = (
+        <TagsInput
+          value={[]}
+          inputProps={{ placeholder: 'Add another emotion...' }}
+          onChange={this.handleTagChange}
+        />
+      );
+      break;
+    case EntryFormFieldsEnum.WEIGHT:
+      component = <Input onChange={this.handleWeightChange} />;
+      break;
+    case EntryFormFieldsEnum.THOUGHTS:
+      component = <TextArea onChange={this.handleThoughtsChange} rows={6} />;
+      break;
     }
 
     const rules: Rule[] = [];
@@ -235,7 +236,7 @@ export class EntryPage extends React.Component<IProps> {
     if (config.required) {
       rules.push({
         required: true,
-        message: "Mandatory field"
+        message: 'Mandatory field'
       });
     }
 
@@ -263,10 +264,10 @@ export class EntryPage extends React.Component<IProps> {
 
   public render() {
     return (
-      <div style={{ margin: "20px" }}>
+      <div style={{ margin: '20px' }}>
         <Card
           loading={this.props.rootStore?.isFetchingDates}
-          style={{ backgroundColor: "#c2c2c2" }}
+          style={{ backgroundColor: '#c2c2c2' }}
         >
           <Form
             ref={this.formRef}

@@ -20,7 +20,7 @@ export class KeywordList extends React.Component<IProps> {
   private originalList: any[] = [];
 
   @action
-  public componentWillReceiveProps(newProps: IProps) {
+  public UNSAFE_componentWillReceiveProps(newProps: IProps) {
     if (newProps.list && this.originalList.length === 0) {
       this.originalList = newProps.list;
     }
@@ -45,11 +45,11 @@ export class KeywordList extends React.Component<IProps> {
 
     return (
       <Row gutter={16}>
-        {lists.map(list => (
-          <Col span={columnWidth}>
-            {(list || []).map(item => {
+        {lists.map((list: any, index: number) => (
+          <Col key={`kw-col-${index}`} span={columnWidth}>
+            {(list || []).map((item: any, i: number) => {
               return (
-                <Row>
+                <Row key={`kw-col${index}-row${i}`}>
                   <KeywordTag onChange={() => this.toggleCheck(item.key)}>
                     {item.key} - {item.value}
                   </KeywordTag>

@@ -28,7 +28,7 @@ const DAYS: Record<string, string> = {
   '6': 'Saturday'
 };
 
-const bars: number = 5;
+const bars = 5;
 
 @observer
 export class KeywordDays extends React.Component<IProps> {
@@ -47,6 +47,7 @@ export class KeywordDays extends React.Component<IProps> {
       const dayNumber = day % 7;
       data.keywords.forEach((word: string) => {
         if (
+          // eslint-disable-next-line no-prototype-builtins
           groupedData[dayNumber].hasOwnProperty(word) &&
           groupedData[dayNumber][word]
         ) {
@@ -64,7 +65,7 @@ export class KeywordDays extends React.Component<IProps> {
 
   render() {
     const data = [];
-    for (let i: number = 0; i < this.dataByDay.length; i++) {
+    for (let i = 0; i < this.dataByDay.length; i++) {
       const day = this.dataByDay[i];
       data.push({
         day: DAYS[i.toString()],
@@ -80,7 +81,7 @@ export class KeywordDays extends React.Component<IProps> {
         <Tooltip />
         <Legend />
         {Heap.nlargest(this.props.dictionary, bars).map(word => {
-          return <Bar dataKey={word.key} fill="#8884d8" />;
+          return <Bar key={word.key} dataKey={word.key} fill="#8884d8" />;
         })}
       </BarChart>
     );

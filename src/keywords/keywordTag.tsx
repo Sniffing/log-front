@@ -10,7 +10,7 @@ interface IProps {
 @observer
 export class KeywordTag extends React.Component<IProps> {
   @observable
-  private checked: boolean = true;
+  private checked = true;
 
   @action
   private handleChange = () => {

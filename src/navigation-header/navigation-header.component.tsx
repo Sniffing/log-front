@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 class Header extends React.Component<RouteComponentProps> {
   @observable
-  private current: string = 'home';
+  private current = 'home';
 
   @action
   private handleClick = (param: ClickParam) => {

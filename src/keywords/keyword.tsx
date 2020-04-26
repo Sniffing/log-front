@@ -33,7 +33,7 @@ export class KeywordPage extends React.Component<IProps> {
   private data: any[] = [];
 
   @observable
-  private cutoff: number = 5;
+  private cutoff = 5;
 
   @observable
   private dictionary: Record<string, number> = {};
@@ -68,6 +68,7 @@ export class KeywordPage extends React.Component<IProps> {
 
     this.data.forEach((datum: any) => {
       datum.keywords.forEach((word: string) => {
+        // eslint-disable-next-line no-prototype-builtins
         if (!localDictionary.hasOwnProperty(word)) {
           localDictionary[word] = 1;
         } else {

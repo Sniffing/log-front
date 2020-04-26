@@ -1,15 +1,15 @@
 import { KeywordPage } from "./keywords";
-import { CalendarPage, WeightPage, MemoryPage } from "./pages";
+import { CalendarPage, WeightPage, MemoryPage, Home } from "./pages";
 import { EntryPage } from './entry';
 
-enum Page {
+export enum Page {
+    HOME = "HOME",
     WEIGHT = "WEIGHT",
     KEYWORDS = "KEYWORDS",
     CALENDAR = "CALENDAR",
     MEMORY = "MEMORY",
     ENTRY = "ENTRY",
 }
-
 export interface IPageConfig {
     page: string;
     path: string;
@@ -18,6 +18,7 @@ export interface IPageConfig {
 
 const getComponent = (page: Page) => {
     switch(page) {
+        case Page.HOME: return Home;
         case Page.WEIGHT: return WeightPage;
         case Page.KEYWORDS: return KeywordPage;
         case Page.CALENDAR: return CalendarPage;
@@ -28,7 +29,6 @@ const getComponent = (page: Page) => {
 
 const pageConfigs: IPageConfig[] = Object.values(Page).map((page: Page) => {
     const comp = getComponent(page);
-    // console.log(WeightPage, KeywordPage, EntryPage, CalendarPage, MemoryPage);
     
     return {
         page: page.toString(),

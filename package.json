@@ -5,12 +5,12 @@
   "dependencies": {
     "@ant-design/icons": "^4.0.6",
     "@types/heap": "^0.2.28",
-    "@types/jest": "^24.9.1",
-    "@types/lodash": "^4.14.149",
+    "@types/jest": "^25.2.1",
+    "@types/lodash": "^4.14.150",
     "@types/react": "^16.9.34",
     "@types/react-calendar-heatmap": "^1.6.2",
     "@types/react-dom": "^16.9.6",
-    "@types/react-router-dom": "^4.3.5",
+    "@types/react-router-dom": "^5.1.4",
     "@types/react-tagsinput": "^3.19.7",
     "@types/recharts": "^1.8.10",
     "@types/regression": "^2.0.0",
@@ -24,15 +24,15 @@
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
     "moment": "^2.24.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.0",
     "react": "^16.13.1",
-    "react-calendar": "^2.19.2",
+    "react-calendar": "^3.0.1",
     "react-calendar-heatmap": "^1.8.1",
     "react-dom": "^16.13.1",
     "react-minimal-pie-chart": "^6.0.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
-    "react-spinners": "^0.6.1",
+    "react-spinners": "^0.8.1",
     "react-tagsinput": "^3.19.0",
     "react-vis": "^1.11.7",
     "recharts": "^1.8.5",
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "prettier": "^1.19.1"
+    "prettier": "^2.0.5"
   },
   "scripts": {
     "start": "react-scripts start",

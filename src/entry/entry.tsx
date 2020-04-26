@@ -5,8 +5,6 @@ import {
   ILogEntry,
   IFormProps,
   defaultFormValues,
-  dateFormat,
-  convertLogEntryToFormValues,
   convertFormValuesToLogEntry,
   IEntryFormValues,
   entryFormFields,
@@ -31,7 +29,7 @@ import TextArea from "antd/lib/input/TextArea";
 import TagsInput from "react-tagsinput";
 import { FormInstance, Rule } from "antd/lib/form";
 import { ValidateErrorEntity } from "rc-field-form/lib/interface";
-import { observable, action, toJS } from "mobx";
+import { observable, action } from "mobx";
 
 import "react-tagsinput/react-tagsinput.css";
 import { remove, flatten } from "lodash";

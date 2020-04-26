@@ -1,5 +1,5 @@
 import React from "react";
-import { observable, computed, keys } from "mobx";
+import { observable, keys } from "mobx";
 import ReactMinimalPieChart, {
   PieChartData,
   LabelProps

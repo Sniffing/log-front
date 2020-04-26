@@ -1,6 +1,6 @@
 import React from "react";
 
-import LineWeight from "../charts/lineweight";
+import { WeightLineGraph } from ".";
 import { inject } from "mobx-react";
 import { RootStore } from "../stores/rootStore";
 
@@ -13,7 +13,7 @@ export class WeightPage extends React.Component<IProps> {
   render() {
     return (
       <div className="weight-page">
-        <LineWeight rootStore={this.props.rootStore} />
+        <WeightLineGraph rootStore={this.props.rootStore} />
       </div>
     );
   }

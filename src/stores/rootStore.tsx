@@ -47,9 +47,7 @@ export class RootStore {
     this.isFetchingData = true;
     try {
       const response = await get("/weight");
-      runInAction(() => {
-        this.weightData = response.data;
-      });
+      this.weightData = response.data;
     } catch (err) {
       throw new Error(err);
     } finally {

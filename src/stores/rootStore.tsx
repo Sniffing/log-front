@@ -2,6 +2,7 @@ import { observable, runInAction, action } from 'mobx';
 import get from 'axios';
 import { ILogEntry } from '../entry';
 import { Constants } from '../App.constants';
+import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 
 export interface WeightEntry {
   date: string;
@@ -32,6 +33,9 @@ export class RootStore {
 
   @observable
   public isFetchingDates = false;
+
+  @observable
+  public fetchingMemory: IPromiseBasedObservable<any> | undefined;
 
   @observable
   public weightData: WeightEntry[] = [];
@@ -70,19 +74,17 @@ export class RootStore {
     }
   }
 
-  @action
+  @action.bound
   public async fetchMemory() {
-    this.isFetchingData = true;
-    try {
-      const response = await get('/text');
-      runInAction(() => {
-        this.memories = response.data;
-      });
-    } catch (err) {
-      throw new Error(err);
-    } finally {
-      this.isFetchingData = false;
-    }
+    this.fetchingMemory = fromPromise(get('/text'));
+    await this.fetchingMemory.then(response => {
+      this.setMemories(response.data);
+    });
+  }
+
+  @action.bound
+  private setMemories(memories: any) {
+    this.memories = memories;
   }
 
   @action

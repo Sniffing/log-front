@@ -37,8 +37,8 @@ private rowCards = (page: IPageConfig, span: number) => {
   return (
     <Col span={span} key={page.page}>
       <Link to={page.path}>
-        <Card>
-          <h1 style={{ textTransform: 'capitalize' }}>
+        <Card style={{width:'300px' }}>
+          <h1 style={{ textTransform: 'capitalize'}}>
             {page.page.toLowerCase()}
           </h1>
         </Card>

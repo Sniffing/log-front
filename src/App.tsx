@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Provider, observer } from 'mobx-react';
-import './App.css';
+import './App.scss';
 
 import rootStore from './stores/rootStore';
 import { Home } from './pages';

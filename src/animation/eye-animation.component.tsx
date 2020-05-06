@@ -1,8 +1,7 @@
 import React from 'react';
 import { observable, action } from 'mobx';
-import { Stage, Layer, Circle, Line, Text, Group } from 'react-konva';
+import { Stage, Layer, Circle, Line,  Group } from 'react-konva';
 import { observer } from 'mobx-react';
-import { KonvaEventObject } from 'konva/types/Node';
 import Konva from 'konva';
 import { Context } from 'konva/types/Context';
 
@@ -83,13 +82,9 @@ export class EyeAnimation extends React.Component{
     ctx.beginPath();
     ctx.lineTo(10,50);
     ctx.lineTo(70,75);                           
-    // ctx.bezierCurveTo(70,79);
     ctx.lineTo(130,50);
-    // ctx.bezierCurveTo(135,50);
     ctx.lineTo(70,25);
-    // ctx.bezierCurveTo(70,21);
     ctx.moveTo(10, 50);
-    // ctx.bezierCurveTo(6,50);
     ctx.closePath();
   }
 
@@ -121,7 +116,6 @@ export class EyeAnimation extends React.Component{
             <Group>
               <Line
                 points={[10,50, 70,75, 130,50, 70,25]}
-                tension={0.35}
                 closed
                 stroke="black"
               />              

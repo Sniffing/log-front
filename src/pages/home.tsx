@@ -54,8 +54,6 @@ public render() {
       <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
         {this.cards()}
       </div>
-
-      <EyeAnimation></EyeAnimation>
     </>
   );
 }

@@ -3,11 +3,7 @@ import get from 'axios';
 import { ILogEntry } from '../entry';
 import { Constants } from '../App.constants';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
-
-export interface WeightEntry {
-  date: string;
-  weight: string;
-}
+import { IWeightDTO } from '../weight';
 
 export interface KeywordEntry {
   date: string;
@@ -38,7 +34,7 @@ export class RootStore {
   public fetchingMemory: IPromiseBasedObservable<any> | undefined;
 
   @observable
-  public weightData: WeightEntry[] = [];
+  public fetchingWeight: IPromiseBasedObservable<any> | undefined;
 
   @observable
   public keywordsData: KeywordEntry[] = [];
@@ -46,18 +42,8 @@ export class RootStore {
   @observable
   public memories: Memory[] = [];
 
-  @action
-  public async fetchWeightData() {
-    this.isFetchingData = true;
-    try {
-      const response = await get('/weight');
-      this.weightData = response.data;
-    } catch (err) {
-      throw new Error(err);
-    } finally {
-      this.isFetchingData = false;
-    }
-  }
+  @observable
+  public weights: IWeightDTO[] = [];
 
   @action
   public async fetchKeywords() {
@@ -83,8 +69,23 @@ export class RootStore {
   }
 
   @action.bound
+  public async fetchWeightData() {
+    this.isFetchingData = true;
+    this.fetchingWeight = fromPromise(get('/weight'));
+
+    await this.fetchingWeight.then(response => {
+      this.setWeight(response.data);
+    });
+  }
+
+  @action.bound
   private setMemories(memories: any) {
     this.memories = memories;
+  }
+
+  @action.bound
+  private setWeight(weights: any) {
+    this.weights = weights;
   }
 
   @action

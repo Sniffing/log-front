@@ -2,7 +2,6 @@ import React from 'react';
 import { Card, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import { Constants, IPageConfig } from '../App.constants';
-import { EyeAnimation } from '../animation/eye-animation.component';
 
 export class Home extends React.Component {
 private pages: IPageConfig[];
@@ -22,7 +21,7 @@ private cards = () => {
   const c = Array.from(new Array(this.cols), (x, i) => i + 1);
 
   const v = r.map((x, i) => (
-    <Row key={`row-${x}`} gutter={[16, 16]}>
+    <Row key={`row-${x}`} gutter={16}>
       {c.map((x, j) =>
         this.rowCards(this.pages[i * this.cols + j], 24 / this.cols)
       )}
@@ -37,13 +36,13 @@ private rowCards = (page: IPageConfig, span: number) => {
   }
   return (
     <Col span={span} key={page.page}>
-      <Link to={page.path}>
-        <Card style={{width:'300px' }}>
+      <Card style={{width:'300px', margin: '20px 0' }}>
+        <Link to={page.path} style={{width: '100%', height:'100%'}}>
           <h1 style={{ textTransform: 'capitalize'}}>
             {page.page.toLowerCase()}
           </h1>
-        </Card>
-      </Link>
+        </Link>
+      </Card>
     </Col>
   );
 };

@@ -11,7 +11,8 @@ const formatWeightDTO = (dto: IWeightDTO) => {
   return entry;
 };
 
-export const formatResults = (data: IWeightDTO[]): FormattedWeight[] => {
+export const formatResults = (data: IWeightDTO[] | undefined): FormattedWeight[] => {
+  if (!data) return [];
   return data.map(formatWeightDTO);
 }; 
 
@@ -69,6 +70,14 @@ export const computeLineOfAverage = (data: FormattedWeight[], averageWeight: num
       }
     ]
     : [];
+};
+
+export const getAverageWeight = (weights: IWeightDTO[]) => {
+  const totalWeight = weights
+    .map(d => Number(d.weight))
+    .reduce((acc, item) => acc + item);
+
+  return  totalWeight / weights.length;
 };
 
 export const getTitleLinePoint = (point: LineSeriesPoint) => ({

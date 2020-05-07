@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import { Constants, IPageConfig } from '../App.constants';
+import { EyeAnimation } from '../animation/eye-animation.component';
 
 export class Home extends React.Component {
 private pages: IPageConfig[];

@@ -78,14 +78,14 @@ export class EyeAnimation extends React.Component{
     this.handlePupilMove(relativeMouse.x, relativeMouse.y);
   }
 
+  private line: Konva.Line= new Konva.Line({
+    points: [10,50, 70,75, 130,50, 70,25],
+    tension: 0.35,
+    closed: true,
+  })
+
   private clipFn = (ctx: Context) => {
-    ctx.beginPath();
-    ctx.lineTo(10,50);
-    ctx.lineTo(70,75);                           
-    ctx.lineTo(130,50);
-    ctx.lineTo(70,25);
-    ctx.moveTo(10, 50);
-    ctx.closePath();
+    this.line.drawScene(ctx.canvas, undefined, true, undefined);
   }
 
   public render() {
@@ -116,6 +116,7 @@ export class EyeAnimation extends React.Component{
             <Group>
               <Line
                 points={[10,50, 70,75, 130,50, 70,25]}
+                tension={0.35}
                 closed
                 stroke="black"
               />              

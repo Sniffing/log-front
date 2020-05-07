@@ -59,7 +59,7 @@ export class EntryPage extends React.Component<IProps> {
     super(props);
   }
 
-  public async componentWillMount() {
+  public async UNSAFE_componentWillMount() {
     if (this.props.rootStore) {
       const dates = await this.props.rootStore.fetchLastDates();
       this.dates = dates;

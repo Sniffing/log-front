@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Card, Spin } from 'antd';
+import { Button, Card, Spin, Result } from 'antd';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { RootStore } from '../stores/rootStore';
-import { WarningResult } from '../custom-components/warning-result';
 
 import './memory.scss';
 import { Utils } from '../App.utils';
@@ -48,13 +47,11 @@ export class MemoryPage extends Component<IProps> {
         
         {this.props.rootStore?.fetchingMemory?.case({
           fulfilled: () => 
-            <>
-              <Card title={`${Utils.fromReversedDate(this.memory.date)}`} className='card'>
-                <p>{this.memory.text}</p>
-              </Card>
-            </>,
+            <Card title={`${Utils.fromReversedDate(this.memory.date)}`} className='card'>
+              <p>{this.memory.text}</p>
+            </Card>,
           pending: () => <Spin/>,
-          rejected: () => <WarningResult title={'Error fetching memories'}/>,
+          rejected: () => <Result title={'Error fetching memories'} status={500}/>,
         })}   
       </div>
     );

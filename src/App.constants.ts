@@ -1,8 +1,9 @@
 import { KeywordPage } from './keywords';
-import { CalendarPage, Home } from './pages';
+import { Home } from './pages';
 import { EntryPage } from './entry';
 import { MemoryPage } from './memory';
 import { WeightPage } from './weight';
+import { CalendarPage } from './calendar';
 
 export enum Page {
     HOME = 'HOME',

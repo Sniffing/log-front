@@ -1,5 +1,5 @@
 import React from 'react';
-import CalendarKeyword from '../charts/calendarKeyword';
+import CalendarKeyword from './calendar-keyword';
 
 export class CalendarPage extends React.Component {
   public render() {

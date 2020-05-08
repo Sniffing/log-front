@@ -4,6 +4,7 @@ import { EntryPage } from './entry';
 import { MemoryPage } from './memory';
 import { WeightPage } from './weight';
 import { CalendarPage } from './calendar';
+import { LifeEventPage } from './life-event';
 
 export enum Page {
     HOME = 'HOME',
@@ -12,6 +13,7 @@ export enum Page {
     CALENDAR = 'CALENDAR',
     MEMORY = 'MEMORY',
     ENTRY = 'ENTRY',
+    LIFE_EVENT = 'LIFE_EVENT',
 }
 export interface IPageConfig {
     page: string;
@@ -27,6 +29,7 @@ const getComponent = (page: Page) => {
   case Page.CALENDAR: return CalendarPage;
   case Page.MEMORY: return MemoryPage;
   case Page.ENTRY: return EntryPage;
+  case Page.LIFE_EVENT: return LifeEventPage;
   }
 };
 

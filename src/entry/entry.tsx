@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { RootStore, ILastDates } from '../stores/rootStore';
 import {
   ILogEntry,
-  IFormProps,
+
   defaultFormValues,
   convertFormValuesToLogEntry,
   IEntryFormValues,
@@ -33,6 +33,7 @@ import { observable, action } from 'mobx';
 
 import 'react-tagsinput/react-tagsinput.css';
 import { remove, flatten } from 'lodash';
+import { IFormProps } from '../App.interfaces';
 
 interface IProps {
   rootStore?: RootStore;

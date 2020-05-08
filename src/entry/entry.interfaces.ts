@@ -47,12 +47,3 @@ type IBooleanMetrics = Partial<Record<BooleanMetric, boolean>>;
 interface IEntryMetric {
   weight?: string;
 }
-
-export interface IFormProps {
-  id?: string;
-  name: string;
-  label?: string | React.Component | JSX.Element;
-  placeholder?: string;
-  validator?: any;
-  required?: boolean;
-}

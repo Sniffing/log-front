@@ -8,7 +8,7 @@ private pages: IPageConfig[];
 private count: number;
 
 private rows = 3;
-private cols = 2;
+private cols = 3;
 
 constructor(props: any) {
   super(props);

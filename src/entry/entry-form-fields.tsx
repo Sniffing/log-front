@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IFormProps } from '.';
+import { IFormProps } from '../App.interfaces';
 
 export enum EntryFormFieldsEnum {
   DATE = 'DATE',

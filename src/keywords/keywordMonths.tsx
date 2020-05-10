@@ -6,9 +6,11 @@ import ReactMinimalPieChart, {
   LabelProps
 } from 'react-minimal-pie-chart';
 import { clone, isEmpty } from 'lodash';
+import { observer } from 'mobx-react';
+import { KeywordEntry } from '../stores/rootStore';
 
 interface IProps {
-  data: any[];
+  data: KeywordEntry[];
 }
 
 const months = {
@@ -41,6 +43,7 @@ const baseMonthWordMap: Record<string, Record<string, number>> = {
   '12': {}
 };
 
+@observer
 export class KeywordMonths extends React.Component<IProps> {
   @observable
   private yearMonthData: Record<
@@ -48,7 +51,7 @@ export class KeywordMonths extends React.Component<IProps> {
     Record<string, Record<string, number>>
   > = {};
 
-  private convertData(data: any[]) {
+  private convertData(data: KeywordEntry[]) {
     data.forEach(datum => {
       const date = datum.date.split('-');
       const year = date[0];

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { Treemap } from 'recharts';
+import { WordCount } from '.';
 
 interface IProps {
-  data: any[];
+  data: WordCount[];
   minCount: number;
 }
 
@@ -14,7 +15,7 @@ export class KeywordTreemap extends Component<IProps> {
     const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
     const keywords = Array.isArray(this.props.data)
-      ? this.props.data.filter(({key, value}) => {
+      ? this.props.data.filter(({value}: WordCount) => {
         return value > this.props.minCount;
       }).map(({ key, value }) => {
         return {
@@ -23,6 +24,8 @@ export class KeywordTreemap extends Component<IProps> {
         };
       })
       : [];
+
+    console.log('here', this.props.data);
 
     const data = [
       {

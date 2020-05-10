@@ -40,8 +40,11 @@ export class RootStore {
   @observable
   public savingLifeEntry: IPromiseBasedObservable<any> | undefined;
 
+  @observable 
+  public fetchingKeywords: IPromiseBasedObservable<any> | undefined;
+
   @observable
-  public keywordsData: KeywordEntry[] = [];
+  public keywords: KeywordEntry[] = [];
 
   @observable
   public memories: Memory[] = [];
@@ -51,17 +54,11 @@ export class RootStore {
 
   @action
   public async fetchKeywords() {
-    this.isFetchingData = true;
-    try {
-      const response = await get('/keywords');
-      runInAction(() => {
-        this.keywordsData = response.data;
-      });
-    } catch (err) {
-      throw new Error(err);
-    } finally {
-      this.isFetchingData = false;
-    }
+    this.fetchingKeywords = fromPromise(get('/keywords'));
+    
+    await this.fetchingKeywords.then(response => {
+      this.setKeywords(response.data);
+    });
   }
 
   @action.bound
@@ -80,6 +77,11 @@ export class RootStore {
     await this.fetchingWeight.then(response => {
       this.setWeight(response.data);
     });
+  }
+
+  @action.bound
+  private setKeywords(keywords: any) {
+    this.keywords = keywords;
   }
 
   @action.bound

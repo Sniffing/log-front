@@ -37,7 +37,7 @@ public async componentDidMount() {
 
   try {
     await this.props.rootStore.fetchKeywords();
-    this.parseResults(this.props.rootStore.keywordsData);
+    this.parseResults(this.props.rootStore.keywords);
   } catch (err) {
     message.error('Could not fetch keywords');
   }
@@ -71,7 +71,7 @@ public parseResults = (res: KeywordEntry[]) => {
     this.searchTerm = value;
     try {
       await this.props.rootStore.fetchKeywords();
-      this.parseResults(this.props.rootStore.keywordsData);
+      this.parseResults(this.props.rootStore.keywords);
     } catch  {
       message.error('Could not search keywords');
     }

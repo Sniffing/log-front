@@ -75,7 +75,7 @@ export class LifeEventPage extends React.Component<IProps> {
   }
 
   public render() {
-    const loading = this.props.rootStore.savingEntry?.state === 'pending';
+    const loading = this.props.rootStore.savingLifeEntry?.state === 'pending';
     return (
       <Card style={{margin: '20px'}} loading={loading}>
         <Form ref={this.formRef} labelCol={{span: 4}} onFinish={this.handleSaveEventClick}>

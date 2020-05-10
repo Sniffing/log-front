@@ -38,7 +38,7 @@ export class RootStore {
   public fetchingWeight: IPromiseBasedObservable<any> | undefined;
 
   @observable
-  public savingEntry: IPromiseBasedObservable<any> | undefined;
+  public savingLifeEntry: IPromiseBasedObservable<any> | undefined;
 
   @observable
   public keywordsData: KeywordEntry[] = [];
@@ -117,7 +117,7 @@ export class RootStore {
   }
 
   public async saveLifeEvent(event: ILifeEvent) {
-    this.savingEntry = fromPromise(fetch(Constants.LIFE_EVENT_URL, {
+    this.savingLifeEntry = fromPromise(fetch(Constants.LIFE_EVENT_URL, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

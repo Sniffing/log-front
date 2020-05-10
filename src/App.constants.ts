@@ -46,4 +46,5 @@ const pageConfigs: IPageConfig[] = Object.values(Page).map((page: Page) => {
 export class Constants {
     public static pageConfigs = pageConfigs;
     public static DATABASE_URL='http://localhost:3000';
+    public static LIFE_EVENT_URL=`${Constants.DATABASE_URL}/lifeEvent`;
 }

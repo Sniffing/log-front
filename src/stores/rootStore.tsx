@@ -4,6 +4,7 @@ import { ILogEntry } from '../entry';
 import { Constants } from '../App.constants';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 import { IWeightDTO } from '../weight';
+import { ILifeEvent } from '../life-event';
 
 export interface KeywordEntry {
   date: string;
@@ -35,6 +36,9 @@ export class RootStore {
 
   @observable
   public fetchingWeight: IPromiseBasedObservable<any> | undefined;
+
+  @observable
+  public savingEntry: IPromiseBasedObservable<any> | undefined;
 
   @observable
   public keywordsData: KeywordEntry[] = [];
@@ -110,6 +114,17 @@ export class RootStore {
     } finally {
       this.setFetchingDates(false);
     }
+  }
+
+  public async saveLifeEvent(event: ILifeEvent) {
+    this.savingEntry = fromPromise(fetch(Constants.LIFE_EVENT_URL, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(event),
+    }));
   }
 
   @action.bound

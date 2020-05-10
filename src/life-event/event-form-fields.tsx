@@ -13,9 +13,9 @@ export enum EventFormFieldsEnum {
 export const eventFormFields = [
   EventFormFieldsEnum.DATE,
   EventFormFieldsEnum.NAME,
-  EventFormFieldsEnum.DESCRIPTION,
   EventFormFieldsEnum.NATURE,
   EventFormFieldsEnum.INTENSITY,
+  EventFormFieldsEnum.DESCRIPTION,
 ];
 
 const generateFormLabel = (label: string) => (

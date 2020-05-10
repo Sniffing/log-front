@@ -151,7 +151,7 @@ export class EntryPage extends React.Component<IProps> {
     }
   };
 
-  private handleDateChange = (value: Moment | null, dateString: string) => {
+  private handleDateChange = (value: Moment | null) => {
     this.formRef.current?.setFieldsValue({
       [EntryFormFieldsEnum.DATE]: value
     });

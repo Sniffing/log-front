@@ -36,6 +36,7 @@ class Header extends React.Component<RouteComponentProps> {
 
     return (
       <Menu
+        style={{textAlign: 'center'}}
         onClick={this.handleClick}
         selectedKeys={[this.current]}
         mode="horizontal"

@@ -17,6 +17,7 @@ import { observable, action, computed } from 'mobx';
 import { RootStore } from '../stores/rootStore';
 import { SliderValue } from 'antd/lib/slider';
 import { FormattedWeight, formatResults, sortByDate, WeightDates, convertToGraphData, computeLineOfBestFit, computeLineOfAverage, getTitleLinePoint, getAverageWeight } from '.';
+import { Rejected } from '../custom-components';
 
 interface IProps {
   rootStore?: RootStore;
@@ -159,7 +160,7 @@ public render() {
   const graph = this.props.rootStore?.fetchingWeight?.case({
     fulfilled: () => this.createGraph(this.formattedData),
     pending: () => <Spin/>,
-    rejected: () =>  <Result title={'Error fetching Weights'} status={500}/>,
+    rejected: () =>  <Rejected message={'Error fetching Weights'}/>,
   });
 
   return <>

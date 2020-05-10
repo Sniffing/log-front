@@ -6,6 +6,7 @@ import { RootStore } from '../stores/rootStore';
 
 import './memory.scss';
 import { Utils } from '../App.utils';
+import { Rejected } from '../custom-components';
 
 interface IProps {
   rootStore?: RootStore;
@@ -51,7 +52,7 @@ export class MemoryPage extends Component<IProps> {
               <p>{this.memory.text}</p>
             </Card>,
           pending: () => <Spin/>,
-          rejected: () => <Result title={'Error fetching memories'} status={500}/>,
+          rejected: () => <Rejected message={'Error fetching Memories'}/>,
         })}   
       </div>
     );

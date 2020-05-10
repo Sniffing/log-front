@@ -75,7 +75,7 @@ export const computeLineOfAverage = (data: FormattedWeight[], averageWeight: num
 export const getAverageWeight = (weights: IWeightDTO[]) => {
   const totalWeight = weights
     .map(d => Number(d.weight))
-    .reduce((acc, item) => acc + item);
+    .reduce((acc, item) => acc + item, 0);
 
   return  totalWeight / weights.length;
 };

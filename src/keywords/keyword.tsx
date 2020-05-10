@@ -12,6 +12,7 @@ import {
   KeywordTreemap,
   KeywordMonths
 } from './';
+import { Rejected } from '../custom-components';
 
 interface IProps {
   rootStore?: RootStore;
@@ -100,7 +101,7 @@ export class KeywordPage extends React.Component<IProps> {
             />
           </>,
           pending: () => <Spin/>,
-          rejected: () => <Result title={'Error fetching Keywords'} status={500}/>,
+          rejected: () => <Rejected message={'Error fetching Keywords'}/>,
         })}
       </div>
     );

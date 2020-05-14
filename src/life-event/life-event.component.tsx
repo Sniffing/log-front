@@ -3,20 +3,11 @@ import Form, { FormInstance } from 'antd/lib/form';
 import { EventFormFieldsEnum, eventFormFields, EntryFormFieldsConfigs } from './event-form-fields';
 import { Input, Button, Card, DatePicker, Radio } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import { isDateDisabled, nature } from '.';
-import { Moment } from 'moment';
+import { isDateDisabled, ILifeEventFormValues } from '.';
 import { inject, observer } from 'mobx-react';
 import { RootStore } from '../stores/rootStore';
 import { convertFormValuesToLifeEvent } from './life-event.helper';
 import { NumbersOnlySelect } from '../custom-components';
-
-export interface ILifeEventFormValues {
-  [EventFormFieldsEnum.NAME]: string;
-  [EventFormFieldsEnum.DESCRIPTION]: string;
-  [EventFormFieldsEnum.DATE]: Moment;
-  [EventFormFieldsEnum.NATURE]: nature;
-  [EventFormFieldsEnum.INTENSITY]: number;
-}
 
 interface IProps {
   rootStore: RootStore;

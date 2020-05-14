@@ -1,5 +1,5 @@
-import { ILifeEventFormValues } from './life-event.component';
-import { ILifeEvent } from './life-event.interfaces';
+
+import { ILifeEvent, ILifeEventFormValues } from './life-event.interfaces';
 
 export const convertFormValuesToLifeEvent = (formValues: ILifeEventFormValues): ILifeEvent => {
   return {

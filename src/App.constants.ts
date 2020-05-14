@@ -5,6 +5,7 @@ import { MemoryPage } from './memory';
 import { WeightPage } from './weight';
 import { CalendarPage } from './calendar';
 import { LifeEventPage } from './life-event';
+import { CalorieEntryPage } from './calories';
 
 export enum Page {
     HOME = 'HOME',
@@ -14,6 +15,7 @@ export enum Page {
     MEMORY = 'MEMORY',
     ENTRY = 'ENTRY',
     LIFE_EVENT = 'LIFE_EVENT',
+    CALORIE_ENTRY = 'CALORIE_ENTRY',
 }
 export interface IPageConfig {
     page: string;
@@ -30,6 +32,7 @@ const getComponent = (page: Page) => {
   case Page.MEMORY: return MemoryPage;
   case Page.ENTRY: return EntryPage;
   case Page.LIFE_EVENT: return LifeEventPage;
+  case Page.CALORIE_ENTRY: return CalorieEntryPage;
   }
 };
 
@@ -46,5 +49,7 @@ const pageConfigs: IPageConfig[] = Object.values(Page).map((page: Page) => {
 export class Constants {
     public static pageConfigs = pageConfigs;
     public static DATABASE_URL='http://localhost:3000';
-    public static LIFE_EVENT_URL=`${Constants.DATABASE_URL}/lifeEvent`;
+    public static LOG_ENTRY_URL=`${Constants.DATABASE_URL}/logEntries`;
+    public static LIFE_EVENT_URL=`${Constants.DATABASE_URL}/lifeEvents`;
+    public static CALORIE_ENTRY_URL=`${Constants.DATABASE_URL}/calories`;
 }

@@ -1,10 +1,11 @@
-import { observable, runInAction, action } from 'mobx';
+import { observable, action } from 'mobx';
 import get from 'axios';
 import { ILogEntry } from '../entry';
 import { Constants } from '../App.constants';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 import { IWeightDTO } from '../weight';
 import { ILifeEvent } from '../life-event';
+import { ICalorieEntry } from '../calories';
 
 export interface KeywordEntry {
   date: string;
@@ -39,6 +40,9 @@ export class RootStore {
 
   @observable
   public savingLifeEntry: IPromiseBasedObservable<any> | undefined;
+
+  @observable
+  public savingCalorieEntry: IPromiseBasedObservable<any> | undefined;
 
   @observable 
   public fetchingKeywords: IPromiseBasedObservable<any> | undefined;
@@ -116,6 +120,17 @@ export class RootStore {
     } finally {
       this.setFetchingDates(false);
     }
+  }
+
+  public async saveCalorieEntry(entry: ICalorieEntry) {
+    this.savingCalorieEntry = fromPromise(fetch(Constants.CALORIE_ENTRY_URL, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(entry),
+    }));
   }
 
   public async saveLifeEvent(event: ILifeEvent) {

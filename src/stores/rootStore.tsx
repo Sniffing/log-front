@@ -39,12 +39,9 @@ export class RootStore {
   public fetchingWeight: IPromiseBasedObservable<any> | undefined;
 
   @observable
-  public savingLifeEntry: IPromiseBasedObservable<any> | undefined;
-
-  @observable
   public savingCalorieEntry: IPromiseBasedObservable<any> | undefined;
 
-  @observable 
+  @observable
   public fetchingKeywords: IPromiseBasedObservable<any> | undefined;
 
   @observable
@@ -59,7 +56,7 @@ export class RootStore {
   @action
   public async fetchKeywords() {
     this.fetchingKeywords = fromPromise(get('/keywords'));
-    
+
     await this.fetchingKeywords.then(response => {
       this.setKeywords(response.data);
     });
@@ -133,15 +130,16 @@ export class RootStore {
     }));
   }
 
+  @action.bound
   public async saveLifeEvent(event: ILifeEvent) {
-    this.savingLifeEntry = fromPromise(fetch(Constants.LIFE_EVENT_URL, {
+    return await fetch(Constants.LIFE_EVENT_URL, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(event),
-    }));
+    });
   }
 
   @action.bound

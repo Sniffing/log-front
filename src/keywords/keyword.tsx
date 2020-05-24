@@ -1,12 +1,11 @@
 import React from 'react';
-import { Result, Spin } from 'antd';
+import { Spin } from 'antd';
 import { RootStore, KeywordEntry } from '../stores/rootStore';
 import { inject, observer } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
 import NumericInput from '../custom-components/numericInput';
 import { pull } from 'lodash';
 import {
-  dummyData,
   WordCount,
   KeywordList,
   KeywordTreemap,

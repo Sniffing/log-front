@@ -1,7 +1,7 @@
 import React from 'react';
 import Form, { FormInstance } from 'antd/lib/form';
 import { EventFormFieldsEnum, eventFormFields, EntryFormFieldsConfigs } from './event-form-fields';
-import { Input, Button, Card, DatePicker, Radio } from 'antd';
+import { Input, Button, Card, DatePicker, Radio, message } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { isDateDisabled, ILifeEventFormValues } from '.';
 import { inject, observer } from 'mobx-react';
@@ -16,14 +16,18 @@ interface IProps {
 @inject('rootStore')
 @observer
 export class LifeEventPage extends React.Component<IProps> {
-
   private formRef = React.createRef<FormInstance>();
 
-  private handleSaveEventClick = (value: any) => {
-    const formValues = value as ILifeEventFormValues;
-    console.log(value, formValues);
-    const event = convertFormValuesToLifeEvent(formValues);
-    this.props.rootStore?.saveLifeEvent(event);
+  private handleSaveEventClick = async (values: any) => {
+    console.log(values);
+    const event = convertFormValuesToLifeEvent(values as ILifeEventFormValues);
+
+    try {
+      await this.props.rootStore?.saveLifeEvent(event);
+    } catch (error) {
+      message.error('Could not save entry');
+      console.log(error);
+    }
   }
 
   private createFormItem = (elem: EventFormFieldsEnum) => {
@@ -32,20 +36,20 @@ export class LifeEventPage extends React.Component<IProps> {
 
     switch(elem) {
     case EventFormFieldsEnum.NAME: break;
-    case EventFormFieldsEnum.DESCRIPTION: 
+    case EventFormFieldsEnum.DESCRIPTION:
       formComponent = <TextArea autoSize={{ minRows:5, maxRows:10 }}/>;
       break;
-    case EventFormFieldsEnum.DATE: 
+    case EventFormFieldsEnum.DATE:
       formComponent = <DatePicker disabledDate={isDateDisabled}></DatePicker>;
       break;
-    case EventFormFieldsEnum.NATURE: 
-      formComponent = 
+    case EventFormFieldsEnum.NATURE:
+      formComponent =
         <Radio.Group>
           <Radio value='good'>Good</Radio>
           <Radio value='bad'>Bad</Radio>
         </Radio.Group>;
       break;
-    case EventFormFieldsEnum.INTENSITY: 
+    case EventFormFieldsEnum.INTENSITY:
       formComponent = <NumbersOnlySelect/>;
       break;
     }
@@ -57,24 +61,23 @@ export class LifeEventPage extends React.Component<IProps> {
         message: 'Mandatory field'
       });
     }
-    
+
     return (
-      <Form.Item label={config.label} name={config.name} rules={rules}>
+      <Form.Item label={config.label} name={config.name} rules={rules} key={config.name}>
         {formComponent}
       </Form.Item>
     );
   }
 
   public render() {
-    const loading = this.props.rootStore.savingLifeEntry?.state === 'pending';
     return (
-      <Card style={{margin: '20px'}} loading={loading}>
+      <Card style={{margin: '20px'}}>
         <Form ref={this.formRef} labelCol={{span: 4}} onFinish={this.handleSaveEventClick}>
           {eventFormFields.map(this.createFormItem)}
 
           <Form.Item style={{textAlign:'center'}}>
             <Button type="primary" htmlType="submit">Save Event</Button>
-          </Form.Item> 
+          </Form.Item>
         </Form>
       </Card>
     );

@@ -10,7 +10,7 @@ import {
   Crosshair,
   DiscreteColorLegend
 } from 'react-vis';
-import { DatePicker, Slider, Result, Spin } from 'antd';
+import { DatePicker, Slider, Spin } from 'antd';
 import moment, { Moment } from 'moment';
 import { observer, inject } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
@@ -80,7 +80,7 @@ private changeEndDate = (newEnd: any) => {
   if (newEnd !== undefined) {
     const newEndUnix = newEnd.unix() * 1000;
     console.log('setting new end:', this.dates.end);
- 
+
     // const filteredData = this.formattedData.filter(data => {
     //   return data.date >= this.dates.start && data.date < newEndUnix;
     // });

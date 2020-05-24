@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, Spin, Result } from 'antd';
+import { Button, Card, Spin } from 'antd';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { RootStore } from '../stores/rootStore';
@@ -31,7 +31,7 @@ export class MemoryPage extends Component<IProps> {
     this.currentIndex = random;
   };
 
-  @computed 
+  @computed
   private get memory() {
     const memories = this.props.rootStore?.memories;
     const memory = memories ? memories[this.currentIndex] : undefined;
@@ -45,15 +45,15 @@ export class MemoryPage extends Component<IProps> {
         <Button className='rollButton' onClick={this.rollNewMemory}>
           Random Memory
         </Button>
-        
+
         {this.props.rootStore?.fetchingMemory?.case({
-          fulfilled: () => 
+          fulfilled: () =>
             <Card title={`${Utils.fromReversedDate(this.memory.date)}`} className='card'>
               <p>{this.memory.text}</p>
             </Card>,
           pending: () => <Spin/>,
           rejected: () => <Rejected message={'Error fetching Memories'}/>,
-        })}   
+        })}
       </div>
     );
   }

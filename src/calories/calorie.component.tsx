@@ -28,9 +28,9 @@ export class CalorieEntryPage extends React.Component<IProps> {
     let formComponent = <Input/>;
 
     switch(elem) {
-    case CalorieFormFieldsEnum.CALORIES: 
+    case CalorieFormFieldsEnum.CALORIES:
       break;
-    case CalorieFormFieldsEnum.DATE: 
+    case CalorieFormFieldsEnum.DATE:
       formComponent = <DatePicker disabledDate={isDateDisabled}></DatePicker>;
       break;
     }
@@ -42,7 +42,7 @@ export class CalorieEntryPage extends React.Component<IProps> {
         message: 'Mandatory field'
       });
     }
-    
+
     return (
       <Form.Item label={config.label} name={config.name} rules={rules}>
         {formComponent}
@@ -59,7 +59,7 @@ export class CalorieEntryPage extends React.Component<IProps> {
 
           <Form.Item style={{textAlign:'center'}}>
             <Button type="primary" htmlType="submit">Save Entry</Button>
-          </Form.Item> 
+          </Form.Item>
         </Form>
       </Card>
     );

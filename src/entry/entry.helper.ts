@@ -1,4 +1,4 @@
-import { IEntryFormValues, EntryFormFieldsEnum, ILogEntry, BooleanMetric } from '.';
+import { IEntryFormValues, EntryFormFieldsEnum, ILogEntry } from '.';
 import moment from 'moment';
 
 export const defaultFormValues: IEntryFormValues = {
@@ -45,7 +45,7 @@ export const convertFormValuesToLogEntry = (
       date: values.DATE.format(dateFormat)
     },
     // booleanMetricState,
-     
+
     entryMetricState: {
       ...(values.WEIGHT && { weight: values.WEIGHT })
     },

@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { IFormProps } from '../App.interfaces';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 
 
 export enum EventFormFieldsEnum {
@@ -50,7 +52,13 @@ export const EntryFormFieldsConfigs: Record<EventFormFieldsEnum, IFormProps> = {
   },
   [EventFormFieldsEnum.INTENSITY]: {
     ...getBaseConfig(EventFormFieldsEnum.INTENSITY),
-    label: 'Event intensity',
+    label:
+      <Tooltip title={'10 should be huge say hospitalised vs getting married 5 is medium such as switched jobs 1 is a minor struggle that would cause stress, e.g. moving house'}>
+        <span>
+        Intensity {' '}
+          <InfoCircleOutlined />
+        </span>
+      </Tooltip>,
     required: true
   }
 };

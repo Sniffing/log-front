@@ -42,18 +42,18 @@ export class MemoryPage extends Component<IProps> {
   public render() {
     return (
       <div className='memory'>
-        <Button className='rollButton' onClick={this.rollNewMemory}>
-          Random Memory
-        </Button>
-
         {this.props.rootStore?.fetchingMemory?.case({
           fulfilled: () =>
             <Card title={`${Utils.fromReversedDate(this.memory.date)}`} className='card'>
               <p>{this.memory.text}</p>
             </Card>,
           pending: () => <Spin/>,
-          rejected: () => <Rejected message={'Error fetching Memories'}/>,
+          rejected: () => <Rejected message="Unable to fetch memories"/>,
         })}
+
+        <Button className='rollButton' onClick={this.rollNewMemory} disabled={!!this.memory}>
+          Random Memory
+        </Button>
       </div>
     );
   }

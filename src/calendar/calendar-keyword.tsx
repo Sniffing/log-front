@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import './calendar.scss';
-import { Select, message, Spin } from 'antd';
+import { Select, Spin } from 'antd';
 import { observer, inject } from 'mobx-react';
-import { observable, action, computed } from 'mobx';
+import { observable, computed } from 'mobx';
 import { RootStore, KeywordEntry } from '../stores/rootStore';
 import { Rejected } from '../custom-components';
 
@@ -22,11 +22,16 @@ class CalendarKeyword extends Component<IProps> {
 
   public async componentDidMount() {
     this.props.rootStore?.fetchKeywords();
+    this.props.rootStore?.fetchLastDates();
   }
 
   @computed
   private get heatMapValues() {
-    return this.props.rootStore?.keywords
+    if (!this.props.rootStore) {
+      return [];
+    }
+
+    return this.props.rootStore.keywords
       .filter((k: KeywordEntry) => k.keywords.includes(this.searchTerm))
       .map((k: KeywordEntry) => {
         return {
@@ -37,19 +42,22 @@ class CalendarKeyword extends Component<IProps> {
 
   @computed
   private get startDate() {
-    return new Date(this.props.rootStore?.fetchLastDates());
+    if (!this.props.rootStore) return new Date();
+
+    return new Date(this.props.rootStore.lastDates.first);
   }
 
   @computed
   private get endDate() {
-    return new Date(this.props.rootStore?.fetchLastDates());
+    if (!this.props.rootStore) return new Date();
+
+    return new Date(this.props.rootStore.lastDates.last);
   }
 
   private get calendarMap() {
     return (
       <>
         <Select>
-          {this.props.keywords.}
         </Select>
         <CalendarHeatmap
           startDate={this.startDate}
@@ -64,7 +72,7 @@ class CalendarKeyword extends Component<IProps> {
     return(
       <div>
         {this.props.rootStore?.fetchingKeywords?.case({
-          fulfilled: () => this.calendarMap(),
+          fulfilled: () => this.calendarMap,
           pending: () => <Spin/>,
           rejected: () =>  <Rejected message="Unable to get keywords"/>,
         })}

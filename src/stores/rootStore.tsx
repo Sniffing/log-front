@@ -30,9 +30,6 @@ export class RootStore {
   public isSavingData = false;
 
   @observable
-  public isFetchingDates = false;
-
-  @observable
   public fetchingMemory: IPromiseBasedObservable<any> | undefined;
 
   @observable
@@ -45,6 +42,9 @@ export class RootStore {
   public fetchingKeywords: IPromiseBasedObservable<any> | undefined;
 
   @observable
+  public fetchingDates: IPromiseBasedObservable<any> | undefined;
+
+  @observable
   public keywords: KeywordEntry[] = [];
 
   @observable
@@ -53,9 +53,15 @@ export class RootStore {
   @observable
   public weights: IWeightDTO[] = [];
 
+  @observable
+  public lastDates: ILastDates = {
+    first: '',
+    last: '',
+  };
+
   @action
   public async fetchKeywords() {
-    this.fetchingKeywords = fromPromise(get('/keywords'));
+    this.fetchingKeywords = fromPromise(get(Constants.LOG_ENTRY_URL+'/keywords'));
 
     await this.fetchingKeywords.then(response => {
       this.setKeywords(response.data);
@@ -64,7 +70,7 @@ export class RootStore {
 
   @action.bound
   public async fetchMemory() {
-    this.fetchingMemory = fromPromise(get('/text'));
+    this.fetchingMemory = fromPromise(get(Constants.LOG_ENTRY_URL+'/text'));
     await this.fetchingMemory.then(response => {
       this.setMemories(response.data);
     });
@@ -73,7 +79,7 @@ export class RootStore {
   @action.bound
   public async fetchWeightData() {
     this.isFetchingData = true;
-    this.fetchingWeight = fromPromise(get('/weight'));
+    this.fetchingWeight = fromPromise(get(Constants.LOG_ENTRY_URL+'/weight'));
 
     await this.fetchingWeight.then(response => {
       this.setWeight(response.data);
@@ -95,28 +101,20 @@ export class RootStore {
     this.weights = weights;
   }
 
+  @action.bound
+  private setLastDates(dates: ILastDates) {
+    this.lastDates = dates;
+  }
+
   @action
   public async fetchLastDates() {
-    this.setFetchingDates(true);
-    try {
-      const result: Response = await fetch(
-        Constants.DATABASE_URL + '/entries',
-        {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+    this.fetchingDates = fromPromise(get(
+      Constants.LOG_ENTRY_URL));
 
-      return (await result.json()) as ILastDates;
-      // return Promise.resolve({ first: "2018-07-15", last: "2019-11-02" });
-    } catch (error) {
-      throw new Error(error);
-    } finally {
-      this.setFetchingDates(false);
-    }
+    await this.fetchingDates.then((response) => {
+      console.log((response.data as ILastDates));
+      this.setLastDates(response.data as ILastDates);
+    });
   }
 
   public async saveCalorieEntry(entry: ICalorieEntry) {
@@ -140,11 +138,6 @@ export class RootStore {
       },
       body: JSON.stringify(event),
     });
-  }
-
-  @action.bound
-  private setFetchingDates(value: boolean) {
-    this.isFetchingDates = value;
   }
 
   @action.bound

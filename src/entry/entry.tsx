@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import { RootStore, ILastDates } from '../stores/rootStore';
+import { RootStore } from '../stores/rootStore';
 import {
   ILogEntry,
 
@@ -45,9 +45,6 @@ export class EntryPage extends React.Component<IProps> {
   private formRef: React.RefObject<FormInstance> = React.createRef();
 
   @observable
-  private dates?: ILastDates;
-
-  @observable
   private nextDate: Moment = moment();
 
   @observable
@@ -60,13 +57,13 @@ export class EntryPage extends React.Component<IProps> {
     super(props);
   }
 
-  public async UNSAFE_componentWillMount() {
+  public async componentDidMount() {
     if (this.props.rootStore) {
-      const dates = await this.props.rootStore.fetchLastDates();
-      this.dates = dates;
+      await this.props.rootStore.fetchLastDates();
 
+      console.log('dates', this.props.rootStore.lastDates,);
       this.setNextDate(
-        moment(dates.last)
+        moment(this.props.rootStore.lastDates.last)
           .utc()
           .add(-moment().utcOffset(), 'm')
           .add(1, 'day')
@@ -188,7 +185,7 @@ export class EntryPage extends React.Component<IProps> {
   };
 
   private disableDatesAfterLastEntry = (current: Moment) => {
-    return current && current > moment(this.dates?.last).endOf('day');
+    return current && current > moment(this.props.rootStore?.lastDates.last).endOf('day');
   };
 
   private getFormField = (field: EntryFormFieldsEnum) => {
@@ -267,7 +264,7 @@ export class EntryPage extends React.Component<IProps> {
     return (
       <div style={{ margin: '20px' }}>
         <Card
-          loading={this.props.rootStore?.isFetchingDates}
+          loading={this.props.rootStore?.fetchingDates?.state !== 'fulfilled'}
           style={{ backgroundColor: '#c2c2c2' }}
         >
           <Form

@@ -64,6 +64,7 @@ export class RootStore {
     this.fetchingKeywords = fromPromise(get(Constants.LOG_ENTRY_URL+'/keywords'));
 
     await this.fetchingKeywords.then(response => {
+      console.log('fetched');
       this.setKeywords(response.data);
     });
   }

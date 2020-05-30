@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
-import {  Spin } from 'antd';
+import {  Spin, Card, Row } from 'antd';
 import { observer, inject } from 'mobx-react';
 import { observable, computed } from 'mobx';
 import { RootStore, KeywordEntry } from '../stores/rootStore';
 import { Rejected } from '../custom-components';
+import ReactTooltip from 'react-tooltip';
 
 import './calendar.scss';
+import { Utils } from '../App.utils';
 interface IProps {
   rootStore?: RootStore;
   data: KeywordEntry[];
   year: number;
+}
+
+interface IInterval {
+  start: Date;
+  end: Date;
 }
 
 @inject('rootStore')
@@ -27,7 +34,6 @@ class CalendarKeyword extends Component<IProps> {
     }
 
     return this.props.data
-      // .filter((k: KeywordEntry) => this.searchTerm.length > 0 ? true : k.keywords.includes(this.searchTerm))
       .map((k: KeywordEntry) => {
         return {
           date: k.date,
@@ -40,43 +46,80 @@ class CalendarKeyword extends Component<IProps> {
     return new Date(this.props.year, 0,1);
   }
 
+  private get midStartDate() {
+    return new Date(this.props.year, 5, 30);
+  }
+
+  private get midEndDate() {
+    return new Date(this.props.year, 6, 1);
+  }
+
   @computed
   private get endDate() {
     return new Date(this.props.year, 11, 31);
   }
 
+  private get intervals(): IInterval[] {
+    return [
+      {
+        start: this.startDate,
+        end: this.midStartDate,
+      },
+      {
+        start: this.midEndDate,
+        end: this.endDate,
+      },
+    ];
+  }
+
+  private tooltip = (value: {date: string} | undefined) => {
+    const tip = (value?.date) ? Utils.fromReversedDate(value.date) : 'missing entry';
+    return {
+      'data-tip': tip
+    };
+  }
+
   @computed
   private get calendarMap() {
-    console.log(this.startDate, this.endDate);
     return (
       <>
         <h3>{this.props.year}</h3>
-        <CalendarHeatmap
-          startDate={this.startDate}
-          endDate={this.endDate}
-          values={this.heatMapValues}
-          classForValue={(value) => {
-            if (!value) {
-              return 'color-empty';
-            }
+        {this.intervals.map((interval: IInterval, index: number) => {
+          return  (
+            <Row key={index}>
+              <CalendarHeatmap
+                startDate={interval.start}
+                endDate={interval.end}
+                values={this.heatMapValues}
+                showWeekdayLabels
+                gutterSize={2}
+                weekdayLabels={['M','T','W','T','F','S','S']}
+                tooltipDataAttrs={(this.tooltip)}
+                classForValue={(value) => {
+                  if (!value) {
+                    return 'color-empty';
+                  }
 
-            return 'color-filled';
-          }}
-        />
+                  return 'color-filled';
+                }}
+              />
+            </Row>
+          );
+        }) }
       </>
     );
   }
 
   public render() {
     return(
-      <div>
+      <Card>
         {this.props.rootStore?.fetchingKeywords?.case({
           fulfilled: () => this.calendarMap,
           pending: () => <Spin/>,
           rejected: () =>  <Rejected message="Unable to get keywords"/>,
         })}
-        <p> Days of {this.searchTerm}: </p>
-      </div>
+        <ReactTooltip/>
+      </Card>
     );
   }
 }

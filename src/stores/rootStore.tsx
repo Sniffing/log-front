@@ -71,7 +71,7 @@ export class RootStore {
 
   @action.bound
   public async fetchMemory() {
-    this.fetchingMemory = fromPromise(get(Constants.LOG_ENTRY_URL+'/text'));
+    this.fetchingMemory = fromPromise(get(Constants.LOG_ENTRY_URL+'/texts'));
     await this.fetchingMemory.then(response => {
       this.setMemories(response.data);
     });
@@ -80,7 +80,7 @@ export class RootStore {
   @action.bound
   public async fetchWeightData() {
     this.isFetchingData = true;
-    this.fetchingWeight = fromPromise(get(Constants.LOG_ENTRY_URL+'/weight'));
+    this.fetchingWeight = fromPromise(get(Constants.LOG_ENTRY_URL+'/weights'));
 
     await this.fetchingWeight.then(response => {
       this.setWeight(response.data);

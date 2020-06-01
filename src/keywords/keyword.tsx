@@ -9,7 +9,6 @@ import {
   WordCount,
   KeywordList,
   KeywordTreemap,
-  KeywordMonths
 } from './';
 import { Rejected } from '../custom-components';
 
@@ -89,8 +88,6 @@ export class KeywordPage extends React.Component<IProps> {
         {this.props.rootStore?.fetchingKeywords?.case({
           fulfilled: () => <>
             <h2>Number of days recorded: {data?.length} </h2>
-            {/* <KeywordDays data={this.data} dictionary={this.displayTerms}/> */}
-            <KeywordMonths data={data} />
             <KeywordTreemap data={this.activeWords} minCount={this.filterAmount} />
             <NumericInput value={this.filterAmount} onChange={this.setFilterAmount} />
             <KeywordList

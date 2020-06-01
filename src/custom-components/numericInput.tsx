@@ -13,7 +13,7 @@ class NumericInput extends Component<IProps> {
     const numValue = parseInt(value);
     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     if ((!Number.isNaN(numValue) && reg.test(value)) || value === '' || value === '-') {
-      this.props.onChange(numValue);
+      this.props.onChange(numValue > 10 ? numValue : 10);
     }
   }
 
@@ -28,7 +28,7 @@ class NumericInput extends Component<IProps> {
       >
         <Input
           {...this.props}
-          onChange={this.onChange}
+          onBlur={this.onChange}
           placeholder="Entry count cutoff"
           maxLength={5}
         />

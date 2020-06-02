@@ -20,6 +20,7 @@
     "circular-dependency-plugin": "^5.2.0",
     "heap": "^0.2.6",
     "konva": "^5.0.2",
+    "metrics-graphics": "^2.15.6",
     "minimist": "^1.2.5",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",

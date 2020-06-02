@@ -6,6 +6,7 @@ import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 import { IWeightDTO } from '../weight';
 import { ILifeEvent } from '../life-event';
 import { ICalorieEntry } from '../calories';
+import { KEYWORD_URL, TEXT_URL, WEIGHT_URL, LAST_DATES_URL } from '.';
 
 export interface KeywordEntry {
   date: string;
@@ -61,7 +62,7 @@ export class RootStore {
 
   @action
   public async fetchKeywords() {
-    this.fetchingKeywords = fromPromise(get(Constants.LOG_ENTRY_URL+'/keywords'));
+    this.fetchingKeywords = fromPromise(get(KEYWORD_URL));
 
     await this.fetchingKeywords.then(response => {
       console.log('fetched');
@@ -71,7 +72,7 @@ export class RootStore {
 
   @action.bound
   public async fetchMemory() {
-    this.fetchingMemory = fromPromise(get(Constants.LOG_ENTRY_URL+'/texts'));
+    this.fetchingMemory = fromPromise(get(TEXT_URL));
     await this.fetchingMemory.then(response => {
       this.setMemories(response.data);
     });
@@ -80,7 +81,7 @@ export class RootStore {
   @action.bound
   public async fetchWeightData() {
     this.isFetchingData = true;
-    this.fetchingWeight = fromPromise(get(Constants.LOG_ENTRY_URL+'/weights'));
+    this.fetchingWeight = fromPromise(get(WEIGHT_URL));
 
     await this.fetchingWeight.then(response => {
       this.setWeight(response.data);
@@ -109,8 +110,7 @@ export class RootStore {
 
   @action
   public async fetchLastDates() {
-    this.fetchingDates = fromPromise(get(
-      Constants.LOG_ENTRY_URL));
+    this.fetchingDates = fromPromise(get(LAST_DATES_URL));
 
     await this.fetchingDates.then((response) => {
       console.log((response.data as ILastDates));

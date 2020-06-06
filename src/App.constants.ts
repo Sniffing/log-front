@@ -6,6 +6,7 @@ import { WeightPage } from './weight';
 import { CalendarPage } from './calendar';
 import { LifeEventPage } from './life-event';
 import { CalorieEntryPage } from './calories';
+import { Analysis } from './analysis';
 
 export enum Page {
     HOME = 'HOME',
@@ -16,6 +17,7 @@ export enum Page {
     ENTRY = 'ENTRY',
     LIFE_EVENT = 'LIFE_EVENT',
     CALORIE_ENTRY = 'CALORIE_ENTRY',
+    ANALYSIS = 'ANALYSIS',
 }
 export interface IPageConfig {
     page: string;
@@ -33,12 +35,13 @@ const getComponent = (page: Page) => {
   case Page.ENTRY: return EntryPage;
   case Page.LIFE_EVENT: return LifeEventPage;
   case Page.CALORIE_ENTRY: return CalorieEntryPage;
+  case Page.ANALYSIS: return Analysis;
   }
 };
 
 const pageConfigs: IPageConfig[] = Object.values(Page).map((page: Page) => {
   const comp = getComponent(page);
-    
+
   return {
     page: page.toString(),
     path: `/${page.toString().toLowerCase()}`,

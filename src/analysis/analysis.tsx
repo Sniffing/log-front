@@ -2,6 +2,11 @@ import React from 'react';
 import { RootStore } from '../stores/rootStore';
 import { observer, inject } from 'mobx-react';
 import ReactEcharts from 'echarts-for-react';
+import { EChartOption } from 'echarts';
+import { IWeightDTO } from '../weight';
+import { computed, runInAction, observable, toJS } from 'mobx';
+import { Utils } from '../App.utils';
+import { Spin } from 'antd';
 
 interface IProps {
   rootStore?: RootStore;
@@ -11,67 +16,75 @@ interface IProps {
 @observer
 export class Analysis extends React.Component<IProps> {
 
-  private getOption() {
+  public componentDidMount() {
+    this.props.rootStore?.fetchWeightData();
+  }
+
+  private get weightData(): EChartOption.Series {
+    const series = this.props.rootStore?.weights;
+    const sortedData = series?.sort((a: IWeightDTO, b: IWeightDTO) => {
+      const dateA = Utils.dateFromString(a.date);
+      const dateB = Utils.dateFromString(b.date);
+      return dateA > dateB ? 1 : -1;
+    });
+
+    const data = sortedData?.map((weight: IWeightDTO) => {
+      const date = Utils.dateFromString(weight.date);
+      const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
+      const num: number = parseFloat(weight.weight);
+
+      console.log(dateVal, num);
+      return {
+        name: date.toString(),
+        value: [dateVal, num],
+      };
+    });
+
+    return {
+      name: 'Weight',
+      type: 'line',
+      data: data,
+    };
+  }
+
+  @observable
+  private data: any[] = [];
+
+  @computed
+  private get option(): EChartOption {
     return {
       title: {
-        text: '折线图堆叠'
+        text: 'Title'
       },
       tooltip: {
         trigger: 'axis'
       },
       legend: {
-        data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+        data: ['Weight']
       },
       grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
+        left: '2%',
+        right: '2%',
+        bottom: '2%',
         containLabel: true
       },
-      toolbox: {
-        feature: {
-          saveAsImage: {}
-        }
-      },
       xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        type: 'time',
+        splitLine: {
+          show: false
+        }
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
+        boundaryGap: [0, '100%'],
+        splitLine: {
+          show: false
+        },
+        min: 63,
+        max: 73,
       },
       series: [
-        {
-          name: '邮件营销',
-          type: 'line',
-          stack: '总量',
-          data: [120, 132, 101, 134, 90, 230, 210]
-        },
-        {
-          name: '联盟广告',
-          type: 'line',
-          stack: '总量',
-          data: [220, 182, 191, 234, 290, 330, 310]
-        },
-        {
-          name: '视频广告',
-          type: 'line',
-          stack: '总量',
-          data: [150, 232, 201, 154, 190, 330, 410]
-        },
-        {
-          name: '直接访问',
-          type: 'line',
-          stack: '总量',
-          data: [320, 332, 301, 334, 390, 330, 320]
-        },
-        {
-          name: '搜索引擎',
-          type: 'line',
-          stack: '总量',
-          data: [820, 932, 901, 934, 1290, 1330, 1320]
-        }
+        this.weightData,
       ]
     };
   }
@@ -80,8 +93,11 @@ export class Analysis extends React.Component<IProps> {
     return (
       <>
         <div>Analysis page</div>
-        <ReactEcharts
-          option={this.getOption()}></ReactEcharts>
+        {this.props.rootStore?.fetchingWeight?.case({
+          fulfilled: () => <ReactEcharts option={this.option}/>,
+          pending: () => <Spin/>,
+          rejected: () => <div>fuck</div>,
+        })}
       </>
     );
   }

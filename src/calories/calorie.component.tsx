@@ -10,6 +10,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import { UploadChangeParam, RcFile } from 'antd/lib/upload';
 import { observable, action, computed } from 'mobx';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
+import { UploadFile } from 'antd/lib/upload/interface';
 
 interface IProps {
   rootStore: RootStore;
@@ -83,6 +84,16 @@ export class CalorieEntryPage extends React.Component<IProps> {
     }
   }
 
+  @action
+  private removeFile = () => {
+    this.csvFile = undefined;
+  }
+
+  @computed
+  private get fileList(): RcFile[] {
+    return this.csvFile ? [this.csvFile] : [];
+  }
+
   @computed
   private get uploadProps(): DraggerProps {
     return {
@@ -90,6 +101,8 @@ export class CalorieEntryPage extends React.Component<IProps> {
       accept: '.csv',
       multiple: false,
       beforeUpload: this.checkFile,
+      onRemove: this.removeFile,
+      fileList: this.fileList,
       onChange: (info: UploadChangeParam) => {
         const { status } = info.file;
         if (status !== 'uploading') {
@@ -103,27 +116,32 @@ export class CalorieEntryPage extends React.Component<IProps> {
   public render() {
     const loading = this.props.rootStore.savingCalorieEntry?.state === 'pending';
     return (
-      <Card style={{margin: '20px'}} loading={loading}>
-        <Form ref={this.formRef} labelCol={{span: 4}} onFinish={this.handleSaveEventClick}>
-          {calorieFormFields.map(this.createFormItem)}
+      <>
+        <Card style={{margin: '20px'}} loading={loading}>
+          <Form ref={this.formRef} labelCol={{span: 4}} onFinish={this.handleSaveEventClick}>
+            {calorieFormFields.map(this.createFormItem)}
 
-          <Form.Item style={{textAlign:'center'}}>
-            <Button type="primary" htmlType="submit">Save Entry</Button>
-          </Form.Item>
-        </Form>
-
-        <Dragger {...this.uploadProps}>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">Upload .csv file</p>
-        </Dragger>,
-        <Button
-          onClick={this.uploadFile}
-          disabled={!this.csvFile || this.uploadingCSV?.state === 'pending'}>
+            <Form.Item style={{textAlign:'center'}}>
+              <Button type="primary" htmlType="submit">Save Entry</Button>
+            </Form.Item>
+          </Form>
+        </Card>
+        <Card style={{margin: '20px', textAlign: 'center'}}>
+          <Dragger {...this.uploadProps}>
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">Upload .csv file</p>
+          </Dragger>
+          <Button
+            type="primary"
+            style={{marginTop: '20px'}}
+            onClick={this.uploadFile}
+            disabled={!this.csvFile || this.uploadingCSV?.state === 'pending'}>
             Upload
-        </Button>
-      </Card>
+          </Button>
+        </Card>
+      </>
     );
   }
 }

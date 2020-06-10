@@ -4,7 +4,12 @@ import { inject, observer } from 'mobx-react';
 import Form, { FormInstance } from 'antd/lib/form';
 import { ICalorieEntryFormValues, CalorieFormFieldsEnum, calorieFormFields, isDateDisabled, CalorieFormFieldsConfigs } from '.';
 import { convertFormValuesToCalorieEntry } from './calorie.helper';
-import { Input, DatePicker, Card, Button } from 'antd';
+import { Input, DatePicker, Card, Button, message } from 'antd';
+import Dragger, { DraggerProps } from 'antd/lib/upload/Dragger';
+import { InboxOutlined } from '@ant-design/icons';
+import { UploadChangeParam, RcFile } from 'antd/lib/upload';
+import { observable, action, computed } from 'mobx';
+import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
 
 interface IProps {
   rootStore: RootStore;
@@ -50,6 +55,51 @@ export class CalorieEntryPage extends React.Component<IProps> {
     );
   }
 
+  @observable
+  private csvFile: RcFile | undefined;
+
+  @observable
+  private uploadingCSV: IPromiseBasedObservable<any> | undefined;
+
+  @action
+  private setCSV = (file: RcFile) => {
+    this.csvFile = file;
+  }
+
+  private checkFile = (file: RcFile): boolean | PromiseLike<void> => {
+    console.log(file);
+    if (file.type !== 'text/csv') {
+      message.error('Can only upload csvs');
+      return false;
+    }
+
+    this.setCSV(file);
+    return false;
+  }
+
+  private uploadFile = () => {
+    if (this.csvFile) {
+      this.uploadingCSV = fromPromise(this.props.rootStore.saveCaloriesFromCSV(this.csvFile));
+    }
+  }
+
+  @computed
+  private get uploadProps(): DraggerProps {
+    return {
+      name: 'file',
+      accept: '.csv',
+      multiple: false,
+      beforeUpload: this.checkFile,
+      onChange: (info: UploadChangeParam) => {
+        const { status } = info.file;
+        if (status !== 'uploading') {
+          console.log(info.file);
+        }
+      },
+      disabled: this.uploadingCSV?.state === 'pending',
+    };
+  }
+
   public render() {
     const loading = this.props.rootStore.savingCalorieEntry?.state === 'pending';
     return (
@@ -61,6 +111,18 @@ export class CalorieEntryPage extends React.Component<IProps> {
             <Button type="primary" htmlType="submit">Save Entry</Button>
           </Form.Item>
         </Form>
+
+        <Dragger {...this.uploadProps}>
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+          </p>
+          <p className="ant-upload-text">Upload .csv file</p>
+        </Dragger>,
+        <Button
+          onClick={this.uploadFile}
+          disabled={!this.csvFile || this.uploadingCSV?.state === 'pending'}>
+            Upload
+        </Button>
       </Card>
     );
   }

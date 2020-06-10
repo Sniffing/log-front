@@ -7,6 +7,9 @@ import { IWeightDTO } from '../weight';
 import { ILifeEvent } from '../life-event';
 import { ICalorieEntry } from '../calories';
 import { KEYWORD_URL, TEXT_URL, WEIGHT_URL, LAST_DATES_URL } from '.';
+import { RcFile } from 'antd/lib/upload';
+import { CALORIE_FROM_FILE_URL } from './constants';
+import axios from 'axios';
 
 export interface KeywordEntry {
   date: string;
@@ -127,6 +130,16 @@ export class RootStore {
       },
       body: JSON.stringify(entry),
     }));
+  }
+
+  public async saveCaloriesFromCSV(csvFile: RcFile) {
+    const formData = new FormData();
+    formData.append('file', csvFile, 'calories.csv');
+
+    return fetch(CALORIE_FROM_FILE_URL, {
+      method: 'POST',
+      body: formData,
+    });
   }
 
   @action.bound

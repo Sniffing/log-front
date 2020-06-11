@@ -2,18 +2,18 @@ import React from 'react';
 
 import { WeightLineGraph } from '.';
 import { inject } from 'mobx-react';
-import { RootStore } from '../stores/rootStore';
+import { LogEntryStore } from '../stores/logEntryStore';
 
 interface IProps {
-  rootStore?: RootStore;
+  logEntryStore?: LogEntryStore;
 }
 
-@inject('rootStore')
+@inject('logEntryStore')
 export class WeightPage extends React.Component<IProps> {
   render() {
     return (
       <div className="weight-page">
-        <WeightLineGraph rootStore={this.props.rootStore} />
+        <WeightLineGraph logEntryStore={this.props.logEntryStore} />
       </div>
     );
   }

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import { RootStore } from '../stores/rootStore';
 import {
   ILogEntry,
 
@@ -34,12 +33,13 @@ import { observable, action } from 'mobx';
 import 'react-tagsinput/react-tagsinput.css';
 import { remove, flatten } from 'lodash';
 import { IFormProps } from '../App.interfaces';
+import { LogEntryStore } from '../stores/logEntryStore';
 
 interface IProps {
-  rootStore?: RootStore;
+  logEntryStore?: LogEntryStore;
 }
 
-@inject('rootStore')
+@inject('logEntryStore')
 @observer
 export class EntryPage extends React.Component<IProps> {
   private formRef: React.RefObject<FormInstance> = React.createRef();
@@ -58,12 +58,11 @@ export class EntryPage extends React.Component<IProps> {
   }
 
   public async componentDidMount() {
-    if (this.props.rootStore) {
-      await this.props.rootStore.fetchLastDates();
+    if (this.props.logEntryStore) {
+      await this.props.logEntryStore.fetchLastDates();
 
-      console.log('dates', this.props.rootStore.lastDates,);
       this.setNextDate(
-        moment(this.props.rootStore.lastDates.last)
+        moment(this.props.logEntryStore.lastDates.last)
           .utc()
           .add(-moment().utcOffset(), 'm')
           .add(1, 'day')
@@ -89,15 +88,15 @@ export class EntryPage extends React.Component<IProps> {
   private handleFinish = async (value: any) => {
     const values = value as IEntryFormValues;
     const entry: ILogEntry = convertFormValuesToLogEntry(values);
-    const { rootStore } = this.props;
+    const { logEntryStore } = this.props;
 
-    if (!rootStore) {
-      console.log('Rootstore not defined');
+    if (!logEntryStore) {
+      console.log('LogEntryStore not defined');
       return;
     }
 
     try {
-      await rootStore.saveEntry(entry);
+      await logEntryStore.saveEntry(entry);
       message.success(`Saved data for ${entry.dateState?.date}`);
       this.formRef.current?.resetFields();
 
@@ -161,11 +160,9 @@ export class EntryPage extends React.Component<IProps> {
       })
     );
 
-    console.log(emotions);
     this.formRef.current?.setFieldsValue({
       [EntryFormFieldsEnum.FREE_EMOTIONS]: emotions
     });
-    console.log(this.formRef.current?.getFieldsValue());
   };
 
   private handleWeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -185,7 +182,7 @@ export class EntryPage extends React.Component<IProps> {
   };
 
   private disableDatesAfterLastEntry = (current: Moment) => {
-    return current && current > moment(this.props.rootStore?.lastDates.last).endOf('day');
+    return current && current > moment(this.props.logEntryStore?.lastDates.last).endOf('day');
   };
 
   private getFormField = (field: EntryFormFieldsEnum) => {
@@ -264,7 +261,7 @@ export class EntryPage extends React.Component<IProps> {
     return (
       <div style={{ margin: '20px' }}>
         <Card
-          loading={this.props.rootStore?.fetchingDates?.state !== 'fulfilled'}
+          loading={this.props.logEntryStore?.fetchingDates?.state !== 'fulfilled'}
           style={{ backgroundColor: '#c2c2c2' }}
         >
           <Form

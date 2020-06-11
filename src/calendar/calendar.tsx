@@ -1,17 +1,17 @@
 import React from 'react';
 import CalendarKeyword from './calendar-keyword';
-import { RootStore, KeywordEntry } from '../stores/rootStore';
 import { inject, observer } from 'mobx-react';
 import { Spin, Select } from 'antd';
 import { Rejected } from '../custom-components';
 import { computed, action, observable } from 'mobx';
 import { Utils } from '../App.utils';
+import { KeywordEntry, LogEntryStore } from '../stores/logEntryStore';
 
 interface IProps {
-  rootStore?: RootStore;
+  logEntryStore?: LogEntryStore;
 }
 
-@inject('rootStore')
+@inject('logEntryStore')
 @observer
 export class CalendarPage extends React.Component<IProps> {
 
@@ -19,16 +19,16 @@ export class CalendarPage extends React.Component<IProps> {
   private filterTerms: string[] = [];
 
   public async componentDidMount() {
-    this.props.rootStore?.fetchLastDates();
-    this.props.rootStore?.fetchKeywords();
+    this.props.logEntryStore?.fetchLastDates();
+    this.props.logEntryStore?.fetchKeywords();
   }
 
   @computed
   private get calendars() {
     const years: number[] = [];
 
-    if (this.props.rootStore && this.props.rootStore.fetchingDates?.state === 'fulfilled') {
-      const {first, last} = this.props.rootStore?.lastDates;
+    if (this.props.logEntryStore && this.props.logEntryStore.fetchingDates?.state === 'fulfilled') {
+      const {first, last} = this.props.logEntryStore?.lastDates;
 
       const firstYear = Utils.dateFromString(first).getFullYear();
       const lastYear = Utils.dateFromString(last).getFullYear();
@@ -44,9 +44,9 @@ export class CalendarPage extends React.Component<IProps> {
   }
 
   private getData(year: number): KeywordEntry[] {
-    if (!this.props.rootStore) return [];
+    if (!this.props.logEntryStore) return [];
 
-    return this.props.rootStore?.keywords
+    return this.props.logEntryStore?.keywords
       .filter((entry: KeywordEntry) =>  Number(entry.date.split('-')[0]) === year)
       .filter((entry: KeywordEntry) => {
         for(let i=0; i<this.filterTerms.length; i++) {
@@ -60,7 +60,7 @@ export class CalendarPage extends React.Component<IProps> {
   @computed
   private get keywords() {
     const set = new Set<string>();
-    this.props.rootStore?.keywords.forEach((k: KeywordEntry) => {
+    this.props.logEntryStore?.keywords.forEach((k: KeywordEntry) => {
       k.keywords.forEach(w => set.add(w));
     });
 
@@ -82,7 +82,7 @@ export class CalendarPage extends React.Component<IProps> {
             </Select.Option>
           ))}
         </Select>
-        {this.props.rootStore?.fetchingDates?.case({
+        {this.props.logEntryStore?.fetchingDates?.case({
           fulfilled: () => this.calendars,
           pending: () => <Spin/>,
           rejected: () => <Rejected message="Unable to fetch entries"/>,

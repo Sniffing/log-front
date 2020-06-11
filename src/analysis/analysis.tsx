@@ -1,27 +1,27 @@
 import React from 'react';
-import { RootStore } from '../stores/rootStore';
 import { observer, inject } from 'mobx-react';
 import ReactEcharts from 'echarts-for-react';
 import { EChartOption } from 'echarts';
 import { IWeightDTO } from '../weight';
-import { computed, runInAction, observable, toJS } from 'mobx';
+import { computed, observable } from 'mobx';
 import { Utils } from '../App.utils';
 import { Spin } from 'antd';
+import { LogEntryStore } from '../stores/logEntryStore';
 
 interface IProps {
-  rootStore?: RootStore;
+  logEntryStore?: LogEntryStore;
 }
 
-@inject('rootStore')
+@inject('logEntryStore')
 @observer
 export class Analysis extends React.Component<IProps> {
 
   public componentDidMount() {
-    this.props.rootStore?.fetchWeightData();
+    this.props.logEntryStore?.fetchWeightData();
   }
 
   private get weightData(): EChartOption.Series {
-    const series = this.props.rootStore?.weights;
+    const series = this.props.logEntryStore?.weights;
     const sortedData = series?.sort((a: IWeightDTO, b: IWeightDTO) => {
       const dateA = Utils.dateFromString(a.date);
       const dateB = Utils.dateFromString(b.date);
@@ -33,7 +33,6 @@ export class Analysis extends React.Component<IProps> {
       const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
       const num: number = parseFloat(weight.weight);
 
-      console.log(dateVal, num);
       return {
         name: date.toString(),
         value: [dateVal, num],
@@ -93,7 +92,7 @@ export class Analysis extends React.Component<IProps> {
     return (
       <>
         <div>Analysis page</div>
-        {this.props.rootStore?.fetchingWeight?.case({
+        {this.props.logEntryStore?.fetchingWeight?.case({
           fulfilled: () => <ReactEcharts option={this.option}/>,
           pending: () => <Spin/>,
           rejected: () => <div>fuck</div>,

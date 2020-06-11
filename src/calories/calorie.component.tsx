@@ -1,66 +1,38 @@
 import React from 'react';
-import { RootStore } from '../stores/rootStore';
 import { inject, observer } from 'mobx-react';
 import Form, { FormInstance } from 'antd/lib/form';
-import { ICalorieEntryFormValues, CalorieFormFieldsEnum, calorieFormFields, isDateDisabled, CalorieFormFieldsConfigs } from '.';
+import { ICalorieEntryFormValues, calorieFormFields, createFormItem } from '.';
 import { convertFormValuesToCalorieEntry } from './calorie.helper';
-import { Input, DatePicker, Card, Button, message } from 'antd';
+import { Card, Button, message } from 'antd';
 import Dragger, { DraggerProps } from 'antd/lib/upload/Dragger';
 import { InboxOutlined } from '@ant-design/icons';
 import { UploadChangeParam, RcFile } from 'antd/lib/upload';
 import { observable, action, computed } from 'mobx';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
-import { UploadFile } from 'antd/lib/upload/interface';
+import { CalorieStore } from '../stores/calorieStore';
+import { Store } from 'antd/lib/form/interface';
 
 interface IProps {
-  rootStore: RootStore;
+  calorieStore: CalorieStore;
 }
 
-@inject('rootStore')
+@inject('calorieStore')
 @observer
 export class CalorieEntryPage extends React.Component<IProps> {
 
   private formRef = React.createRef<FormInstance>();
 
-  private handleSaveEventClick = (value: any) => {
-    const formValues = value as ICalorieEntryFormValues;
-    console.log(value, formValues);
-    const event = convertFormValuesToCalorieEntry(formValues);
-    this.props.rootStore?.saveCalorieEntry(event);
-  }
-
-  private createFormItem = (elem: CalorieFormFieldsEnum) => {
-    const config = CalorieFormFieldsConfigs[elem];
-    let formComponent = <Input/>;
-
-    switch(elem) {
-    case CalorieFormFieldsEnum.CALORIES:
-      break;
-    case CalorieFormFieldsEnum.DATE:
-      formComponent = <DatePicker disabledDate={isDateDisabled}></DatePicker>;
-      break;
-    }
-
-    const rules = [];
-    if (config.required) {
-      rules.push({
-        required: true,
-        message: 'Mandatory field'
-      });
-    }
-
-    return (
-      <Form.Item label={config.label} name={config.name} rules={rules}>
-        {formComponent}
-      </Form.Item>
-    );
-  }
-
   @observable
   private csvFile: RcFile | undefined;
 
   @observable
-  private uploadingCSV: IPromiseBasedObservable<any> | undefined;
+  private uploadingCSV: IPromiseBasedObservable<Response> | undefined;
+
+  private handleSaveEventClick = (value: Store) => {
+    const formValues = value as ICalorieEntryFormValues;
+    const event = convertFormValuesToCalorieEntry(formValues);
+    this.props.calorieStore?.saveCalorieEntry(event);
+  }
 
   @action
   private setCSV = (file: RcFile) => {
@@ -68,7 +40,6 @@ export class CalorieEntryPage extends React.Component<IProps> {
   }
 
   private checkFile = (file: RcFile): boolean | PromiseLike<void> => {
-    console.log(file);
     if (file.type !== 'text/csv') {
       message.error('Can only upload csvs');
       return false;
@@ -80,7 +51,7 @@ export class CalorieEntryPage extends React.Component<IProps> {
 
   private uploadFile = () => {
     if (this.csvFile) {
-      this.uploadingCSV = fromPromise(this.props.rootStore.saveCaloriesFromCSV(this.csvFile));
+      this.uploadingCSV = fromPromise(this.props.calorieStore.saveCaloriesFromCSV(this.csvFile));
     }
   }
 
@@ -114,12 +85,12 @@ export class CalorieEntryPage extends React.Component<IProps> {
   }
 
   public render() {
-    const loading = this.props.rootStore.savingCalorieEntry?.state === 'pending';
+    const loading = this.props.calorieStore.savingCalorieEntry?.state === 'pending';
     return (
       <>
         <Card style={{margin: '20px'}} loading={loading}>
           <Form ref={this.formRef} labelCol={{span: 4}} onFinish={this.handleSaveEventClick}>
-            {calorieFormFields.map(this.createFormItem)}
+            {calorieFormFields.map(createFormItem)}
 
             <Form.Item style={{textAlign:'center'}}>
               <Button type="primary" htmlType="submit">Save Entry</Button>

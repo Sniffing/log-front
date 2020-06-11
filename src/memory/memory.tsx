@@ -2,38 +2,38 @@ import React, { Component } from 'react';
 import { Button, Card, Spin } from 'antd';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { RootStore } from '../stores/rootStore';
 
 import './memory.scss';
 import { Utils } from '../App.utils';
 import { Rejected } from '../custom-components';
+import { LogEntryStore } from '../stores/logEntryStore';
 
 interface IProps {
-  rootStore?: RootStore;
+  logEntryStore?: LogEntryStore;
 }
 
-@inject('rootStore')
+@inject('logEntryStore')
 @observer
 export class MemoryPage extends Component<IProps> {
   @observable
   private currentIndex = 0;
 
   public componentDidMount() {
-    this.props.rootStore?.fetchMemory();
+    this.props.logEntryStore?.fetchMemory();
   }
 
   @action
   private rollNewMemory = () => {
-    if (!this.props.rootStore?.memories) return;
+    if (!this.props.logEntryStore?.memories) return;
 
     let random = Math.random();
-    random *= this.props.rootStore.memories.length - 1;
+    random *= this.props.logEntryStore.memories.length - 1;
     this.currentIndex = random;
   };
 
   @computed
   private get memory() {
-    const memories = this.props.rootStore?.memories;
+    const memories = this.props.logEntryStore?.memories;
     const memory = memories ? memories[this.currentIndex] : undefined;
 
     return memory ? memory : {date: '', text: ''};
@@ -42,7 +42,7 @@ export class MemoryPage extends Component<IProps> {
   public render() {
     return (
       <div className='memory'>
-        {this.props.rootStore?.fetchingMemory?.case({
+        {this.props.logEntryStore?.fetchingMemory?.case({
           fulfilled: () =>
             <Card title={`${Utils.fromReversedDate(this.memory.date)}`} className='card'>
               <p>{this.memory.text}</p>

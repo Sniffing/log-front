@@ -14,16 +14,16 @@ import { DatePicker, Slider, Spin } from 'antd';
 import moment, { Moment } from 'moment';
 import { observer, inject } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
-import { RootStore } from '../stores/rootStore';
 import { SliderValue } from 'antd/lib/slider';
 import { FormattedWeight, formatResults, sortByDate, WeightDates, convertToGraphData, computeLineOfBestFit, computeLineOfAverage, getTitleLinePoint, getAverageWeight } from '.';
 import { Rejected } from '../custom-components';
+import { LogEntryStore } from '../stores/logEntryStore';
 
 interface IProps {
-  rootStore?: RootStore;
+  logEntryStore?: LogEntryStore;
 }
 
-@inject('rootStore')
+@inject('logEntryStore')
 @observer
 export class WeightLineGraph extends Component<IProps> {
 
@@ -39,12 +39,12 @@ private crosshairValues: any[] = [];
 private fitCloseness = 4;
 
 public componentDidMount() {
-  this.props.rootStore?.fetchWeightData();
+  this.props.logEntryStore?.fetchWeightData();
 }
 
 @computed
 private get formattedData(): FormattedWeight[] {
-  const sortedResults = sortByDate(formatResults(this.props.rootStore?.weights));
+  const sortedResults = sortByDate(formatResults(this.props.logEntryStore?.weights));
 
   if (sortedResults.length) {
     this.setDates({
@@ -79,7 +79,6 @@ private changeStartDate = (newStart: any) => {
 private changeEndDate = (newEnd: any) => {
   if (newEnd !== undefined) {
     const newEndUnix = newEnd.unix() * 1000;
-    console.log('setting new end:', this.dates.end);
 
     // const filteredData = this.formattedData.filter(data => {
     //   return data.date >= this.dates.start && data.date < newEndUnix;
@@ -104,7 +103,7 @@ private updateCrosshairs(dataPoint: any) {
 }
 
 private createGraph = (data: FormattedWeight[]) => {
-  const averageWeight = this.props.rootStore ? getAverageWeight(this.props.rootStore.weights) : 0;
+  const averageWeight = this.props.logEntryStore ? getAverageWeight(this.props.logEntryStore.weights) : 0;
   const pointLine = <LineSeries
     color="red"
     data={convertToGraphData(data)}
@@ -157,7 +156,7 @@ private createGraph = (data: FormattedWeight[]) => {
 
 public render() {
 
-  const graph = this.props.rootStore?.fetchingWeight?.case({
+  const graph = this.props.logEntryStore?.fetchingWeight?.case({
     fulfilled: () => this.createGraph(this.formattedData),
     pending: () => <Spin/>,
     rejected: () =>  <Rejected message={'Error fetching Weights'}/>,

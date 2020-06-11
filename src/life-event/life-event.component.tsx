@@ -5,28 +5,27 @@ import { Input, Button, Card, DatePicker, Radio, message } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { isDateDisabled, ILifeEventFormValues } from '.';
 import { inject, observer } from 'mobx-react';
-import { RootStore } from '../stores/rootStore';
 import { convertFormValuesToLifeEvent } from './life-event.helper';
 import { NumbersOnlySelect } from '../custom-components';
+import { LifeEventStore } from '../stores/lifeEventStore';
 
 interface IProps {
-  rootStore: RootStore;
+  lifeEventStore: LifeEventStore;
 }
 
-@inject('rootStore')
+@inject('lifeEventStore')
 @observer
 export class LifeEventPage extends React.Component<IProps> {
   private formRef = React.createRef<FormInstance>();
 
   private handleSaveEventClick = async (values: any) => {
-    console.log(values);
     const event = convertFormValuesToLifeEvent(values as ILifeEventFormValues);
 
     try {
-      await this.props.rootStore?.saveLifeEvent(event);
+      await this.props.lifeEventStore?.saveLifeEvent(event);
     } catch (error) {
       message.error('Could not save entry');
-      console.log(error);
+      console.error(error);
     }
   }
 

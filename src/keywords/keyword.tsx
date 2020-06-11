@@ -1,6 +1,5 @@
 import React from 'react';
 import { Spin } from 'antd';
-import { RootStore, KeywordEntry } from '../stores/rootStore';
 import { inject, observer } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
 import NumericInput from '../custom-components/numericInput';
@@ -11,12 +10,13 @@ import {
   KeywordTreemap,
 } from './';
 import { Rejected } from '../custom-components';
+import { LogEntryStore, KeywordEntry } from '../stores/logEntryStore';
 
 interface IProps {
-  rootStore?: RootStore;
+  logEntryStore?: LogEntryStore;
 }
 
-@inject('rootStore')
+@inject('logEntryStore')
 @observer
 export class KeywordPage extends React.Component<IProps> {
   @observable
@@ -29,14 +29,14 @@ export class KeywordPage extends React.Component<IProps> {
   private filterAmount= 5;
 
   public async componentDidMount() {
-    this.props.rootStore?.fetchKeywords();
+    this.props.logEntryStore?.fetchKeywords();
   }
 
   @computed
   private get wordCounts(): Record<string, number> {
     const localDictionary: Record<string, number> = {};
 
-    this.props.rootStore?.keywords.forEach((entry: KeywordEntry) => {
+    this.props.logEntryStore?.keywords.forEach((entry: KeywordEntry) => {
       entry.keywords.forEach((word: string) => {
         // eslint-disable-next-line no-prototype-builtins
         if (!localDictionary.hasOwnProperty(word)) {
@@ -52,9 +52,6 @@ export class KeywordPage extends React.Component<IProps> {
 
   @computed
   private get activeWords(): WordCount[] {
-    console.log(this.filterAmount);
-    console.log(this.wordCounts);
-
     const displayTerms = Object.entries(this.wordCounts)
       .filter(entry => !this.bannedList.includes(entry[0]))
       .filter(entry => entry[1] > this.filterAmount)
@@ -82,10 +79,10 @@ export class KeywordPage extends React.Component<IProps> {
   }
 
   public render() {
-    const data = this.props.rootStore?.keywords || [];
+    const data = this.props.logEntryStore?.keywords || [];
     return (
       <div className="keyword-page">
-        {this.props.rootStore?.fetchingKeywords?.case({
+        {this.props.logEntryStore?.fetchingKeywords?.case({
           fulfilled: () => <>
             <h2>Number of days recorded: {data?.length} </h2>
             <KeywordTreemap data={this.activeWords} minCount={this.filterAmount} />

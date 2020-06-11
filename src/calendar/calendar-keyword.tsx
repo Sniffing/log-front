@@ -3,14 +3,14 @@ import CalendarHeatmap from 'react-calendar-heatmap';
 import {  Spin, Card, Row } from 'antd';
 import { observer, inject } from 'mobx-react';
 import { observable, computed } from 'mobx';
-import { RootStore, KeywordEntry } from '../stores/rootStore';
 import { Rejected } from '../custom-components';
 import ReactTooltip from 'react-tooltip';
 
 import './calendar.scss';
 import { Utils } from '../App.utils';
+import { LogEntryStore, KeywordEntry } from '../stores/logEntryStore';
 interface IProps {
-  rootStore?: RootStore;
+  logEntryStore?: LogEntryStore;
   data: KeywordEntry[];
   year: number;
 }
@@ -20,7 +20,7 @@ interface IInterval {
   end: Date;
 }
 
-@inject('rootStore')
+@inject('logEntryStore')
 @observer
 class CalendarKeyword extends Component<IProps> {
 
@@ -29,7 +29,7 @@ class CalendarKeyword extends Component<IProps> {
 
   @computed
   private get heatMapValues() {
-    if (!this.props.rootStore) {
+    if (!this.props.logEntryStore) {
       return [];
     }
 
@@ -113,7 +113,7 @@ class CalendarKeyword extends Component<IProps> {
   public render() {
     return(
       <Card>
-        {this.props.rootStore?.fetchingKeywords?.case({
+        {this.props.logEntryStore?.fetchingKeywords?.case({
           fulfilled: () => this.calendarMap,
           pending: () => <Spin/>,
           rejected: () =>  <Rejected message="Unable to get keywords"/>,

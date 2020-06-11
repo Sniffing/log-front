@@ -3,16 +3,16 @@ import { Route, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Provider, observer } from 'mobx-react';
 import './App.scss';
 
-import rootStore from './stores/rootStore';
 import { Home } from './pages';
 import { IPageConfig, Constants } from './App.constants';
 import { NavigationHeader } from './navigation-header';
+import { allStores } from './stores';
 
 @observer
 class App extends React.Component<RouteComponentProps> {
   public render() {
     return (
-      <Provider rootStore={rootStore}>
+      <Provider  {...allStores}>
         <div className="App">
           <NavigationHeader/>
           <div className="App-body">

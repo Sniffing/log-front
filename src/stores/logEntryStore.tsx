@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 import { IWeightDTO } from '../weight';
-import { KEYWORD_URL, TEXT_URL, WEIGHT_URL, LAST_DATES_URL } from '.';
+import { KEYWORD_URL, TEXT_URL, WEIGHT_URL, LAST_DATES_URL, LOCAL_URL } from '.';
 import { ILogEntry } from '../entry';
 import { Constants } from '../App.constants';
 import get, { AxiosResponse } from 'axios';
@@ -120,7 +120,7 @@ export class LogEntryStore {
   public saveEntry = async (data: ILogEntry) => {
     this.setSavingData(true);
     try {
-      await fetch(Constants.DATABASE_URL, {
+      await fetch(LOCAL_URL, {
         method: 'POST',
         headers: {
           Accept: 'application/json',

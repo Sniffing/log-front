@@ -1,9 +1,8 @@
 import { observable, action } from 'mobx';
-import { Constants } from '../App.constants';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 import { ICalorieEntry } from '../calories';
 import { RcFile } from 'antd/lib/upload';
-import { CALORIE_FROM_FILE_URL } from './constants';
+import { CALORIE_FROM_FILE_URL, CALORIE_ENTRIES_URL } from './constants';
 import get, { AxiosResponse } from 'axios';
 
 export class CalorieStore {
@@ -16,7 +15,7 @@ export class CalorieStore {
   public calorieEntries: ICalorieEntry[] = [];
 
   public async saveCalorieEntry(entry: ICalorieEntry) {
-    this.savingCalorieEntry = fromPromise(fetch(Constants.CALORIE_ENTRY_URL, {
+    this.savingCalorieEntry = fromPromise(fetch(CALORIE_ENTRIES_URL, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -38,7 +37,7 @@ export class CalorieStore {
 
   @action
   public async fetchCalorieEntries() {
-    this.isFetchingCalories = fromPromise(get(Constants.CALORIE_ENTRY_URL));
+    this.isFetchingCalories = fromPromise(get(CALORIE_ENTRIES_URL));
 
     await this.isFetchingCalories.then((entries: any) => {
       this.setCalorieEntries(entries);

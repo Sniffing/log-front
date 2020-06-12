@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, Spin } from 'antd';
+import { Button, Card, Spin, Row } from 'antd';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
@@ -7,6 +7,7 @@ import './memory.scss';
 import { Utils } from '../App.utils';
 import { Rejected } from '../custom-components';
 import { LogEntryStore } from '../stores/logEntryStore';
+import { StepBackwardOutlined, CaretLeftOutlined, CaretRightOutlined, StepForwardOutlined } from '@ant-design/icons/lib/icons';
 
 interface IProps {
   logEntryStore?: LogEntryStore;
@@ -39,6 +40,31 @@ export class MemoryPage extends Component<IProps> {
     return memory ? memory : {date: '', text: ''};
   }
 
+  @computed
+  private get memoriesLength() {
+    return (this.props.logEntryStore?.memories.length  || 1) -1;
+  }
+
+  @action.bound
+  private goFirst() {
+    this.currentIndex = 0;
+  }
+
+  @action.bound
+  private goLast() {
+    this.currentIndex = this.memoriesLength;
+  }
+
+  @action.bound
+  private goNext() {
+    this.currentIndex = Math.min(this.currentIndex + 1, this.memoriesLength);
+  }
+
+  @action.bound
+  private goPrev() {
+    this.currentIndex = Math.max(this.currentIndex - 1, 0);
+  }
+
   public render() {
     return (
       <div className='memory'>
@@ -51,9 +77,32 @@ export class MemoryPage extends Component<IProps> {
           rejected: () => <Rejected message="Unable to fetch memories"/>,
         })}
 
-        <Button className='rollButton' onClick={this.rollNewMemory} disabled={!!this.memory}>
+        <Row className='buttons'>
+          <Button
+            icon={<StepBackwardOutlined />}
+            onClick={this.goFirst}
+            disabled={this.currentIndex === 0}
+          />
+          <Button
+            icon={<CaretLeftOutlined />}
+            onClick={this.goPrev}
+            disabled={this.currentIndex === 0}
+          />
+          <Button className='rollButton' onClick={this.rollNewMemory} disabled={!!this.memory}>
           Random Memory
-        </Button>
+          </Button>
+          <Button
+            icon={<CaretRightOutlined />}
+            onClick={this.goNext}
+            disabled={this.currentIndex === this.memoriesLength}
+          />
+          <Button
+            icon={<StepForwardOutlined />}
+            onClick={this.goLast}
+            disabled={this.currentIndex === this.memoriesLength}
+          />
+        </Row>
+
       </div>
     );
   }

@@ -4,6 +4,12 @@
   .buttons {
     margin-top: 50px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+
+    > button {
+      margin: 0 10px;
+    }
   }
 
   .card {

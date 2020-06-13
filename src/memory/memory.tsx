@@ -68,14 +68,16 @@ export class MemoryPage extends Component<IProps> {
   public render() {
     return (
       <div className='memory'>
-        {this.props.logEntryStore?.fetchingMemory?.case({
-          fulfilled: () =>
-            <Card title={`${Utils.fromReversedDate(this.memory.date)}`} className='card'>
-              <p>{this.memory.text}</p>
-            </Card>,
-          pending: () => <Spin/>,
-          rejected: () => <Rejected message="Unable to fetch memories"/>,
-        })}
+        <div style={{ minHeight: '500px'}}>
+          {this.props.logEntryStore?.fetchingMemory?.case({
+            fulfilled: () =>
+              <Card title={`${Utils.fromReversedDate(this.memory.date)}`} className='card'>
+                <p>{this.memory.text}</p>
+              </Card>,
+            pending: () => <Spin/>,
+            rejected: () => <Rejected message="Unable to fetch memories"/>,
+          })}
+        </div>
 
         <Row className='buttons'>
           <Button

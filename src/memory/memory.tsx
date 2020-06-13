@@ -78,7 +78,6 @@ export class MemoryPage extends Component<IProps> {
             rejected: () => <Rejected message="Unable to fetch memories"/>,
           })}
         </div>
-
         <Row className='buttons'>
           <Button
             icon={<StepBackwardOutlined />}

@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import get from 'axios';
 import { ILifeEvent } from '../life-event';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
@@ -11,18 +11,33 @@ export class LifeEventStore {
   private fetchingLifeEvents: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
 
   @observable
+  private savingLifeEvents: IPromiseBasedObservable<Response> | undefined;
+
+  @observable
   public lifeEvents: ILifeEvent[] = [];
+
+  @computed
+  public get isSaving() {
+    return this.savingLifeEvents?.state === 'pending';
+  }
+
+  @computed
+  public get isFetching() {
+    return this.fetchingLifeEvents?.state === 'pending';
+  }
 
   @action.bound
   public async saveLifeEvent(event: ILifeEvent) {
-    return await fetch(LIFE_EVENTS_URL, {
+    this.savingLifeEvents = fromPromise(fetch(LIFE_EVENTS_URL, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(event),
-    });
+    }));
+
+    return await this.savingLifeEvents;
   }
 
   @action.bound

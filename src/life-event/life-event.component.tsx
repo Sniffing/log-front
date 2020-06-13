@@ -8,6 +8,7 @@ import { inject, observer } from 'mobx-react';
 import { convertFormValuesToLifeEvent } from './life-event.helper';
 import { NumbersOnlySelect } from '../custom-components';
 import { LifeEventStore } from '../stores/lifeEventStore';
+import { LifeEventsList } from './life-events-list';
 
 interface IProps {
   lifeEventStore: LifeEventStore;
@@ -23,6 +24,7 @@ export class LifeEventPage extends React.Component<IProps> {
 
     try {
       await this.props.lifeEventStore?.saveLifeEvent(event);
+      this.formRef.current?.resetFields();
     } catch (error) {
       message.error('Could not save entry');
       console.error(error);
@@ -43,10 +45,10 @@ export class LifeEventPage extends React.Component<IProps> {
       break;
     case EventFormFieldsEnum.NATURE:
       formComponent =
-        <Radio.Group>
-          <Radio value='good'>Good</Radio>
-          <Radio value='bad'>Bad</Radio>
-        </Radio.Group>;
+          <Radio.Group>
+            <Radio value='good'>Good</Radio>
+            <Radio value='bad'>Bad</Radio>
+          </Radio.Group>;
       break;
     case EventFormFieldsEnum.INTENSITY:
       formComponent = <NumbersOnlySelect/>;
@@ -70,15 +72,20 @@ export class LifeEventPage extends React.Component<IProps> {
 
   public render() {
     return (
-      <Card style={{margin: '20px'}}>
-        <Form ref={this.formRef} labelCol={{span: 4}} onFinish={this.handleSaveEventClick}>
-          {eventFormFields.map(this.createFormItem)}
+      <div>
+        <Card style={{margin: '20px'}} loading={this.props.lifeEventStore.isSaving}>
+          <Form ref={this.formRef} labelCol={{span: 4}} onFinish={this.handleSaveEventClick}>
+            {eventFormFields.map(this.createFormItem)}
 
-          <Form.Item style={{textAlign:'center'}}>
-            <Button type="primary" htmlType="submit">Save Event</Button>
-          </Form.Item>
-        </Form>
-      </Card>
+            <Form.Item style={{textAlign:'center'}}>
+              <Button type="primary" htmlType="submit">Save Event</Button>
+            </Form.Item>
+          </Form>
+        </Card>
+        <Card>
+          <LifeEventsList></LifeEventsList>
+        </Card>
+      </div>
     );
   }
 }

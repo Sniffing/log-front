@@ -1,14 +1,25 @@
 import React from 'react';
 import { Menu } from 'antd';
 import { HomeOutlined, DownCircleOutlined } from '@ant-design/icons';
-import { observable, action } from 'mobx';
+import { observable, action, runInAction } from 'mobx';
 import { ClickParam } from 'antd/lib/menu';
 import { Constants, IPageConfig, Page, pageDisplayNames } from '../App.constants';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { observer } from 'mobx-react';
 
+@observer
 class Header extends React.Component<RouteComponentProps> {
   @observable
   private current = '';
+
+  public componentDidMount() {
+    const nameWithSlash = window.location.pathname;
+    const name = nameWithSlash.slice(1);
+
+    runInAction(() => {
+      this.current = name.toUpperCase();
+    });
+  }
 
   @action
   private handleClick = (param: ClickParam) => {
@@ -23,12 +34,6 @@ class Header extends React.Component<RouteComponentProps> {
 
     this.props.history.push(`/${route.toLowerCase()}`);
   };
-
-  private capitalise = (str: string) => {
-    if (!str || !str.length) return '';
-
-    return str.slice(0,1).toUpperCase() + str.slice(1).toLowerCase();
-  }
 
   public render () {
     const routeOptions = Constants.pageConfigs.map(page => (

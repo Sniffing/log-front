@@ -7,7 +7,7 @@ import get, { AxiosResponse } from 'axios';
 
 export class CalorieStore {
   @observable
-  public isFetchingCalories: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
+  public fetchingCalories: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
 
   @observable
   public savingCalorieEntry: IPromiseBasedObservable<Response> | undefined;
@@ -38,9 +38,9 @@ export class CalorieStore {
 
   @action
   public async fetchCalorieEntries() {
-    this.isFetchingCalories = fromPromise(get(CALORIE_ENTRIES_URL));
+    this.fetchingCalories = fromPromise(get(CALORIE_ENTRIES_URL));
 
-    await this.isFetchingCalories.then((response: any) => {
+    await this.fetchingCalories.then((response: any) => {
       this.setCalorieEntries(response.data as ICalorieEntry[]);
     });
   }

@@ -76,14 +76,14 @@ export class CalorieBarChart extends React.Component<IProps> {
   }
 
   public render() {
-    if (!this.props.calorieStore || !this.props.calorieStore.isFetchingCalories) {
+    if (!this.props.calorieStore || !this.props.calorieStore.fetchingCalories) {
       return 'Error';
     }
 
     return (
       <Card>
         {
-          this.props.calorieStore.isFetchingCalories.case({
+          this.props.calorieStore.fetchingCalories.case({
             fulfilled: () => <ReactEcharts option={this.option}/>,
             pending: () => <Spin/>,
             rejected: () => <Alert

@@ -11,6 +11,7 @@ import { observable, action, computed } from 'mobx';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
 import { CalorieStore } from '../stores/calorieStore';
 import { Store } from 'antd/lib/form/interface';
+import { CalorieBarChart } from './calorie-bar-chart';
 
 interface IProps {
   calorieStore: CalorieStore;
@@ -112,6 +113,8 @@ export class CalorieEntryPage extends React.Component<IProps> {
             Upload
           </Button>
         </Card>
+
+        <CalorieBarChart />
       </>
     );
   }

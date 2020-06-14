@@ -12,6 +12,7 @@ export class CalorieStore {
   @observable
   public savingCalorieEntry: IPromiseBasedObservable<Response> | undefined;
 
+  @observable
   public calorieEntries: ICalorieEntry[] = [];
 
   public async saveCalorieEntry(entry: ICalorieEntry) {
@@ -39,8 +40,8 @@ export class CalorieStore {
   public async fetchCalorieEntries() {
     this.isFetchingCalories = fromPromise(get(CALORIE_ENTRIES_URL));
 
-    await this.isFetchingCalories.then((entries: any) => {
-      this.setCalorieEntries(entries);
+    await this.isFetchingCalories.then((response: any) => {
+      this.setCalorieEntries(response.data as ICalorieEntry[]);
     });
   }
 

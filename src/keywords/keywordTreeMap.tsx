@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { WordCount } from '.';
 import ReactEcharts from 'echarts-for-react';
+import { computed } from 'mobx';
 
 interface IProps {
   data: WordCount[];
@@ -10,6 +11,8 @@ interface IProps {
 
 @observer
 export class KeywordTreemap extends Component<IProps> {
+
+  @computed
   private get option() {
     const keywords = Array.isArray(this.props.data)
       ? this.props.data.filter(({value}: WordCount) => {
@@ -29,6 +32,7 @@ export class KeywordTreemap extends Component<IProps> {
       }]
     };
   }
+
   public render() {
     return (
       <div>

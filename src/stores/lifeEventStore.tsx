@@ -8,10 +8,10 @@ import { AxiosResponse } from 'axios';
 export class LifeEventStore {
 
   @observable
-  private fetchingLifeEvents: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
+  public fetchingLifeEvents: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
 
   @observable
-  private savingLifeEvents: IPromiseBasedObservable<Response> | undefined;
+  public savingLifeEvents: IPromiseBasedObservable<Response> | undefined;
 
   @observable
   public lifeEvents: ILifeEvent[] = [];

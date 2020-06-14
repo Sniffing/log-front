@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Treemap } from 'recharts';
 import { WordCount } from '.';
+import ReactEcharts from 'echarts-for-react';
 
 interface IProps {
   data: WordCount[];
@@ -10,10 +10,7 @@ interface IProps {
 
 @observer
 export class KeywordTreemap extends Component<IProps> {
-  public render() {
-    const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-
+  private get option() {
     const keywords = Array.isArray(this.props.data)
       ? this.props.data.filter(({value}: WordCount) => {
         return value > this.props.minCount;
@@ -25,21 +22,17 @@ export class KeywordTreemap extends Component<IProps> {
       })
       : [];
 
-    const data = [
-      {
-        children: keywords
-      },
-    ];
-
+    return {
+      series: [{
+        type: 'treemap',
+        data: keywords
+      }]
+    };
+  }
+  public render() {
     return (
       <div>
-        <Treemap
-          width={vw}
-          height={vh/3}
-          data={data}
-          stroke="#fff"
-          fill="#8884d8"
-        />
+        <ReactEcharts option={this.option}/>
       </div>
     );
   }

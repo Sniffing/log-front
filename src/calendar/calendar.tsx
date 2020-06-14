@@ -75,7 +75,7 @@ export class CalendarPage extends React.Component<IProps> {
   public render() {
     return (
       <div className="calendar-page">
-        <Select mode="multiple" style={{width: '40%'}} onChange={this.handleFilterChange}>
+        <Select mode="multiple" style={{width: '40%'}} allowClear onChange={this.handleFilterChange}>
           {this.keywords.map(w => (
             <Select.Option key={w} value={w}>
               {w}

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import CalendarHeatmap from 'react-calendar-heatmap';
-import {  Spin, Card, Row } from 'antd';
+import {  Spin, Card } from 'antd';
 import { observer, inject } from 'mobx-react';
 import { observable, computed } from 'mobx';
 import { Rejected } from '../custom-components';
-import ReactTooltip from 'react-tooltip';
 
 import './calendar.scss';
 import { Utils } from '../App.utils';
 import { LogEntryStore, KeywordEntry } from '../stores/logEntryStore';
+import ReactEcharts from 'echarts-for-react';
+import { EChartOption } from 'echarts';
 interface IProps {
   logEntryStore?: LogEntryStore;
   data: KeywordEntry[];
@@ -27,98 +27,62 @@ class CalendarKeyword extends Component<IProps> {
   @observable
   private searchTerm = '';
 
-  @computed
-  private get heatMapValues() {
-    if (!this.props.logEntryStore) {
-      return [];
-    }
-
+  private generateHeatMapValues(year: number) {
     return this.props.data
+      .filter((k: KeywordEntry) => {
+        return year === Utils.dateFromString(k.date).getFullYear();
+      })
       .map((k: KeywordEntry) => {
-        return {
-          date: k.date,
-        };
+        const date = Utils.dateFromString(k.date);
+        const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
+        return [dateVal, 1];
       });
   }
 
-  @computed
-  private get startDate() {
-    return new Date(this.props.year, 0,1);
-  }
-
-  private get midStartDate() {
-    return new Date(this.props.year, 5, 30);
-  }
-
-  private get midEndDate() {
-    return new Date(this.props.year, 6, 1);
-  }
-
-  @computed
-  private get endDate() {
-    return new Date(this.props.year, 11, 31);
-  }
-
-  private get intervals(): IInterval[] {
-    return [
-      {
-        start: this.startDate,
-        end: this.midStartDate,
-      },
-      {
-        start: this.midEndDate,
-        end: this.endDate,
-      },
-    ];
-  }
-
-  private tooltip = (value: {date: string} | undefined) => {
-    const tip = (value?.date) ? Utils.fromReversedDate(value.date) : 'missing entry';
+  private getOption(year: number): EChartOption<EChartOption.SeriesHeatmap> {
     return {
-      'data-tip': tip
+      title: {
+        left: 'center',
+        text: `${year}`
+      },
+      // visualMap: [{
+      //   min: 0,
+      //   max: 1,
+      //   splitNumber: 1,
+      //   type: 'piecewise',
+      //   orient: 'horizontal',
+      //   left: 'center',
+      //   top: 65,
+      //   textStyle: {
+      //     color: '#000'
+      //   }
+      // }],
+      calendar: {
+        left: 30,
+        right: 30,
+        cellSize: ['auto', 14],
+        range: year,
+        itemStyle: {
+          borderWidth: 0.5
+        },
+        yearLabel: {show: false}
+      },
+      series: [{
+        type: 'heatmap',
+        coordinateSystem: 'calendar',
+        data: this.generateHeatMapValues(year),
+      }]
     };
-  }
-
-  @computed
-  private get calendarMap() {
-    return (
-      <>
-        <h3>{this.props.year}</h3>
-        {this.intervals.map((interval: IInterval, index: number) => {
-          return  (
-            <Row key={index}>
-              <CalendarHeatmap
-                startDate={interval.start}
-                endDate={interval.end}
-                values={this.heatMapValues}
-                showWeekdayLabels
-                gutterSize={2}
-                weekdayLabels={['M','T','W','T','F','S','S']}
-                tooltipDataAttrs={(this.tooltip)}
-                classForValue={(value) => {
-                  if (!value) {
-                    return 'color-empty';
-                  }
-
-                  return 'color-filled';
-                }}
-              />
-            </Row>
-          );
-        }) }
-      </>
-    );
   }
 
   public render() {
     return(
       <Card>
         {this.props.logEntryStore?.fetchingKeywords?.case({
-          fulfilled: () => this.calendarMap,
+          fulfilled: () => <ReactEcharts option={this.getOption(this.props.year)}/>,
           pending: () => <Spin/>,
           rejected: () =>  <Rejected message="Unable to get keywords"/>,
         })}
-        <ReactTooltip/>
       </Card>
     );
   }

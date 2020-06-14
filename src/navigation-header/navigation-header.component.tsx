@@ -17,22 +17,26 @@ class Header extends React.Component<RouteComponentProps> {
     const name = nameWithSlash.slice(1);
 
     runInAction(() => {
-      this.current = name.toUpperCase();
+      if (Page[name.toUpperCase() as keyof typeof Page]) {
+        this.current = name.toUpperCase();
+      } else {
+        this.props.history.push('/');
+      }
     });
   }
 
   @action
   private handleClick = (param: ClickParam) => {
-    this.current = param.key;
+    this.current = param.key.toUpperCase();
     const page: Page = Page[this.current as keyof typeof Page];
 
     const route = Constants.pageConfigs
       .map((config: IPageConfig) => config.page)
       .includes(page)
-      ? this.current
+      ? this.current.toLowerCase()
       : '';
 
-    this.props.history.push(`/${route.toLowerCase()}`);
+    this.props.history.push(`/${route}`);
   };
 
   public render () {

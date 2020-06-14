@@ -1,10 +1,9 @@
 import { observable, action } from 'mobx';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
-import { IWeightDTO } from '../weight';
 import { KEYWORD_URL, TEXT_URL, WEIGHT_URL, LAST_DATES_URL, LOCAL_URL } from '.';
 import { ILogEntry } from '../entry';
-import { Constants } from '../App.constants';
 import get, { AxiosResponse } from 'axios';
+import { IWeightDTO } from '../App.interfaces';
 
 export interface KeywordEntry {
   date: string;
@@ -33,7 +32,6 @@ export class LogEntryStore {
 
   @observable
   public fetchingWeight: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
-
 
   @observable
   public fetchingKeywords: IPromiseBasedObservable<AxiosResponse<any>> | undefined;

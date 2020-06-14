@@ -2,11 +2,12 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import ReactEcharts from 'echarts-for-react';
 import { EChartOption } from 'echarts';
-import { IWeightDTO } from '../weight';
+
 import { computed, observable } from 'mobx';
 import { Utils } from '../App.utils';
 import { Spin } from 'antd';
 import { LogEntryStore } from '../stores/logEntryStore';
+import { IWeightDTO } from '../App.interfaces';
 
 interface IProps {
   logEntryStore?: LogEntryStore;

@@ -8,7 +8,6 @@ import { inject, observer } from 'mobx-react';
 import { convertFormValuesToLifeEvent } from './life-event.helper';
 import { NumbersOnlySelect } from '../custom-components';
 import { LifeEventStore } from '../stores/lifeEventStore';
-import { LifeEventsList } from './life-events-list';
 
 interface IProps {
   lifeEventStore: LifeEventStore;
@@ -16,7 +15,7 @@ interface IProps {
 
 @inject('lifeEventStore')
 @observer
-export class LifeEventPage extends React.Component<IProps> {
+export class LifeEventEntryPage extends React.Component<IProps> {
   private formRef = React.createRef<FormInstance>();
 
   private handleSaveEventClick = async (values: any) => {
@@ -81,9 +80,6 @@ export class LifeEventPage extends React.Component<IProps> {
               <Button type="primary" htmlType="submit">Save Event</Button>
             </Form.Item>
           </Form>
-        </Card>
-        <Card>
-          <LifeEventsList></LifeEventsList>
         </Card>
       </div>
     );

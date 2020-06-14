@@ -1,7 +1,8 @@
-import { FormattedWeight, IWeightDTO } from '.';
+import { FormattedWeight } from '.';
 import { LineSeriesPoint } from 'react-vis';
 import regression, { Result } from 'regression';
 import { Utils } from '../App.utils';
+import { IWeightDTO } from '../App.interfaces';
 
 const formatWeightDTO = (dto: IWeightDTO) => {
   const entry: FormattedWeight = {
@@ -14,7 +15,7 @@ const formatWeightDTO = (dto: IWeightDTO) => {
 export const formatResults = (data: IWeightDTO[] | undefined): FormattedWeight[] => {
   if (!data) return [];
   return data.map(formatWeightDTO);
-}; 
+};
 
 export const sortByDate = (collection: FormattedWeight[]) => {
   return collection.slice().sort(

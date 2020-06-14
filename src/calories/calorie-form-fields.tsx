@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { IFormProps } from '../App.interfaces';
+import { generateFormLabel } from '../App.utils';
 
 export enum CalorieFormFieldsEnum {
   DATE = 'DATE',
@@ -10,10 +10,6 @@ export const eventFormFields = [
   CalorieFormFieldsEnum.DATE,
   CalorieFormFieldsEnum.CALORIES
 ];
-
-const generateFormLabel = (label: string) => (
-  <span style={{ textTransform: 'capitalize' }}>{label.toLowerCase()}</span>
-);
 
 const getBaseConfig = (field: CalorieFormFieldsEnum): IFormProps => {
   return {

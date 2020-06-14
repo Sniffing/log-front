@@ -25,11 +25,9 @@ export class KeywordTreemap extends Component<IProps> {
       })
       : [];
 
-    console.log('here', this.props.data);
-
     const data = [
       {
-        children: keywords        
+        children: keywords
       },
     ];
 
@@ -38,7 +36,7 @@ export class KeywordTreemap extends Component<IProps> {
         <Treemap
           width={vw}
           height={vh/3}
-          data={data} 
+          data={data}
           stroke="#fff"
           fill="#8884d8"
         />

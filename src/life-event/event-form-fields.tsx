@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IFormProps } from '../App.interfaces';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
+import { generateFormLabel } from '../App.utils';
 
 
 export enum EventFormFieldsEnum {
@@ -20,9 +21,6 @@ export const eventFormFields = [
   EventFormFieldsEnum.DESCRIPTION,
 ];
 
-const generateFormLabel = (label: string) => (
-  <span style={{ textTransform: 'capitalize' }}>{label.toLowerCase()}</span>
-);
 
 const getBaseConfig = (field: EventFormFieldsEnum): IFormProps => {
   return {

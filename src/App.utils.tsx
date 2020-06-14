@@ -1,3 +1,5 @@
+import React from 'react';
+
 export class Utils {
   public static unixTimeToDate(time: number) {
     const date = new Date(time);
@@ -23,3 +25,7 @@ export class Utils {
     return `${date.getFullYear()}-${('0' + date.getMonth()+1).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
   }
 }
+
+export const generateFormLabel = (label: string) => (
+  <span style={{ textTransform: 'capitalize' }}>{label.toLowerCase()}</span>
+);

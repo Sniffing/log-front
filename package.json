@@ -40,7 +40,6 @@
     "react-spinners": "^0.8.1",
     "react-spring": "^8.0.27",
     "react-tagsinput": "^3.19.0",
-    "react-vis": "^1.11.7",
     "regression": "^2.0.1",
     "typescript": "^3.8.3"
   },

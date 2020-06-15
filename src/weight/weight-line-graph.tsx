@@ -1,23 +1,16 @@
 import React, { Component } from 'react';
-import {
-  XYPlot,
-  XAxis,
-  YAxis,
-  HorizontalGridLines,
-  LineSeries,
-  LineSeriesPoint,
-  VerticalGridLines,
-  Crosshair,
-  DiscreteColorLegend
-} from 'react-vis';
-import { DatePicker, Slider, Spin } from 'antd';
-import moment, { Moment } from 'moment';
+import { Slider, Spin } from 'antd';
 import { observer, inject } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
 import { SliderValue } from 'antd/lib/slider';
-import { FormattedWeight, formatResults, sortByDate, WeightDates, convertToGraphData, computeLineOfBestFit, computeLineOfAverage, getTitleLinePoint, getAverageWeight } from '.';
 import { Rejected } from '../custom-components';
 import { LogEntryStore } from '../stores/logEntryStore';
+import ReactEcharts from 'echarts-for-react';
+import { EChartOption } from 'echarts';
+import { IWeightDTO } from '../App.interfaces';
+import { Utils } from '../App.utils';
+import { getAverageWeight} from '.';
+import { createWeightData, createLineOfBestFitData, createLineOfAverageData } from './weight.helper';
 
 interface IProps {
   logEntryStore?: LogEntryStore;
@@ -28,68 +21,11 @@ interface IProps {
 export class WeightLineGraph extends Component<IProps> {
 
 @observable
-private dates: WeightDates = {
-  start: 0, end: 0, earliest: 0,
-};
-
-@observable
-private crosshairValues: any[] = [];
-
-@observable
 private fitCloseness = 4;
 
 public componentDidMount() {
+  this.props.logEntryStore?.fetchLastDates();
   this.props.logEntryStore?.fetchWeightData();
-}
-
-@computed
-private get formattedData(): FormattedWeight[] {
-  const sortedResults = sortByDate(formatResults(this.props.logEntryStore?.weights));
-
-  if (sortedResults.length) {
-    this.setDates({
-      start: sortedResults[0].date,
-      earliest: sortedResults[0].date,
-      end: sortedResults[sortedResults.length - 1].date
-    });
-  }
-
-  return sortedResults;
-}
-
-@action.bound
-private setDates(dates: WeightDates) {
-  this.dates = dates;
-}
-
-@action
-private changeStartDate = (newStart: any) => {
-  if (newStart !== undefined) {
-    const newStartUnix = newStart.unix() * 1000;
-
-    // const filteredData = this.formattedData.filter(data => {
-    //   return data.date >= newStartUnix && data.date < this.dates.end;
-    // });
-
-    this.dates.start = newStartUnix;
-  }
-};
-
-@action
-private changeEndDate = (newEnd: any) => {
-  if (newEnd !== undefined) {
-    const newEndUnix = newEnd.unix() * 1000;
-
-    // const filteredData = this.formattedData.filter(data => {
-    //   return data.date >= this.dates.start && data.date < newEndUnix;
-    // });
-
-    this.dates.end = newEndUnix;
-  }
-};
-
-private isDateDisabled = (date: Moment): boolean => {
-  return (date < moment(this.dates.earliest) || date > moment().endOf('day'));
 }
 
 @action
@@ -97,67 +33,60 @@ private handlePrecisionChange = (value: SliderValue) => {
   this.fitCloseness = typeof value === 'number' ? value : 4;
 };
 
-@action.bound
-private updateCrosshairs(dataPoint: any) {
-  this.crosshairValues = dataPoint ? [dataPoint] : [];
-}
+@computed
+private get option(): EChartOption {
+  const sortedData = this.props.logEntryStore?.weights?.sort((a: IWeightDTO, b: IWeightDTO) => {
+    const dateA = Utils.dateFromString(a.date);
+    const dateB = Utils.dateFromString(b.date);
+    return dateA > dateB ? 1 : -1;
+  }) || [];
 
-private createGraph = (data: FormattedWeight[]) => {
   const averageWeight = this.props.logEntryStore ? getAverageWeight(this.props.logEntryStore.weights) : 0;
-  const pointLine = <LineSeries
-    color="red"
-    data={convertToGraphData(data)}
-    onNearestXY={this.updateCrosshairs}
-    onSeriesMouseOut={() => this.updateCrosshairs(null)}
-  />;
 
-  const averageLine = <LineSeries color="green" data={computeLineOfAverage(data, averageWeight)} />;
+  const allData = createWeightData(sortedData);
+  const lineOfBestFit = createLineOfBestFitData(sortedData, this.fitCloseness);
+  const averageLine = createLineOfAverageData(sortedData, averageWeight);
 
-  const trendLine = <LineSeries
-    color="blue"
-    data={computeLineOfBestFit(data, this.fitCloseness)}
-  />;
-
-  return (
-    <>
-      <XYPlot xType="time" width={800} height={300}>
-        <HorizontalGridLines />
-        <VerticalGridLines />
-        <XAxis title="Date" />
-        <YAxis title="Weight (kg)" />
-        {pointLine}
-        {averageLine}
-        {trendLine}
-        <Crosshair
-          values={this.crosshairValues}
-          titleFormat={getTitleLinePoint}
-          itemsFormat={(d: LineSeriesPoint) => [
-            { title: 'Weight', value: d[0].y.toFixed(1) }
-          ]}
-        />
-      </XYPlot>
-
-      <DiscreteColorLegend
-        orientation="vertical"
-        onItemClick={() => {}}
-        items={[
-          {
-            title: `Average Weight: ${averageWeight.toFixed(1)}kg`,
-            color: 'green'
-          },
-          { title: 'Weight', color: 'red' },
-          { title: 'Trend Weight', color: 'blue' }
-        ]}
-      />
-    </>
-  );
+  return {
+    title: {
+      text: 'Title'
+    },
+    legend: {
+      data: ['Weight']
+    },
+    grid: {
+      left: '2%',
+      right: '2%',
+      bottom: '2%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'time',
+      splitLine: {
+        show: false
+      }
+    },
+    yAxis: {
+      type: 'value',
+      boundaryGap: [0, '100%'],
+      min: 62,
+      max: 72,
+      splitLine: {
+        show: false
+      },
+    },
+    series: [
+      allData,
+      lineOfBestFit,
+      averageLine
+    ]
+  };
 }
-
 
 public render() {
 
   const graph = this.props.logEntryStore?.fetchingWeight?.case({
-    fulfilled: () => this.createGraph(this.formattedData),
+    fulfilled: () => <ReactEcharts option={this.option} />,
     pending: () => <Spin/>,
     rejected: () =>  <Rejected message={'Error fetching Weights'}/>,
   });
@@ -169,16 +98,6 @@ public render() {
       range={false}
       onChange={this.handlePrecisionChange}
       value={this.fitCloseness}
-    />
-    <DatePicker
-      disabledDate={this.isDateDisabled}
-      onChange={this.changeStartDate}
-      format="YYYY-MM-DD"
-    />
-    <DatePicker
-      disabledDate={this.isDateDisabled}
-      onChange={this.changeEndDate}
-      format="YYYY-MM-DD"
     />
     {graph}
   </>;

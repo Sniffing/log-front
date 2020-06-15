@@ -1,47 +1,24 @@
-import { FormattedWeight } from '.';
-import { LineSeriesPoint } from 'react-vis';
-import regression, { Result } from 'regression';
+import regression, { Result, DataPoint } from 'regression';
 import { Utils } from '../App.utils';
 import { IWeightDTO } from '../App.interfaces';
 
-const formatWeightDTO = (dto: IWeightDTO) => {
-  const entry: FormattedWeight = {
-    date: Date.parse(dto.date),
-    weight: parseFloat(dto.weight)
-  };
-  return entry;
-};
 
-export const formatResults = (data: IWeightDTO[] | undefined): FormattedWeight[] => {
-  if (!data) return [];
-  return data.map(formatWeightDTO);
-};
-
-export const sortByDate = (collection: FormattedWeight[]) => {
-  return collection.slice().sort(
-    (a: FormattedWeight, b: FormattedWeight) => {
-      const aDate = new Date(a.date);
-      const bDate = new Date(b.date);
-      return aDate > bDate ? 1 : -1;
-    }
-  );
-};
-
-export const convertToGraphData = (data: FormattedWeight[]) => {
-  return data.map(d => {
-    const entry: LineSeriesPoint = {
-      x: d.date,
-      y: d.weight
+export const createLineOfBestFitData = (weights: IWeightDTO[], fitCloseness: number) => {
+  if (!weights.length) {
+    return {
+      name: 'Line of best fit',
+      type: 'line',
+      symbol: 'none',
+      data: [],
     };
-    return entry;
-  });
-};
+  }
 
-export const computeLineOfBestFit = (data: FormattedWeight[], fitCloseness: number) => {
-  const base = data[0];
+  const base = Utils.dateFromString(weights[0].date).getTime();
+
   const line: Result = regression.polynomial(
-    data.map(d => {
-      return [d.date - base.date, d.weight];
+    weights.map(d => {
+      const date = new Date(Utils.fromReversedDate(d.date));
+      return [date.getTime() - base, parseFloat(d.weight)];
     }),
     {
       order: fitCloseness,
@@ -49,28 +26,42 @@ export const computeLineOfBestFit = (data: FormattedWeight[], fitCloseness: numb
     }
   );
 
-  const answer = line.points.map(point => {
+  const data = line.points.map((point: DataPoint) => {
+
+    const date = new Date(point[0] + base);
+    const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
+
     return {
-      x: point[0] + base.date,
-      y: point[1]
+      name: date.toString(),
+      value: [dateVal, point[1]],
     };
   });
-  return answer;
+
+  return {
+    name: 'Line of best fit',
+    type: 'line',
+    symbol: 'none',
+    data: data,
+  };
 };
 
-export const computeLineOfAverage = (data: FormattedWeight[], averageWeight: number) => {
-  return data.length > 0
-    ? [
-      {
-        x: data[0].date,
-        y: averageWeight
-      },
-      {
-        x: data[data.length - 1].date,
-        y: averageWeight
-      }
-    ]
-    : [];
+export const createLineOfAverageData = (weights: IWeightDTO[], averageWeight: number) => {
+  const data = weights.map(({ date }: IWeightDTO) => {
+    const d = Utils.dateFromString(date);
+    const dateVal = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('/');
+
+    return {
+      name: date.toString(),
+      value: [dateVal, averageWeight]
+    };
+  });
+
+  return {
+    name: 'Line of average',
+    type: 'line',
+    symbol: 'none',
+    data: data,
+  };
 };
 
 export const getAverageWeight = (weights: IWeightDTO[]) => {
@@ -81,7 +72,23 @@ export const getAverageWeight = (weights: IWeightDTO[]) => {
   return  totalWeight / weights.length;
 };
 
-export const getTitleLinePoint = (point: LineSeriesPoint) => ({
-  title: 'Date',
-  value: Utils.unixTimeToDate(point[0].x)
-});
+export function createWeightData(weights: IWeightDTO[]) {
+
+  const data = weights.map((weight: IWeightDTO) => {
+    const date = Utils.dateFromString(weight.date);
+    const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
+    const num: number = parseFloat(weight.weight);
+
+    return {
+      name: date.toString(),
+      value: [dateVal, num],
+    };
+  });
+
+  return {
+    name: 'Weight',
+    type: 'line',
+    symbol: 'none',
+    data: data,
+  };
+}

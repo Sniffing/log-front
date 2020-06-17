@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {  Spin, Card } from 'antd';
 import { observer, inject } from 'mobx-react';
-import { observable, computed } from 'mobx';
+import { observable } from 'mobx';
 import { Rejected } from '../custom-components';
 
 import './calendar.scss';

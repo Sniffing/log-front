@@ -1,9 +1,9 @@
 import React from 'react';
 import { CalorieStore } from '../../stores/calorieStore';
 import { inject, observer } from 'mobx-react';
-import { computed } from 'mobx';
+import { computed, observable, action } from 'mobx';
 import ReactEcharts from 'echarts-for-react';
-import { Card, Spin, Alert } from 'antd';
+import { Card, Spin, Alert, Button, Input } from 'antd';
 import { ICalorieEntry } from '../calorie.interfaces';
 import { EChartOption } from 'echarts';
 import { Utils } from '../../App.utils';
@@ -16,27 +16,46 @@ interface IProps {
 @observer
 export class CalorieBarChart extends React.Component<IProps> {
 
+  @observable
+  private showDifference = false;
+
+  @observable
+  private maintenance = 2000;
+
   public componentDidMount() {
     this.props.calorieStore?.fetchCalorieEntries();
   }
 
   @computed
-  private get option(): EChartOption {
-    const data = this.props.calorieStore?.calorieEntries || [];
+  private get graphData(): ICalorieEntry[] {
+    if (this.showDifference) {
+      return this.props.calorieStore?.calorieEntries.map((entry: ICalorieEntry) => {
+        return {
+          date: entry.date,
+          calories: entry.calories - this.maintenance
+        };
+      }) || [];
+    }
 
+    return this.props.calorieStore?.calorieEntries || [];
+  }
+
+  @computed
+  private get option(): EChartOption {
     return {
       title : {
         text: 'Calories per day'
       },
       xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: data.map((entry: ICalorieEntry) => Utils.unixTimeToDate(entry.date * 1000)),
+        type: 'time',
+        splitLine: {
+          show: false
+        }
       },
       yAxis: {
         type: 'value',
         boundaryGap: [0, '100%'],
-        max: 5500,
+        max: 5000 - (this.showDifference ? this.maintenance : 0),
       },
       tooltip: {
         trigger: 'axis',
@@ -46,8 +65,8 @@ export class CalorieBarChart extends React.Component<IProps> {
       },
       dataZoom: [{
         type: 'inside',
-        start: 0,
-        end: 50
+        start: 50,
+        end: 100
       }, {
         start: 0,
         end: 10,
@@ -62,17 +81,54 @@ export class CalorieBarChart extends React.Component<IProps> {
         }
       }],
       series: [{
-        data: data.map((entry: ICalorieEntry) => entry.calories),
-        type: 'line',
-        // smooth: true,
+        data: this.graphData
+          .filter((entry: ICalorieEntry) => entry.calories >= 0)
+          .map(({date : d, calories}: ICalorieEntry) => {
+            const date = new Date(d*1000);
+            const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
+            return {
+              name: date.toString(),
+              value: [dateVal, calories],
+            };
+          }),
+        type: 'bar',
         itemStyle: {
-          color: 'rgb(255, 158, 131)'
+          color: this.showDifference ? 'rgb(150, 0, 0)' : 'rgb(225, 140, 60)'
         },
         areaStyle: {
-          color: 'rgb(255, 158, 68)'
+          color: this.showDifference ? 'rgb(150, 0, 0)' : 'rgb(22, 140, 60)'
+        },
+      },
+      {
+        data: this.graphData
+          .filter((entry: ICalorieEntry) => entry.calories < 0)
+          .map(({date : d, calories}: ICalorieEntry) => {
+            const date = new Date(d*1000);
+            const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
+            return {
+              name: date.toString(),
+              value: [dateVal, calories],
+            };
+          }),
+        type: 'bar',
+        itemStyle: {
+          color: 'rgb(10, 150, 25)'
+        },
+        areaStyle: {
+          color: 'rgb(10, 150, 25)'
         },
       }]
     };
+  }
+
+  @action.bound
+  private toggleGraphData() {
+    this.showDifference = !this.showDifference;
+  }
+
+  @action.bound
+  private changeMaintenance(event: React.ChangeEvent<HTMLInputElement>) {
+    this.maintenance = parseInt(event.target.value) || 0;
   }
 
   public render() {
@@ -82,6 +138,10 @@ export class CalorieBarChart extends React.Component<IProps> {
 
     return (
       <Card>
+        <Button onClick={this.toggleGraphData}>
+          {`Show ${this.showDifference ? 'normal' : 'difference'}`}
+        </Button>
+        <Input value={this.maintenance} onChange={this.changeMaintenance}/>
         {
           this.props.calorieStore.fetchingCalories.case({
             fulfilled: () => <ReactEcharts option={this.option}/>,

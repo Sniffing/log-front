@@ -2,6 +2,7 @@ import { ICalorieEntry } from '../calories';
 import { EChartOption } from 'echarts';
 import { IWeightDTO } from '../App.interfaces';
 import { Utils } from '../App.utils';
+import { ILifeEvent } from '../life-event';
 
 function createCalorieData(entries: ICalorieEntry[]): EChartOption.Series {
   const data = entries
@@ -11,13 +12,13 @@ function createCalorieData(entries: ICalorieEntry[]): EChartOption.Series {
 
       return {
         name: date.toString(),
-        value: [dateVal, entry.calories],
+        value: [dateVal, entry.calories - 2000],
       };
     });
 
   return {
-    name: 'Calories',
-    type: 'line',
+    name: 'Calories above 2000',
+    type: 'bar',
     step: 'middle',
     yAxisIndex: 1,
     symbol: 'none',
@@ -51,20 +52,55 @@ function createWeightData(weight: IWeightDTO[]): EChartOption.Series {
   };
 }
 
+function createEventData(eventData: ILifeEvent[]) {
+  return {
+    name: 'Events',
+    type: 'bar',
+    markArea: {
+      data: eventData.map((event: ILifeEvent) => {
+        const date = new Date(event.date*1000);
+        const nextDate = new Date((event.date + 86400) * 1000);
+        const dateStart = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
+        const dateEnd = [nextDate.getFullYear(), nextDate.getMonth()+1, nextDate.getDate()].join('/');
+        return [{
+          xAxis: dateStart,
+          // label: {
+
+          // }
+        }, {
+          xAxis: dateEnd,
+        }];
+      }),
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'line',
+          axis: 'auto',
+        },
+        crossStyle: {
+          type: 'dashed'
+        },
+        backgroundColor: '#505765'
+      }
+    }
+  };
+}
+
 interface ICombinedDataSources {
   weightData?: IWeightDTO[];
   calorieData?: ICalorieEntry[];
+  eventData?: ILifeEvent[];
 }
 
 export function generateCombinedDataOption({
-  weightData, calorieData
+  weightData, calorieData, eventData,
 }: ICombinedDataSources): EChartOption {
   return {
     title: {
       text: 'Title'
     },
     legend: {
-      data: ['Weight']
+      data: ['Weight', 'Calories above 2000']
     },
     grid: {
       left: '2%',
@@ -72,6 +108,23 @@ export function generateCombinedDataOption({
       bottom: '2%',
       containLabel: true
     },
+    dataZoom: [{
+      type: 'inside',
+      start: 50,
+      end: 100
+    }, {
+      start: 0,
+      end: 10,
+      handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+      handleSize: '120%',
+      handleStyle: {
+        color: '#fff',
+        shadowBlur: 3,
+        shadowColor: 'rgba(0, 0, 0, 0.6)',
+        shadowOffsetX: 2,
+        shadowOffsetY: 2
+      }
+    }],
     xAxis: {
       type: 'time',
       splitLine: {
@@ -99,7 +152,8 @@ export function generateCombinedDataOption({
     ],
     series: [
       createWeightData(weightData || []),
-      createCalorieData(calorieData || [])
+      createCalorieData(calorieData || []),
+      createEventData(eventData || []),
     ]
   };
 }

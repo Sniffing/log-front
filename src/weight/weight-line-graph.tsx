@@ -9,8 +9,7 @@ import ReactEcharts from 'echarts-for-react';
 import { EChartOption } from 'echarts';
 import { IWeightDTO } from '../App.interfaces';
 import { Utils } from '../App.utils';
-import { getAverageWeight} from '.';
-import { createWeightData, createLineOfBestFitData, createLineOfAverageData } from './weight.helper';
+import { createWeightData, createLineOfBestFitData } from './weight.helper';
 
 interface IProps {
   logEntryStore?: LogEntryStore;
@@ -41,11 +40,8 @@ private get option(): EChartOption {
     return dateA > dateB ? 1 : -1;
   }) || [];
 
-  const averageWeight = this.props.logEntryStore ? getAverageWeight(this.props.logEntryStore.weights) : 0;
-
   const allData = createWeightData(sortedData);
   const lineOfBestFit = createLineOfBestFitData(sortedData, this.fitCloseness);
-  const averageLine = createLineOfAverageData(sortedData, averageWeight);
 
   return {
     title: {
@@ -78,7 +74,6 @@ private get option(): EChartOption {
     series: [
       allData,
       lineOfBestFit,
-      averageLine
     ]
   };
 }

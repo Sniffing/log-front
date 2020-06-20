@@ -45,25 +45,6 @@ export const createLineOfBestFitData = (weights: IWeightDTO[], fitCloseness: num
   };
 };
 
-export const createLineOfAverageData = (weights: IWeightDTO[], averageWeight: number) => {
-  const data = weights.map(({ date }: IWeightDTO) => {
-    const d = Utils.dateFromString(date);
-    const dateVal = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('/');
-
-    return {
-      name: date.toString(),
-      value: [dateVal, averageWeight]
-    };
-  });
-
-  return {
-    name: 'Line of average',
-    type: 'line',
-    symbol: 'none',
-    data: data,
-  };
-};
-
 export const getAverageWeight = (weights: IWeightDTO[]) => {
   const totalWeight = weights
     .map(d => Number(d.weight))
@@ -90,5 +71,10 @@ export function createWeightData(weights: IWeightDTO[]) {
     type: 'line',
     symbol: 'none',
     data: data,
+    markLine: {
+      data: [
+        {type: 'average', name: 'Average'}
+      ]
+    }
   };
 }

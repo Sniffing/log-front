@@ -14,7 +14,7 @@ function createCalorieData(entries: ICalorieEntry[]): EChartOption.Series {
         name: date.toString(),
         value: [dateVal, entry.calories - 2000],
         itemStyle: {
-          color: entry.calories >=2000 ? 'blue' : 'pink'
+          color: entry.calories >=2000 ?  '#00356E' : '#002752'
         },
       };
     });
@@ -29,7 +29,7 @@ function createCalorieData(entries: ICalorieEntry[]): EChartOption.Series {
   };
 }
 
-function createWeightData(weight: IWeightDTO[]): EChartOption.Series {
+function createWeightData(weight: IWeightDTO[]) {//}: EChartOption.Series {
   const sortedData = weight?.sort((a: IWeightDTO, b: IWeightDTO) => {
     const dateA = Utils.dateFromString(a.date);
     const dateB = Utils.dateFromString(b.date);
@@ -53,8 +53,8 @@ function createWeightData(weight: IWeightDTO[]): EChartOption.Series {
     symbol: 'none',
     data: data,
     itemStyle: {
-      color: 'black'
-    }
+      color: '#006573'
+    },
   };
 }
 
@@ -63,6 +63,7 @@ function createEventData(eventData: ILifeEvent[]) {
     name: 'Events',
     type: 'bar',
     markArea: {
+      clip: true,
       data: eventData.map((event: ILifeEvent) => {
         const date = new Date(event.date*1000);
         const nextDate = new Date((event.date + 86400 * event.intensity) * 1000);
@@ -70,13 +71,16 @@ function createEventData(eventData: ILifeEvent[]) {
         const dateEnd = [nextDate.getFullYear(), nextDate.getMonth()+1, nextDate.getDate()].join('/');
         return [{
           xAxis: dateStart,
+          rotate: 90,
+          name: event.name,
           label: {
-            position: 'top',
+            position: 'insideLeft',
+            rotate: 90,
             color: 'black',
+            fontSize: 8,
           },
           itemStyle : {
             color: {
-              type: 'log',
               colorStops: [{
                 offset: 0,
                 color: event.nature === 'good' ? 'green' : 'red' ,
@@ -85,24 +89,13 @@ function createEventData(eventData: ILifeEvent[]) {
                 color: 'transparent',
               }]
             },
-            opacity: 0.7,
+            opacity: 0.6,
           },
         }, {
           xAxis: dateEnd,
         }];
       }),
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'line',
-          axis: 'auto',
-        },
-        crossStyle: {
-          type: 'dashed'
-        },
-        backgroundColor: '#505765'
-      }
-    }
+    },
   };
 }
 

@@ -59,14 +59,28 @@ function createEventData(eventData: ILifeEvent[]) {
     markArea: {
       data: eventData.map((event: ILifeEvent) => {
         const date = new Date(event.date*1000);
-        const nextDate = new Date((event.date + 86400) * 1000);
+        const nextDate = new Date((event.date + 86400 * event.intensity) * 1000);
         const dateStart = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
         const dateEnd = [nextDate.getFullYear(), nextDate.getMonth()+1, nextDate.getDate()].join('/');
         return [{
           xAxis: dateStart,
-          // label: {
-
-          // }
+          label: {
+            position: 'top',
+            color: 'black',
+          },
+          itemStyle : {
+            color: {
+              type: 'log',
+              colorStops: [{
+                offset: 0,
+                color: event.nature === 'good' ? 'green' : 'red' ,
+              },{
+                offset: 1,
+                color: 'transparent',
+              }]
+            },
+            opacity: 0.7,
+          },
         }, {
           xAxis: dateEnd,
         }];
@@ -110,7 +124,7 @@ export function generateCombinedDataOption({
     },
     dataZoom: [{
       type: 'inside',
-      start: 50,
+      start: 90,
       end: 100
     }, {
       start: 0,

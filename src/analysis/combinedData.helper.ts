@@ -13,6 +13,9 @@ function createCalorieData(entries: ICalorieEntry[]): EChartOption.Series {
       return {
         name: date.toString(),
         value: [dateVal, entry.calories - 2000],
+        itemStyle: {
+          color: entry.calories >=2000 ? 'blue' : 'pink'
+        },
       };
     });
 
@@ -49,6 +52,9 @@ function createWeightData(weight: IWeightDTO[]): EChartOption.Series {
     type: 'line',
     symbol: 'none',
     data: data,
+    itemStyle: {
+      color: 'black'
+    }
   };
 }
 
@@ -124,7 +130,7 @@ export function generateCombinedDataOption({
     },
     dataZoom: [{
       type: 'inside',
-      start: 90,
+      start: 50,
       end: 100
     }, {
       start: 0,

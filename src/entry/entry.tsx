@@ -222,7 +222,7 @@ export class EntryPage extends React.Component<IProps> {
       component = <Input onChange={this.handleWeightChange} />;
       break;
     case EntryFormFieldsEnum.THOUGHTS:
-      component = <TextArea onChange={this.handleThoughtsChange} rows={6} />;
+      component = <TextArea maxLength={1500} onChange={this.handleThoughtsChange} rows={6} />;
       break;
     }
 
@@ -261,7 +261,7 @@ export class EntryPage extends React.Component<IProps> {
     return (
       <div style={{ margin: '20px' }}>
         <Card
-          loading={this.props.logEntryStore?.fetchingDates?.state !== 'fulfilled'}
+          loading={this.props.logEntryStore?.fetchingDates?.state !== 'fulfilled' || this.props.logEntryStore.isSavingData}
           style={{ backgroundColor: '#c2c2c2' }}
         >
           <Form

@@ -6,6 +6,7 @@ import { LifeEventStore } from './lifeEventStore';
 export const KEYWORD_URL = Constants.LOG_ENTRY_URL+'/keywords';
 export const TEXT_URL = Constants.LOG_ENTRY_URL+'/texts';
 export const WEIGHT_URL = Constants.LOG_ENTRY_URL+'/weights';
+export const LOG_ENTRY_URL = Constants.LOG_ENTRY_URL;
 export const LAST_DATES_URL = Constants.LOG_ENTRY_URL;
 
 export const LIFE_EVENTS_URL = Constants.LIFE_EVENT_URL;

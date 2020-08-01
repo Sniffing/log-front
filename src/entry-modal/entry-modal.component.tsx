@@ -1,23 +1,26 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import { Modal, Button, Checkbox } from 'antd';
 import { observer } from 'mobx-react';
 import { ModalProps } from 'antd/lib/modal';
 import { observable, action } from 'mobx';
 import Title from 'antd/lib/typography/Title';
+import { FormInstance } from 'antd/lib/form';
+import { Store } from 'antd/lib/form/interface';
 
-interface IProps extends ModalProps {
+export interface IEntryFormModalProps extends ModalProps {
   keepOpen?: boolean;
-  onOk: (e: React.MouseEvent<HTMLElement>) => void;
+  onOk: (fieldValues: Store | undefined) => void;
   onCancel: (e: React.MouseEvent<HTMLElement>) => void;
+  formRef: RefObject<FormInstance>;
 }
 
 @observer
-export class EntryModal extends React.Component<IProps> {
+export class EntryFormModal extends React.Component<IEntryFormModalProps> {
 
   @observable
   private keepOpen = false;
 
-  public constructor(props: IProps) {
+  public constructor(props: IEntryFormModalProps) {
     super(props);
     this.setKeepOpen(props.keepOpen || false);
   }
@@ -33,10 +36,11 @@ export class EntryModal extends React.Component<IProps> {
   }
 
   private handleSubmit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    const {onCancel, onOk} = this.props;
+    const {onCancel, onOk, formRef} = this.props;
+    const formFields = formRef.current?.getFieldsValue();
 
     if (onOk)
-      onOk(event);
+      onOk(formFields);
 
     if(!this.keepOpen && onCancel) {
       onCancel(event);

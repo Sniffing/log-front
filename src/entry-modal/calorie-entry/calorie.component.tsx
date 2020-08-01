@@ -1,39 +1,29 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import { inject, observer } from 'mobx-react';
 import Form, { FormInstance } from 'antd/lib/form';
-import { ICalorieEntryFormValues, calorieFormFields, createFormItem } from '.';
-import { convertFormValuesToCalorieEntry } from './calorie.helper';
-import { Card, Button, message } from 'antd';
+import { calorieFormFields, createFormItem } from '.';
+import { Button, message } from 'antd';
 import Dragger, { DraggerProps } from 'antd/lib/upload/Dragger';
 import { InboxOutlined } from '@ant-design/icons';
 import { UploadChangeParam, RcFile } from 'antd/lib/upload';
 import { observable, action, computed } from 'mobx';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
-import { CalorieStore } from '../stores/calorieStore';
-import { Store } from 'antd/lib/form/interface';
-import { CalorieBarChart } from './calorie-bar-chart';
+import { CalorieStore } from '../../stores/calorieStore';
 
 interface IProps {
   calorieStore?: CalorieStore;
+  formRef: RefObject<FormInstance>;
 }
 
 @inject('calorieStore')
 @observer
-export class CalorieEntryPage extends React.Component<IProps> {
-
-  private formRef = React.createRef<FormInstance>();
+export class CalorieEntry extends React.Component<IProps> {
 
   @observable
   private csvFile: RcFile | undefined;
 
   @observable
   private uploadingCSV: IPromiseBasedObservable<Response> | undefined;
-
-  private handleSaveEventClick = (value: Store) => {
-    const formValues = value as ICalorieEntryFormValues;
-    const event = convertFormValuesToCalorieEntry(formValues);
-    this.props.calorieStore?.saveCalorieEntry(event);
-  }
 
   @action
   private setCSV = (file: RcFile) => {
@@ -88,19 +78,13 @@ export class CalorieEntryPage extends React.Component<IProps> {
   public render() {
     if (!this.props.calorieStore) return <></>;
 
-    const loading = this.props.calorieStore.savingCalorieEntry?.state === 'pending';
     return (
       <>
-        <Card style={{margin: '20px'}} loading={loading}>
-          <Form ref={this.formRef} labelCol={{span: 4}} onFinish={this.handleSaveEventClick}>
-            {calorieFormFields.map(createFormItem)}
+        <Form ref={this.props.formRef} labelCol={{span: 4}}>
+          {calorieFormFields.map(createFormItem)}
+        </Form>
 
-            <Form.Item style={{textAlign:'center'}}>
-              <Button type="primary" htmlType="submit">Save Entry</Button>
-            </Form.Item>
-          </Form>
-        </Card>
-        <Card style={{margin: '20px', textAlign: 'center'}}>
+        <div style={{margin: '20px', textAlign: 'center'}}>
           <Dragger {...this.uploadProps}>
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
@@ -114,9 +98,7 @@ export class CalorieEntryPage extends React.Component<IProps> {
             disabled={!this.csvFile || this.uploadingCSV?.state === 'pending'}>
             Upload
           </Button>
-        </Card>
-
-        <CalorieBarChart />
+        </div>
       </>
     );
   }

@@ -1,9 +1,9 @@
 import { action, observable, computed } from 'mobx';
 import get from 'axios';
-import { ILifeEvent } from '../life-event';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 import { LIFE_EVENTS_URL } from '.';
 import { AxiosResponse } from 'axios';
+import { ILifeEvent } from '../entry-modal/event-entry';
 
 export class LifeEventStore {
 
@@ -28,16 +28,17 @@ export class LifeEventStore {
 
   @action.bound
   public async saveLifeEvent(event: ILifeEvent) {
-    this.savingLifeEvents = fromPromise(fetch(LIFE_EVENTS_URL, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(event),
-    }));
+    console.log('saved!', event);
+    // this.savingLifeEvents = fromPromise(fetch(LIFE_EVENTS_URL, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(event),
+    // }));
 
-    return await this.savingLifeEvents;
+    // return await this.savingLifeEvents;
   }
 
   @action.bound

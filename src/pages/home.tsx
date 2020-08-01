@@ -1,14 +1,28 @@
 import React from 'react';
-import { Card, Row, Col, Button } from 'antd';
+import { Card, Row, Col, Button, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { Constants } from '../App.constants';
 import { IPageConfig, pageDisplayNames } from './page.constants';
-import { EntryModal } from '../entry-modal/entry-modal.component';
+import { EntryFormModal } from '../entry-modal/entry-modal.component';
 import { observable, action } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
+import { ILifeEventFormValues } from '../entry-modal/event-entry';
+import { LifeEventStore } from '../stores/lifeEventStore';
+import { convertFormValuesToLifeEvent } from '../entry-modal/event-entry/life-event.helper';
+import { FormInstance } from 'antd/lib/form';
+import { Store } from 'antd/lib/form/interface';
+import { CalorieEntry, ICalorieEntryFormValues } from '../entry-modal/calorie-entry';
+import { convertFormValuesToCalorieEntry } from '../entry-modal/calorie-entry/calorie.helper';
+import { CalorieStore } from '../stores/calorieStore';
 
+interface IProps {
+  lifeEventStore?: LifeEventStore;
+  calorieStore?: CalorieStore;
+}
+
+@inject('lifeEventStore', 'calorieStore')
 @observer
-export class Home extends React.Component {
+export class Home extends React.Component<IProps> {
 
   @observable
   private entryModalVisible = true;
@@ -61,16 +75,49 @@ export class Home extends React.Component {
     this.entryModalVisible = visible;
   }
 
+  private handleSaveLifeEvent = async (value: Store | undefined) => {
+    if (!value) return;
+
+    const event = convertFormValuesToLifeEvent(value as ILifeEventFormValues);
+
+    try {
+      await this.props.lifeEventStore?.saveLifeEvent(event);
+    } catch (error) {
+      message.error('Could not save entry');
+      console.error(error);
+    }
+  }
+
+  private handleSaveCalorie = async (value: Store | undefined) => {
+    if (!value) return;
+
+    const formValues = value as ICalorieEntryFormValues;
+    const event = convertFormValuesToCalorieEntry(formValues);
+
+    try {
+      await this.props.calorieStore?.saveCalorieEntry(event);
+    }catch (error) {
+      message.error('Could not save entry');
+      console.error(error);
+    }
+  }
+
   public render() {
+    const lifeEventForm = React.createRef<FormInstance>();
+    const calorieEventForm = React.createRef<FormInstance>();
     return (
       <>
         <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
           {this.cards()}
         </div>
         <Button onClick={() => this.setEntryModalVisible(true)}>Click</Button>
-        <EntryModal title="Entry!" visible={this.entryModalVisible} onCancel={() => this.setEntryModalVisible(false)} onOk={() => console.log('submit')}>
-          <div>stuff</div>
-        </EntryModal>
+
+        {/* <EntryFormModal title="Life Event entry" visible={this.entryModalVisible} onCancel={() => this.setEntryModalVisible(false)} onOk={this.handleSaveLifeEvent} formRef={lifeEventForm}>
+          <LifeEventEntry formRef={lifeEventForm}/>
+        </EntryFormModal> */}
+        <EntryFormModal title="Calorie entry" visible={this.entryModalVisible} onCancel={() => this.setEntryModalVisible(false)} onOk={this.handleSaveCalorie} formRef={calorieEventForm}>
+          <CalorieEntry formRef={calorieEventForm}/>
+        </EntryFormModal>
       </>
     );
   }

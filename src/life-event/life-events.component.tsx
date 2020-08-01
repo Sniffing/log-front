@@ -1,10 +1,9 @@
 import React from 'react';
 import { List, Card } from 'antd';
-import { LifeEventStore } from '../../stores/lifeEventStore';
 import { inject, observer } from 'mobx-react';
-import { ILifeEvent } from '../life-event.interfaces';
 import { computed } from 'mobx';
-
+import { LifeEventStore } from '../stores/lifeEventStore';
+import { ILifeEvent } from '../entry-modal/event-entry';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -12,7 +11,7 @@ interface IProps {
 
 @inject('lifeEventStore')
 @observer
-export class LifeEventsListPage extends React.Component<IProps> {
+export class LifeEventsPage extends React.Component<IProps> {
 
   public componentDidMount() {
     this.props.lifeEventStore?.fetchLifeEvents();

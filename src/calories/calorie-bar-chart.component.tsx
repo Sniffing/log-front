@@ -1,12 +1,11 @@
 import React from 'react';
-import { CalorieStore } from '../../stores/calorieStore';
 import { inject, observer } from 'mobx-react';
 import { computed, observable, action } from 'mobx';
 import ReactEcharts from 'echarts-for-react';
 import { Card, Spin, Alert, Button, Input } from 'antd';
-import { ICalorieEntry } from '../calorie.interfaces';
 import { EChartOption } from 'echarts';
-import { Utils } from '../../App.utils';
+import { CalorieStore } from '../stores/calorieStore';
+import { ICalorieEntry } from '../entry-modal/calorie-entry';
 
 interface IProps {
   calorieStore?: CalorieStore;

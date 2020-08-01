@@ -1,5 +1,5 @@
-import { IFormProps } from '../App.interfaces';
-import { generateFormLabel } from '../App.utils';
+import { IFormProps } from '../../App.interfaces';
+import { generateFormLabel } from '../../App.utils';
 
 export enum CalorieFormFieldsEnum {
   DATE = 'DATE',

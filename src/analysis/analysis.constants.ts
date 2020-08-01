@@ -1,5 +1,5 @@
 import { IWeightDTO } from '../App.interfaces';
-import { ICalorieEntry } from '../calories';
+import { ICalorieEntry } from '../entry-modal/calorie-entry';
 
 export interface ICombinedDataSources {
   weightData?: IWeightDTO[];

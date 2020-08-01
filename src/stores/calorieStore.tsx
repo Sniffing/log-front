@@ -1,9 +1,9 @@
 import { observable, action } from 'mobx';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
-import { ICalorieEntry } from '../calories';
 import { RcFile } from 'antd/lib/upload';
 import { CALORIE_FROM_FILE_URL, CALORIE_ENTRIES_URL } from './constants';
 import get, { AxiosResponse } from 'axios';
+import { ICalorieEntry } from '../entry-modal/calorie-entry';
 
 export class CalorieStore {
   @observable
@@ -16,14 +16,15 @@ export class CalorieStore {
   public calorieEntries: ICalorieEntry[] = [];
 
   public async saveCalorieEntry(entry: ICalorieEntry) {
-    this.savingCalorieEntry = fromPromise(fetch(CALORIE_ENTRIES_URL, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(entry),
-    }));
+    console.log('saved', entry);
+    // this.savingCalorieEntry = fromPromise(fetch(CALORIE_ENTRIES_URL, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(entry),
+    // }));
   }
 
   public async saveCaloriesFromCSV(csvFile: RcFile) {

@@ -14,7 +14,7 @@ import { Store } from 'antd/lib/form/interface';
 import { CalorieBarChart } from './calorie-bar-chart';
 
 interface IProps {
-  calorieStore: CalorieStore;
+  calorieStore?: CalorieStore;
 }
 
 @inject('calorieStore')
@@ -51,7 +51,7 @@ export class CalorieEntryPage extends React.Component<IProps> {
   }
 
   private uploadFile = () => {
-    if (this.csvFile) {
+    if (this.props.calorieStore && this.csvFile) {
       this.uploadingCSV = fromPromise(this.props.calorieStore.saveCaloriesFromCSV(this.csvFile));
     }
   }
@@ -86,6 +86,8 @@ export class CalorieEntryPage extends React.Component<IProps> {
   }
 
   public render() {
+    if (!this.props.calorieStore) return <></>;
+
     const loading = this.props.calorieStore.savingCalorieEntry?.state === 'pending';
     return (
       <>

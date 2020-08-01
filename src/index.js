@@ -6,11 +6,10 @@ import App from './App';
 import 'antd/dist/antd.css';
 import './index.css';
 import './App.scss';
-import '../node_modules/react-vis/dist/style.css';
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />  
+    <App />
   </BrowserRouter>,
   document.getElementById('root')
 );

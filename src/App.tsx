@@ -4,9 +4,10 @@ import { Provider, observer } from 'mobx-react';
 import './App.scss';
 
 import { Home } from './pages';
-import { IPageConfig, Constants } from './App.constants';
 import { NavigationHeader } from './navigation-header';
 import { allStores } from './stores';
+import { Constants } from './App.constants';
+import { IPageConfig } from './pages/page.constants';
 
 @observer
 class App extends React.Component<RouteComponentProps> {

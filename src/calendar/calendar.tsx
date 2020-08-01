@@ -76,7 +76,7 @@ export class CalendarPage extends React.Component<IProps> {
     return (
       <div className="calendar-page">
         <Select mode="multiple" style={{width: '40%'}} allowClear onChange={this.handleFilterChange}>
-          {this.keywords.map(w => (
+          {this.keywords.sort((a,b) => a.localeCompare(b)).map(w => (
             <Select.Option key={w} value={w}>
               {w}
             </Select.Option>

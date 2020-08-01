@@ -10,7 +10,7 @@ import { NumbersOnlySelect } from '../custom-components';
 import { LifeEventStore } from '../stores/lifeEventStore';
 
 interface IProps {
-  lifeEventStore: LifeEventStore;
+  lifeEventStore?: LifeEventStore;
 }
 
 @inject('lifeEventStore')
@@ -70,6 +70,7 @@ export class LifeEventEntryPage extends React.Component<IProps> {
   }
 
   public render() {
+    if (!this.props.lifeEventStore) return <></>;
     return (
       <div>
         <Card style={{margin: '20px'}} loading={this.props.lifeEventStore.isSaving}>

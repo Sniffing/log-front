@@ -3,9 +3,10 @@ import { Menu } from 'antd';
 import { HomeOutlined, DownCircleOutlined } from '@ant-design/icons';
 import { observable, action, runInAction } from 'mobx';
 import { ClickParam } from 'antd/lib/menu';
-import { Constants, IPageConfig, Page, pageDisplayNames } from '../App.constants';
+import { Constants } from '../App.constants';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
+import { Page, IPageConfig, pageDisplayNames } from '../pages/page.constants';
 
 @observer
 class Header extends React.Component<RouteComponentProps> {

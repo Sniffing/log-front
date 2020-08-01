@@ -21,6 +21,7 @@
     "csv-reader": "^1.0.6",
     "echarts": "^4.8.0",
     "echarts-for-react": "^2.0.16",
+    "font-awesome": "^4.7.0",
     "heap": "^0.2.6",
     "konva": "^5.0.2",
     "minimist": "^1.2.5",

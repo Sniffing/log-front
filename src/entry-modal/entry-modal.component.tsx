@@ -44,6 +44,7 @@ export class EntryFormModal extends React.Component<IEntryFormModalProps> {
 
     if(!this.keepOpen && onCancel) {
       onCancel(event);
+      formRef.current?.resetFields();
     }
   }
 

@@ -4,6 +4,7 @@ import { generateFormLabel } from '../../App.utils';
 export enum CalorieFormFieldsEnum {
   DATE = 'DATE',
   CALORIES = 'CALORIES',
+  CSV = 'CSV',
 }
 
 export const eventFormFields = [
@@ -28,5 +29,10 @@ export const CalorieFormFieldsConfigs: Record<CalorieFormFieldsEnum, IFormProps>
     ...getBaseConfig(CalorieFormFieldsEnum.CALORIES),
     label: 'Calories',
     required: true
+  },
+  [CalorieFormFieldsEnum.CSV]: {
+    id: CalorieFormFieldsEnum.CALORIES,
+    name: CalorieFormFieldsEnum.CALORIES,
+    label: undefined,
   }
 };

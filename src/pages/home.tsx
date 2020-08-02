@@ -11,9 +11,10 @@ import { LifeEventStore } from '../stores/lifeEventStore';
 import { convertFormValuesToLifeEvent } from '../entry-modal/event-entry/life-event.helper';
 import { FormInstance } from 'antd/lib/form';
 import { Store } from 'antd/lib/form/interface';
-import { CalorieEntry, ICalorieEntryFormValues } from '../entry-modal/calorie-entry';
+import { CalorieEntry, ICalorieEntryFormValues, CalorieFormFieldsEnum, ICalorieEntry } from '../entry-modal/calorie-entry';
 import { convertFormValuesToCalorieEntry } from '../entry-modal/calorie-entry/calorie.helper';
 import { CalorieStore } from '../stores/calorieStore';
+import { RcFile } from 'antd/lib/upload';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -88,16 +89,33 @@ export class Home extends React.Component<IProps> {
     }
   }
 
-  private handleSaveCalorie = async (value: Store | undefined) => {
+  private handleSaveCalories = (value: Store | undefined) => {
     if (!value) return;
 
     const formValues = value as ICalorieEntryFormValues;
-    const event = convertFormValuesToCalorieEntry(formValues);
+    if (!formValues[CalorieFormFieldsEnum.CSV]) {
+      this.saveCalorieForm(convertFormValuesToCalorieEntry(formValues));
+    } else {
+      this.uploadCalorieCSVFile(formValues[CalorieFormFieldsEnum.CSV]);
+    }
+  }
+
+  private saveCalorieForm = async (entry: ICalorieEntry) => {
+    try {
+      await this.props.calorieStore?.saveCalorieEntry(entry);
+    } catch (error) {
+      message.error('Could not save entry');
+      console.error(error);
+    }
+  }
+
+  private uploadCalorieCSVFile = async (csv: RcFile) => {
+    if (!csv) return;
 
     try {
-      await this.props.calorieStore?.saveCalorieEntry(event);
-    }catch (error) {
-      message.error('Could not save entry');
+      await this.props.calorieStore?.saveCaloriesFromCSV(csv);
+    } catch (error) {
+      message.error('Could not save CSV');
       console.error(error);
     }
   }
@@ -115,7 +133,7 @@ export class Home extends React.Component<IProps> {
         {/* <EntryFormModal title="Life Event entry" visible={this.entryModalVisible} onCancel={() => this.setEntryModalVisible(false)} onOk={this.handleSaveLifeEvent} formRef={lifeEventForm}>
           <LifeEventEntry formRef={lifeEventForm}/>
         </EntryFormModal> */}
-        <EntryFormModal title="Calorie entry" visible={this.entryModalVisible} onCancel={() => this.setEntryModalVisible(false)} onOk={this.handleSaveCalorie} formRef={calorieEventForm}>
+        <EntryFormModal title="Calorie entry" visible={this.entryModalVisible} onCancel={() => this.setEntryModalVisible(false)} onOk={this.handleSaveCalories} formRef={calorieEventForm}>
           <CalorieEntry formRef={calorieEventForm}/>
         </EntryFormModal>
       </>

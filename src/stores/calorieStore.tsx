@@ -28,13 +28,14 @@ export class CalorieStore {
   }
 
   public async saveCaloriesFromCSV(csvFile: RcFile) {
-    const formData = new FormData();
-    formData.append('file', csvFile, 'calories.csv');
+    console.log('saved', csvFile);
+    // const formData = new FormData();
+    // formData.append('file', csvFile, 'calories.csv');
 
-    return fetch(CALORIE_FROM_FILE_URL, {
-      method: 'POST',
-      body: formData,
-    });
+    // return fetch(CALORIE_FROM_FILE_URL, {
+    //   method: 'POST',
+    //   body: formData,
+    // });
   }
 
   @action

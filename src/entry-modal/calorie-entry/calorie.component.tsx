@@ -2,12 +2,9 @@ import React, { RefObject } from 'react';
 import { inject, observer } from 'mobx-react';
 import Form, { FormInstance } from 'antd/lib/form';
 import { calorieFormFields, createFormItem, ECalorieEntryTabs, CalorieFormFieldsEnum } from '.';
-import { Button, message, Tabs } from 'antd';
-import Dragger, { DraggerProps } from 'antd/lib/upload/Dragger';
-import { InboxOutlined } from '@ant-design/icons';
-import { UploadChangeParam, RcFile } from 'antd/lib/upload';
-import { observable, action, computed } from 'mobx';
-import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
+import { Tabs } from 'antd';
+import { RcFile } from 'antd/lib/upload';
+import { observable, action } from 'mobx';
 import { CalorieStore } from '../../stores/calorieStore';
 import { CSVUpload } from './csv-upload';
 

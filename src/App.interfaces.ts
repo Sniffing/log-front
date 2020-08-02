@@ -3,7 +3,7 @@ export interface IDummy {
 }
 
 export interface IFormProps {
-  id?: string;
+  key?: string;
   name: string;
   label?: string | React.Component | JSX.Element;
   placeholder?: string;

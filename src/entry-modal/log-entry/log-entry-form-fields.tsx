@@ -1,9 +1,9 @@
-import { IFormProps } from '../App.interfaces';
-import { generateFormLabel } from '../App.utils';
+import { IFormProps } from '../../App.interfaces';
+import { generateFormLabel } from '../../App.utils';
+
 
 export enum EntryFormFieldsEnum {
   DATE = 'DATE',
-  SET_EMOTIONS = 'SET_EMOTIONS',
   FREE_EMOTIONS = 'FREE_EMOTIONS',
   WEIGHT = 'WEIGHT',
   THOUGHTS = 'THOUGHTS'
@@ -13,7 +13,7 @@ export const entryFormFields = Object.values(EntryFormFieldsEnum);
 
 const getBaseConfig = (field: EntryFormFieldsEnum): IFormProps => {
   return {
-    id: field,
+    key: field,
     name: field,
     label: generateFormLabel(field)
   };
@@ -24,13 +24,9 @@ export const EntryFormFieldsConfigs: Record<EntryFormFieldsEnum, IFormProps> = {
     ...getBaseConfig(EntryFormFieldsEnum.DATE),
     required: true
   },
-  [EntryFormFieldsEnum.SET_EMOTIONS]: {
-    ...getBaseConfig(EntryFormFieldsEnum.SET_EMOTIONS),
-    label: 'Emotions'
-  },
   [EntryFormFieldsEnum.FREE_EMOTIONS]: {
     ...getBaseConfig(EntryFormFieldsEnum.FREE_EMOTIONS),
-    label: 'Other emotions'
+    label: 'Feelings'
   },
   [EntryFormFieldsEnum.WEIGHT]: {
     ...getBaseConfig(EntryFormFieldsEnum.WEIGHT)

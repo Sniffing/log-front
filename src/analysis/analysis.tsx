@@ -3,14 +3,11 @@ import { observer, inject } from 'mobx-react';
 import ReactEcharts from 'echarts-for-react';
 
 import { computed, observable, action } from 'mobx';
-import { Spin, Select } from 'antd';
+import { Spin } from 'antd';
 import { LogEntryStore } from '../stores/logEntryStore';
 import { CalorieStore } from '../stores/calorieStore';
 import { generateCombinedDataOption, AnalysisGraph } from '.';
 import { LifeEventStore } from '../stores/lifeEventStore';
-import { Tag } from 'react-konva';
-
-// const {Option} = Select;
 
 interface IProps {
   logEntryStore?: LogEntryStore;

@@ -1,9 +1,9 @@
 import { observable, action } from 'mobx';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
-import { KEYWORD_URL, TEXT_URL, WEIGHT_URL, LAST_DATES_URL, LOCAL_URL, LOG_ENTRY_URL } from '.';
-import { ILogEntry } from '../entry';
+import { KEYWORD_URL, TEXT_URL, WEIGHT_URL, LAST_DATES_URL, LOG_ENTRY_URL } from '.';
 import get, { AxiosResponse } from 'axios';
 import { IWeightDTO } from '../App.interfaces';
+import { ILogEntry } from '../entry-modal/log-entry';
 
 export interface KeywordEntry {
   date: string;
@@ -22,12 +22,6 @@ export interface ILastDates {
 
 export class LogEntryStore {
   @observable
-  public isFetchingData = false;
-
-  @observable
-  public isSavingData = false;
-
-  @observable
   public fetchingMemory: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
 
   @observable
@@ -37,7 +31,7 @@ export class LogEntryStore {
   public fetchingKeywords: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
 
   @observable
-  public fetchingDates: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
+  public fetchingDates: IPromiseBasedObservable<AxiosResponse<ILastDates>> | undefined;
 
   @observable
   public keywords: KeywordEntry[] = [];
@@ -73,7 +67,6 @@ export class LogEntryStore {
 
   @action.bound
   public async fetchWeightData() {
-    this.isFetchingData = true;
     this.fetchingWeight = fromPromise(get(WEIGHT_URL));
 
     await this.fetchingWeight.then(response => {
@@ -101,35 +94,45 @@ export class LogEntryStore {
     this.lastDates = dates;
   }
 
+  @action.bound
+  public setLatestDate(date: string) {
+    this.lastDates.last = date;
+  }
+
   @action
   public async fetchLastDates() {
-    this.fetchingDates = fromPromise(get(LAST_DATES_URL));
+    console.log('fetchin again');
+    // this.fetchingDates = fromPromise(get(LAST_DATES_URL));
+    this.fetchingDates = fromPromise(Promise.resolve({
+      data: {
+        last: '28-02-2018',
+        first: '28-02-2018',
+      },
+      status: 45,
+      statusText: 'test',
+      headers: 'test',
+      config: {
+      },
+    }));
 
     await this.fetchingDates.then((response) => {
       this.setLastDates(response.data as ILastDates);
     });
   }
 
-  @action.bound
-  private setSavingData(value: boolean) {
-    this.isSavingData = value;
-  }
-
   public saveEntry = async (data: ILogEntry) => {
-    this.setSavingData(true);
-    try {
-      await fetch(LOG_ENTRY_URL, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-    } catch (error) {
-      throw new Error(error);
-    } finally {
-      this.setSavingData(false);
-    }
+    console.log('saving', data);
+    // try {
+    //   await fetch(LOG_ENTRY_URL, {
+    //     method: 'POST',
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(data)
+    //   });
+    // } catch (error) {
+    //   throw new Error(error);
+    // }
   };
 }

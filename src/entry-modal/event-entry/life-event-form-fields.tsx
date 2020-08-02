@@ -23,7 +23,7 @@ export const eventFormFields = [
 
 const getBaseConfig = (field: LifeEventFormFieldsEnum): IFormProps => {
   return {
-    id: field,
+    key: field,
     name: field,
     label: generateFormLabel(field)
   };

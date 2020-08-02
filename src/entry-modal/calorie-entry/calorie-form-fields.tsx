@@ -14,7 +14,7 @@ export const eventFormFields = [
 
 const getBaseConfig = (field: CalorieFormFieldsEnum): IFormProps => {
   return {
-    id: field,
+    key: field,
     name: field,
     label: generateFormLabel(field)
   };
@@ -31,7 +31,7 @@ export const CalorieFormFieldsConfigs: Record<CalorieFormFieldsEnum, IFormProps>
     required: true
   },
   [CalorieFormFieldsEnum.CSV]: {
-    id: CalorieFormFieldsEnum.CALORIES,
+    key: CalorieFormFieldsEnum.CALORIES,
     name: CalorieFormFieldsEnum.CALORIES,
     label: undefined,
   }

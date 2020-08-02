@@ -9,7 +9,7 @@ import { Store } from 'antd/lib/form/interface';
 
 export interface IEntryFormModalProps extends ModalProps {
   keepOpen?: boolean;
-  onOk: (fieldValues: Store | undefined) => void;
+  onOk: (fieldValues: Store | undefined, callback?: () => void) => void;
   onCancel: (e: React.MouseEvent<HTMLElement>) => void;
   formRef: RefObject<FormInstance>;
 }

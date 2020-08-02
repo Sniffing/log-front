@@ -36,27 +36,35 @@ export class EntryFormModal extends React.Component<IEntryFormModalProps> {
   }
 
   private handleSubmit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    const {onCancel, onOk, formRef} = this.props;
+    const { onOk, formRef } = this.props;
     const formFields = formRef.current?.getFieldsValue();
 
     if (onOk)
       onOk(formFields);
 
-    if(!this.keepOpen && onCancel) {
+    this.handleCancel(event);
+  }
+
+  private handleCancel = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    const {onCancel, formRef} = this.props;
+
+    if(onCancel && !this.keepOpen) {
       onCancel(event);
+    }
+
+    if (!this.keepOpen) {
       formRef.current?.resetFields();
     }
   }
 
   private get modalFooter() {
-    const {onCancel} = this.props;
     return [
       <Checkbox key="keepOpen"
         checked={this.keepOpen}
         onChange={this.handleKeepOpenToggle}>
           Keep open?
       </Checkbox>,
-      <Button key="cancel" onClick={onCancel}>Close</Button>,
+      <Button key="cancel" onClick={this.handleCancel}>Close</Button>,
       <Button key="submit" type="primary" onClick={this.handleSubmit}>Save</Button>,
     ];
   }

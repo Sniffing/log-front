@@ -1,6 +1,5 @@
-import { ILogEntry, dateFormat } from '../entry-modal/log-entry';
+import { ILogEntry } from '../entry-modal/log-entry';
 import { LogEntryStore } from './logEntryStore';
-import moment from 'moment';
 
 export const logEntryDefaults: ILogEntry = {
   dateState: {},

@@ -5,7 +5,7 @@ import { IPageConfig} from './page.constants';
 import { EntryFormModal } from '../entry-modal/entry-modal.component';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { ILifeEventFormValues } from '../entry-modal/event-entry';
+import { ILifeEventFormValues, LifeEventEntry } from '../entry-modal/event-entry';
 import { LifeEventStore } from '../stores/lifeEventStore';
 import { convertFormValuesToLifeEvent } from '../entry-modal/event-entry/life-event.helper';
 import { FormInstance } from 'antd/lib/form';
@@ -14,10 +14,11 @@ import { CalorieEntry, ICalorieEntryFormValues, CalorieFormFieldsEnum, ICalorieE
 import { convertFormValuesToCalorieEntry } from '../entry-modal/calorie-entry/calorie.helper';
 import { CalorieStore } from '../stores/calorieStore';
 import { RcFile } from 'antd/lib/upload';
-import { LogEntry, ILogEntry, dateFormat } from '../entry-modal/log-entry';
+import { LogEntry, dateFormat } from '../entry-modal/log-entry';
 import { LogEntryStore } from '../stores/logEntryStore';
 import moment from 'moment';
 import { logEntryDefaults } from '../stores/logEntryFormStore';
+import { EntryFormSelector } from '../custom-components/entry-form-select/entry-form-selector.component';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -33,7 +34,7 @@ export class Home extends React.Component<IProps> {
   private logEntryForm = React.createRef<FormInstance>();
 
   @observable
-  private entryModalVisible = true;
+  private entryModalVisible = false;
 
   private pages: IPageConfig[];
   private count: number;
@@ -134,14 +135,18 @@ export class Home extends React.Component<IProps> {
 
   public render() {
     return (
-      <>
+      <div style={{
+
+      }}>
         <Button onClick={() => this.setEntryModalVisible(true)}>Click</Button>
 
-        {/* <EntryFormModal title="Life Event entry" visible={this.entryModalVisible} onCancel={() => this.setEntryModalVisible(false)} onOk={this.handleSaveLifeEvent} formRef={lifeEventForm}>
-          <LifeEventEntry formRef={lifeEventForm}/>
-        </EntryFormModal> */}
-        {/* <EntryFormModal title="Calorie entry" visible={this.entryModalVisible} onCancel={() => this.setEntryModalVisible(false)} onOk={this.handleSaveCalories} formRef={calorieEntryForm}>
-          <CalorieEntry formRef={calorieEntryForm}/>
+        <EntryFormSelector/>
+
+        {/* <EntryFormModal title="Life Event entry" visible={this.entryModalVisible} onCancel={() => this.setEntryModalVisible(false)} onOk={this.handleSaveLifeEvent} formRef={this.lifeEventForm}>
+          <LifeEventEntry formRef={this.lifeEventForm}/>
+        </EntryFormModal>
+        <EntryFormModal title="Calorie entry" visible={this.entryModalVisible} onCancel={() => this.setEntryModalVisible(false)} onOk={this.handleSaveCalories} formRef={this.calorieEntryForm}>
+          <CalorieEntry formRef={this.calorieEntryForm}/>
         </EntryFormModal> */}
         <EntryFormModal title="Log entry" visible={this.entryModalVisible} keepOpen onCancel={() => this.setEntryModalVisible(false)} onOk={this.handleSaveLog} formRef={this.logEntryForm}>
           {this.props.logEntryStore?.fetchingDates?.case({
@@ -150,7 +155,7 @@ export class Home extends React.Component<IProps> {
             rejected: () =><Spin/>,
           })}
         </EntryFormModal>
-      </>
+      </div>
     );
   }
 }

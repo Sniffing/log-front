@@ -102,18 +102,7 @@ export class LogEntryStore {
   @action
   public async fetchLastDates() {
     console.log('fetchin again');
-    // this.fetchingDates = fromPromise(get(LAST_DATES_URL));
-    this.fetchingDates = fromPromise(Promise.resolve({
-      data: {
-        last: '28-02-2018',
-        first: '28-02-2018',
-      },
-      status: 45,
-      statusText: 'test',
-      headers: 'test',
-      config: {
-      },
-    }));
+    this.fetchingDates = fromPromise(get(LAST_DATES_URL));
 
     await this.fetchingDates.then((response) => {
       this.setLastDates(response.data as ILastDates);
@@ -121,18 +110,17 @@ export class LogEntryStore {
   }
 
   public saveEntry = async (data: ILogEntry) => {
-    console.log('saving', data);
-    // try {
-    //   await fetch(LOG_ENTRY_URL, {
-    //     method: 'POST',
-    //     headers: {
-    //       Accept: 'application/json',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(data)
-    //   });
-    // } catch (error) {
-    //   throw new Error(error);
-    // }
+    try {
+      await fetch(LOG_ENTRY_URL, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   };
 }

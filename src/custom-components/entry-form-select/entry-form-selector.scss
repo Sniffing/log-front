@@ -1,0 +1,41 @@
+.entryFormSelector {
+  height: 100vh;
+  width: 100vh;
+  // position: relative;
+
+  .mainSelector {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: blue;
+    border-radius: 0 0 0 200px;
+  }
+
+  .choice {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    background-color: blue;
+    border-radius: 50px;
+  }
+
+  .firstChoice {
+    top: 0;
+    right: calc(200px + 50px);
+    @extend .choice;
+  }
+
+  .secondChoice {
+    top: calc(175px - 15px);
+    right: calc(175px - 15px);
+    @extend .choice;
+  }
+
+  .thirdChoice {
+    right: 0;
+    top: calc(200px + 50px);
+    @extend .choice;
+  }
+}

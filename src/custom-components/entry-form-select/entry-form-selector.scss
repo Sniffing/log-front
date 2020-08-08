@@ -17,7 +17,7 @@
     border-width: 3px;
     border-radius: 0 0 0 200px;
 
-    .text {
+    > .text {
       position: relative;
       text-align: center;
       left: 10%;
@@ -29,25 +29,38 @@
     width: 100px;
     height: 100px;
     position: absolute;
-    background-color: blue;
+    border-width: 1px;
+    border-style: solid;
+    border-color: blue;
     border-radius: 50px;
+
+    > .text {
+      text-align: center;
+    }
+
+    > .icon {
+      color: red;
+      font-size: 60px;
+      text-align: center;
+      height: 75%;
+    }
   }
 
   .firstChoice {
     top: 0;
-    right: calc(200px + 50px);
+    right: calc(200px + 25px);
     @extend .choice;
   }
 
   .secondChoice {
-    top: calc(175px - 15px);
-    right: calc(175px - 15px);
+    top: calc(175px - 35px);
+    right: calc(175px - 35px);
     @extend .choice;
   }
 
   .thirdChoice {
     right: 0;
-    top: calc(200px + 50px);
+    top: calc(200px + 25px);
     @extend .choice;
   }
 }

@@ -27,6 +27,10 @@ export class EntryFormSelector extends React.Component<IProps> {
     this.options = [];
   }
 
+  private handleEntryClick = (label: string) => {
+    console.log('open', label);
+  }
+
   public render() {
     return (
       <div className="entryFormSelector" onMouseLeave={this.handleMouseLeave} >
@@ -35,9 +39,9 @@ export class EntryFormSelector extends React.Component<IProps> {
           <Transition
             items={this.options}
             keys={item => item.label}
-            from={{opacity: 1}}
+            from={{opacity: 0}}
             enter={{ opacity: 1}}
-            leave={{ opacity: 1}}
+            leave={{ opacity: 0}}
             trail={70}
             config={{
               tension: 300,
@@ -45,9 +49,9 @@ export class EntryFormSelector extends React.Component<IProps> {
           >
             {item => (style) => {
               return item ? (
-                <animated.div className={item.className} style={style}>
-                  <span>{item.label}</span>
-                  {item.icon}
+                <animated.div className={item.className} style={style} onClick={() => this.handleEntryClick(item.label)}>
+                  <div className="icon">{item.icon}</div>
+                  <div className='text'>{item.label}</div>
                 </animated.div>
               ): null;
             }}

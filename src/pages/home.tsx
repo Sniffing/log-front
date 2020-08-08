@@ -19,6 +19,7 @@ import { LogEntryStore } from '../stores/logEntryStore';
 import moment from 'moment';
 import { logEntryDefaults } from '../stores/logEntryFormStore';
 import { EntryFormSelector } from '../custom-components/entry-form-select/entry-form-selector.component';
+import { EntryOptions } from './constants';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -134,13 +135,14 @@ export class Home extends React.Component<IProps> {
   }
 
   public render() {
+
     return (
       <div style={{
 
       }}>
         <Button onClick={() => this.setEntryModalVisible(true)}>Click</Button>
 
-        <EntryFormSelector/>
+        <EntryFormSelector options={EntryOptions}/>
 
         {/* <EntryFormModal title="Life Event entry" visible={this.entryModalVisible} onCancel={() => this.setEntryModalVisible(false)} onOk={this.handleSaveLifeEvent} formRef={this.lifeEventForm}>
           <LifeEventEntry formRef={this.lifeEventForm}/>

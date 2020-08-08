@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Slider, Spin } from 'antd';
 import { observer, inject } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
-import { SliderValue } from 'antd/lib/slider';
 import { Rejected } from '../custom-components';
 import { LogEntryStore } from '../stores/logEntryStore';
 import ReactEcharts from 'echarts-for-react';
@@ -28,8 +27,8 @@ public componentDidMount() {
 }
 
 @action
-private handlePrecisionChange = (value: SliderValue) => {
-  this.fitCloseness = typeof value === 'number' ? value : 4;
+private handlePrecisionChange = (value: number) => {
+  this.fitCloseness = value;
 };
 
 @computed

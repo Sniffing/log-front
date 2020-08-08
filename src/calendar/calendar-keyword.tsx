@@ -4,7 +4,6 @@ import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 import { Rejected } from '../custom-components';
 
-import './calendar.scss';
 import { Utils } from '../App.utils';
 import { LogEntryStore, KeywordEntry } from '../stores/logEntryStore';
 import ReactEcharts from 'echarts-for-react';

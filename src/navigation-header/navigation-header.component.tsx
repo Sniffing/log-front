@@ -1,8 +1,8 @@
 import React from 'react';
 import { Menu } from 'antd';
+import { MenuInfo } from 'rc-menu/lib/interface';
 import { HomeOutlined, DownCircleOutlined } from '@ant-design/icons';
 import { observable, action, runInAction } from 'mobx';
-import { ClickParam } from 'antd/lib/menu';
 import { Constants } from '../App.constants';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
@@ -27,8 +27,8 @@ class Header extends React.Component<RouteComponentProps> {
   }
 
   @action
-  private handleClick = (param: ClickParam) => {
-    this.current = param.key.toUpperCase();
+  private handleClick = ({ key }: MenuInfo) => {
+    this.current = key.toString().toUpperCase();
     const page: Page = Page[this.current as keyof typeof Page];
 
     const route = Constants.pageConfigs

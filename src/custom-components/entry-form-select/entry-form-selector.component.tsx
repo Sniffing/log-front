@@ -1,19 +1,25 @@
 import React from 'react';
 
 import './entry-form-selector.scss';
-import { observable, action } from 'mobx';
+import { observable, action, toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { Transition, animated } from 'react-spring/renderprops';
+import Title from 'antd/lib/typography/Title';
+import { IEntryOption } from './entry-form-select.interfaces';
+
+interface IProps {
+  options: IEntryOption[];
+}
 
 @observer
-export class EntryFormSelector extends React.Component {
+export class EntryFormSelector extends React.Component<IProps> {
 
   @observable
-  private options: string[] = [];
+  private options: IEntryOption[] = [];
 
   @action
   private handleMouseEnter = () => {
-    this.options = ['firstChoice','secondChoice','thirdChoice'];
+    this.options = this.props.options || [];
   }
 
   @action
@@ -25,19 +31,26 @@ export class EntryFormSelector extends React.Component {
     return (
       <div className="entryFormSelector" onMouseLeave={this.handleMouseLeave} >
         <div className="mainSelector" onMouseEnter={this.handleMouseEnter}>
+          <Title level={2} className="text">New entry</Title>
           <Transition
             items={this.options}
-            from={{opacity: 0}}
+            keys={item => item.label}
+            from={{opacity: 1}}
             enter={{ opacity: 1}}
-            leave={{ opacity: 0}}
+            leave={{ opacity: 1}}
             trail={70}
             config={{
               tension: 300,
             }}
           >
-            {item => ({opacity}) => (
-              <animated.div className={item} style={{opacity}}/>
-            )}
+            {item => (style) => {
+              return item ? (
+                <animated.div className={item.className} style={style}>
+                  <span>{item.label}</span>
+                  {item.icon}
+                </animated.div>
+              ): null;
+            }}
           </Transition>
         </div>
       </div>

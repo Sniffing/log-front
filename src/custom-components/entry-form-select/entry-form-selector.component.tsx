@@ -3,33 +3,40 @@ import React from 'react';
 import './entry-form-selector.scss';
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
+import { Transition, animated } from 'react-spring/renderprops';
 
 @observer
 export class EntryFormSelector extends React.Component {
 
   @observable
-  private optionsVisible = false;
+  private options: string[] = [];
 
   @action
   private handleMouseEnter = () => {
-    this.optionsVisible = true;
+    this.options = ['firstChoice','secondChoice','thirdChoice'];
   }
 
+  @action
   private handleMouseLeave = () => {
-    this.optionsVisible = false;
+    this.options = [];
   }
 
   public render() {
     return (
-      <div className="entryFormSelector">
-        <div className="mainSelector" onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}/>
-        {this.optionsVisible && (
-          <>
-            <div className="firstChoice"/>
-            <div className="secondChoice"/>
-            <div className="thirdChoice"/>
-          </>
-        )}
+      <div className="entryFormSelector" onMouseLeave={this.handleMouseLeave} >
+        <div className="mainSelector" onMouseEnter={this.handleMouseEnter}>
+          <Transition
+            items={this.options}
+            from={{opacity: 0}}
+            enter={{ opacity: 1}}
+            leave={{ opacity: 0}}
+            trail={100}
+          >
+            {item => ({opacity}) => (
+              <animated.div className={item} style={{opacity}}/>
+            )}
+          </Transition>
+        </div>
       </div>
     );
   }

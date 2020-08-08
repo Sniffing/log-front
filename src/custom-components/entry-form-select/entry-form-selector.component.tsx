@@ -30,7 +30,10 @@ export class EntryFormSelector extends React.Component {
             from={{opacity: 0}}
             enter={{ opacity: 1}}
             leave={{ opacity: 0}}
-            trail={100}
+            trail={70}
+            config={{
+              tension: 300,
+            }}
           >
             {item => ({opacity}) => (
               <animated.div className={item} style={{opacity}}/>

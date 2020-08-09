@@ -11,7 +11,7 @@ import { convertFormValuesToLifeEvent } from '../entry-modal/event-entry/life-ev
 import { FormInstance } from 'antd/lib/form';
 import { Store } from 'antd/lib/form/interface';
 import { CalorieEntry, ICalorieEntryFormValues, CalorieFormFieldsEnum, ICalorieEntry } from '../entry-modal/calorie-entry';
-import { convertFormValuesToCalorieEntry } from '../entry-modal/calorie-entry/calorie.helper';
+import { convertFormValuesToCalorieEntry } from '../entry-modal/calorie-entry';
 import { CalorieStore } from '../stores/calorieStore';
 import { RcFile } from 'antd/lib/upload';
 import { LogEntry, dateFormat } from '../entry-modal/log-entry';
@@ -20,6 +20,7 @@ import moment from 'moment';
 import { logEntryDefaults } from '../stores/logEntryFormStore';
 import { EntryFormSelector } from '../custom-components/entry-form-select/entry-form-selector.component';
 import { EntryOptions } from './constants';
+import { CalorieList } from '../calorie-list';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -137,9 +138,8 @@ export class Home extends React.Component<IProps> {
   public render() {
 
     return (
-      <div style={{
-
-      }}>
+      <div style={{height: '100vh'}}>
+        <CalorieList/>
         <Button onClick={() => this.setEntryModalVisible(true)}>Click</Button>
 
         <EntryFormSelector options={EntryOptions}/>

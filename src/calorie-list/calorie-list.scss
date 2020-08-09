@@ -1,12 +1,15 @@
 .calorieList {
-  max-width: 20%;
   height: 100%;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 
-  .date {
-    width: 60%;
+  &::-webkit-scrollbar {
+    display: none;
   }
+}
 
-  .calories {
-    width: 40%;
-  }
+.header {
+  display: flex;
+  position: fixed;
+  font-weight: 500;
 }

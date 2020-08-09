@@ -1,10 +1,15 @@
 import React from 'react';
 
+interface IUnixTimeToDateParam {
+  time: number;
+  divider?: string;
+}
+
 export class Utils {
-  public static unixTimeToDate(time: number) {
+  public static unixTimeToDate({time, divider = '-'}: IUnixTimeToDateParam) {
     const date = new Date(time);
     console.log(date, date.getMonth());
-    return `${('0' + date.getDate()).slice(-2)}-${('0' + (date.getMonth()+1)).slice(-2)}-${date.getFullYear()}`;
+    return `${('0' + date.getDate()).slice(-2)}${divider}${('0' + (date.getMonth()+1)).slice(-2)}${divider}${date.getFullYear()}`;
   }
 
 

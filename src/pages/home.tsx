@@ -138,8 +138,7 @@ export class Home extends React.Component<IProps> {
   public render() {
 
     return (
-      <div style={{height: '100vh'}}>
-        <CalorieList/>
+      <div>
         <Button onClick={() => this.setEntryModalVisible(true)}>Click</Button>
 
         <EntryFormSelector options={EntryOptions}/>

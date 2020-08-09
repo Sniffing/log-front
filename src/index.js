@@ -9,7 +9,7 @@ import './App.scss';
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <App style={{height: '100vh', width: '100vw'}} />
   </BrowserRouter>,
   document.getElementById('root')
 );

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {  Spin, Card } from 'antd';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import { Rejected } from '../custom-components';
+import { Rejected } from '../../custom-components';
 
-import { Utils } from '../App.utils';
-import { LogEntryStore, KeywordEntry } from '../stores/logEntryStore';
+import { Utils } from '../../App.utils';
+import { LogEntryStore, KeywordEntry } from '../../stores/logEntryStore';
 import ReactEcharts from 'echarts-for-react';
 import { EChartOption } from 'echarts';
 interface IProps {

@@ -1,10 +1,10 @@
-import { WeightPage } from '../weight';
-import { KeywordPage } from '../keywords';
-import { CalendarPage } from '../calendar';
-import { MemoryPage } from '../memory';
-import { Analysis } from '../analysis';
+import { WeightPage } from '../data-vis/weight';
+import { KeywordPage } from '../data-vis/keywords';
+import { CalendarPage } from '../data-vis/calendar';
+import { MemoryPage } from '../data-vis/memory';
+import { Analysis } from '../data-vis/analysis';
 import React from 'react';
-import { LifeEventsPage } from '../life-event';
+import { LifeEventsPage } from '../data-vis/life-event';
 
 export enum Page {
   WEIGHT = 'WEIGHT',

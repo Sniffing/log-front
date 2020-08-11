@@ -2,8 +2,8 @@ import React from 'react';
 import { List, Card } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { computed } from 'mobx';
-import { LifeEventStore } from '../stores/lifeEventStore';
-import { ILifeEvent } from '../entry-modal/event-entry';
+import { LifeEventStore } from '../../stores/lifeEventStore';
+import { ILifeEvent } from '../../entry-modal/event-entry';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;

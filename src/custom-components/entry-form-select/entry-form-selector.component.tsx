@@ -1,14 +1,16 @@
 import React from 'react';
 
 import './entry-form-selector.scss';
-import { observable, action, toJS } from 'mobx';
+import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import { Transition, animated } from 'react-spring/renderprops';
 import Title from 'antd/lib/typography/Title';
 import { IEntryOption } from './entry-form-select.interfaces';
+import { EntryType } from '../../pages/constants';
 
 interface IProps {
   options: IEntryOption[];
+  onSelect: (type: EntryType) => void;
 }
 
 @observer
@@ -17,18 +19,22 @@ export class EntryFormSelector extends React.Component<IProps> {
   @observable
   private options: IEntryOption[] = [];
 
-  @action
   private handleMouseEnter = () => {
-    this.options = this.props.options || [];
+    this.setOptions(this.props.options || []);
   }
 
-  @action
   private handleMouseLeave = () => {
-    this.options = [];
+    this.setOptions([]);
   }
 
-  private handleEntryClick = (label: string) => {
-    console.log('open', label);
+  private handleEntryClick = (type: EntryType) => {
+    this.props.onSelect(type);
+    this.setOptions([]);
+  }
+
+  @action.bound
+  private setOptions(options: IEntryOption[]) {
+    this.options = options;
   }
 
   public render() {
@@ -49,7 +55,9 @@ export class EntryFormSelector extends React.Component<IProps> {
           >
             {item => (style) => {
               return item ? (
-                <animated.div className={item.className} style={style} onClick={() => this.handleEntryClick(item.label)}>
+                <animated.div className={item.className}
+                  style={style}
+                  onClick={() => this.handleEntryClick(EntryType[item.label as EntryType])}>
                   <div className="icon">{item.icon}</div>
                   <div className='text'>{item.label}</div>
                 </animated.div>

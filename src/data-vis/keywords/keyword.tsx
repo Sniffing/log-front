@@ -2,15 +2,15 @@ import React from 'react';
 import { Spin } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
-import NumericInput from '../custom-components/numericInput';
+import NumericInput from '../../custom-components/numericInput';
 import { pull } from 'lodash';
 import {
   WordCount,
   KeywordList,
   KeywordTreemap,
-} from './';
-import { Rejected } from '../custom-components';
-import { LogEntryStore, KeywordEntry } from '../stores/logEntryStore';
+} from '.';
+import { Rejected } from '../../custom-components';
+import { LogEntryStore, KeywordEntry } from '../../stores/logEntryStore';
 
 interface IProps {
   logEntryStore?: LogEntryStore;

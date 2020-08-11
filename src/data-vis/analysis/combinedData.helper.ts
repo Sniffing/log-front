@@ -1,8 +1,8 @@
 import { EChartOption } from 'echarts';
-import { IWeightDTO } from '../App.interfaces';
-import { Utils } from '../App.utils';
-import { ILifeEvent } from '../entry-modal/event-entry';
-import { ICalorieEntry } from '../entry-modal/calorie-entry';
+import { IWeightDTO } from '../../App.interfaces';
+import { Utils } from '../../App.utils';
+import { ILifeEvent } from '../../entry-modal/event-entry';
+import { ICalorieEntry } from '../../entry-modal/calorie-entry';
 
 function createCalorieData(entries: ICalorieEntry[]): EChartOption.Series {
   const data = entries

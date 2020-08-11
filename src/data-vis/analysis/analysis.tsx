@@ -4,10 +4,10 @@ import ReactEcharts from 'echarts-for-react';
 
 import { computed, observable, action } from 'mobx';
 import { Spin } from 'antd';
-import { LogEntryStore } from '../stores/logEntryStore';
-import { CalorieStore } from '../stores/calorieStore';
+import { LogEntryStore } from '../../stores/logEntryStore';
+import { CalorieStore } from '../../stores/calorieStore';
 import { generateCombinedDataOption, AnalysisGraph } from '.';
-import { LifeEventStore } from '../stores/lifeEventStore';
+import { LifeEventStore } from '../../stores/lifeEventStore';
 
 interface IProps {
   logEntryStore?: LogEntryStore;

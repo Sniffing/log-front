@@ -4,9 +4,9 @@ import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
 import './memory.scss';
-import { Utils } from '../App.utils';
-import { Rejected } from '../custom-components';
-import { LogEntryStore } from '../stores/logEntryStore';
+import { Utils } from '../../App.utils';
+import { Rejected } from '../../custom-components';
+import { LogEntryStore } from '../../stores/logEntryStore';
 import { StepBackwardOutlined, CaretLeftOutlined, CaretRightOutlined, StepForwardOutlined } from '@ant-design/icons/lib/icons';
 
 interface IProps {

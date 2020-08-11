@@ -2,7 +2,7 @@ import React from 'react';
 
 import { WeightLineGraph } from '.';
 import { inject } from 'mobx-react';
-import { LogEntryStore } from '../stores/logEntryStore';
+import { LogEntryStore } from '../../stores/logEntryStore';
 
 interface IProps {
   logEntryStore?: LogEntryStore;

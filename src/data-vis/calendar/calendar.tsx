@@ -2,10 +2,10 @@ import React from 'react';
 import CalendarKeyword from './calendar-keyword';
 import { inject, observer } from 'mobx-react';
 import { Spin, Select } from 'antd';
-import { Rejected } from '../custom-components';
+import { Rejected } from '../../custom-components';
 import { computed, action, observable } from 'mobx';
-import { Utils } from '../App.utils';
-import { KeywordEntry, LogEntryStore } from '../stores/logEntryStore';
+import { Utils } from '../../App.utils';
+import { KeywordEntry, LogEntryStore } from '../../stores/logEntryStore';
 
 interface IProps {
   logEntryStore?: LogEntryStore;

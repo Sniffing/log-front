@@ -184,15 +184,17 @@ export class Home extends React.Component<IProps> {
 
   public render() {
     return (
-      <div>
-        <EntryFormSelector options={EntryOptions} onSelect={this.handleEntryFormSelect}/>
+      <div style={{ width: '100%', height: '100%'}}>
+        {/* <EntryFormSelector options={EntryOptions} onSelect={this.handleEntryFormSelect}/>
         <EntryFormModal  visible={this.entryModalVisible} {...this.entryFormModalProps}>
           {this.entryFormModalContent}
-        </EntryFormModal>
+        </EntryFormModal> */}
 
-        <div style={{border: '1px solid red', height: '200px', width: '200px'}}>
-          <ExpandingContainer/>
-        </div>
+
+        <ExpandingContainer/>
+
+
+
       </div>
     );
   }

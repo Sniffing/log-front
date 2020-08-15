@@ -1,21 +1,23 @@
 import React from 'react';
-import { Transition, TransitionProps } from 'react-spring/renderprops';
+import { Transition, TransitionProps, animated } from 'react-spring/renderprops';
+import { observer } from 'mobx-react';
 
-interface IProps extends TransitionProps<any> {
+interface IProps extends Omit<TransitionProps<any>,'items'|'children'> {
   show: boolean;
+  children: JSX.Element;
 }
 
+@observer
 export class Fade extends React.PureComponent<IProps> {
   public render() {
     const {
+      children,
       show,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       from = { opacity: 0 },
       enter = { opacity: 1 },
       leave = { opacity: 0 },
       ...rest
     } = this.props;
-
 
     return (
       <Transition
@@ -24,7 +26,7 @@ export class Fade extends React.PureComponent<IProps> {
         from={from}
         enter={enter}
         leave={leave}>
-        {show => _ => show &&  (<div>shit</div>)}
+        {show => show && (props => <div style={props}>{children}</div>)}
       </Transition>
     );
   }

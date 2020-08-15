@@ -18,6 +18,7 @@ import moment from 'moment';
 import { logEntryDefaults } from '../stores/logEntryFormStore';
 import { EntryFormSelector } from '../custom-components/entry-form-select/entry-form-selector.component';
 import { EntryOptions, EntryType } from './constants';
+import { ExpandingContainer } from '../custom-components/expanding-container/expanding-container.component';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -188,6 +189,10 @@ export class Home extends React.Component<IProps> {
         <EntryFormModal  visible={this.entryModalVisible} {...this.entryFormModalProps}>
           {this.entryFormModalContent}
         </EntryFormModal>
+
+        <div style={{border: '1px solid red', height: '200px', width: '200px'}}>
+          <ExpandingContainer/>
+        </div>
       </div>
     );
   }

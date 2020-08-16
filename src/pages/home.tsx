@@ -184,6 +184,8 @@ export class Home extends React.Component<IProps> {
   }
 
   public render() {
+    const analysisCharts = [1,2,3,4];
+
     return (
       <div className="home">
         {/* <EntryFormSelector options={EntryOptions} onSelect={this.handleEntryFormSelect}/>
@@ -192,15 +194,13 @@ export class Home extends React.Component<IProps> {
         </EntryFormModal> */}
 
         <div className="mainCard">
-          <div className="content">content main</div>
+          <ExpandingContainer className="content" />
         </div>
 
         <div className="analysisCards">
-          <div className="content">
-            <ExpandingContainer/>
-            <ExpandingContainer/>
-            <ExpandingContainer/>
-          </div>
+          {analysisCharts.map(chart => (
+            <ExpandingContainer className="content" key={chart}/>
+          ))}
         </div>
       </div>
     );

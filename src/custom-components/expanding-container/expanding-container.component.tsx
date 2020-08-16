@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, HTMLAttributes } from 'react';
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import { Card } from 'antd';
@@ -9,7 +9,7 @@ interface IProps {
 }
 
 @observer
-export class ExpandingContainer extends React.Component<IProps> {
+export class ExpandingContainer extends React.Component<IProps & HTMLAttributes<HTMLDivElement>> {
 
   @observable
   private expanded = false;
@@ -22,9 +22,9 @@ export class ExpandingContainer extends React.Component<IProps> {
 
   public render() {
     return (
-      <div onClick={this.toggle} style={{width: '100%', height: '100%'}}>
+      <div onClick={this.toggle} className={this.props.className}>
         <Transition
-          from={{ opacity: 0, position: 'absolute' } as CSSProperties}
+          from={{ opacity: 0 } as CSSProperties}
           enter={{ opacity: 1 }}
           leave={{ opacity: 0 }}
           items={this.expanded}>

@@ -20,6 +20,8 @@ import { EntryFormSelector } from '../custom-components/entry-form-select/entry-
 import { EntryOptions, EntryType } from './constants';
 import { ExpandingContainer } from '../custom-components/expanding-container/expanding-container.component';
 
+import './home.scss';
+
 interface IProps {
   lifeEventStore?: LifeEventStore;
   calorieStore?: CalorieStore;
@@ -136,7 +138,6 @@ export class Home extends React.Component<IProps> {
 
   @computed
   private get entryFormModalProps(): IEntryFormModalProps {
-
     const onOk = {
       [EntryType.LOG]:this.handleSaveLog,
       [EntryType.CALORIE]:this.handleSaveCalories,
@@ -184,17 +185,23 @@ export class Home extends React.Component<IProps> {
 
   public render() {
     return (
-      <div style={{ width: '100%', height: '100%'}}>
+      <div className="home">
         {/* <EntryFormSelector options={EntryOptions} onSelect={this.handleEntryFormSelect}/>
         <EntryFormModal  visible={this.entryModalVisible} {...this.entryFormModalProps}>
           {this.entryFormModalContent}
         </EntryFormModal> */}
 
+        <div className="mainCard">
+          <div className="content">content main</div>
+        </div>
 
-        <ExpandingContainer/>
-
-
-
+        <div className="analysisCards">
+          <div className="content">
+            <ExpandingContainer/>
+            <ExpandingContainer/>
+            <ExpandingContainer/>
+          </div>
+        </div>
       </div>
     );
   }

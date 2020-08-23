@@ -4,6 +4,8 @@
 
   .sideBar {
     background-color: white;
+    max-height: 100%;
+    overflow: auto;
   }
 }
 

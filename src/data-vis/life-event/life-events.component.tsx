@@ -14,7 +14,7 @@ interface IProps {
 export class LifeEventsPage extends React.Component<IProps> {
 
   public componentDidMount() {
-    this.props.lifeEventStore?.fetchLifeEvents();
+    this.props.lifeEventStore?.fetch();
   }
 
   @computed

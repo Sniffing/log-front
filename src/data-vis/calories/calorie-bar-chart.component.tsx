@@ -22,7 +22,7 @@ export class CalorieBarChart extends React.Component<IProps> {
   private maintenance = 2000;
 
   public componentDidMount() {
-    this.props.calorieStore?.fetchCalorieEntries();
+    this.props.calorieStore?.fetch();
   }
 
   @computed

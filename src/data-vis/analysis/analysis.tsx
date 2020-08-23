@@ -24,8 +24,8 @@ export class Analysis extends React.Component<IProps> {
 
   public componentDidMount() {
     this.props.logEntryStore?.fetchWeightData();
-    this.props.calorieStore?.fetchCalorieEntries();
-    this.props.lifeEventStore?.fetchLifeEvents();
+    this.props.calorieStore?.fetch();
+    this.props.lifeEventStore?.fetch();
   }
 
   @computed

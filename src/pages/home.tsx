@@ -65,7 +65,7 @@ export class Home extends React.Component<IProps> {
     }
 
     try {
-      await logEntryStore.saveEntry(entry);
+      await logEntryStore.save(entry);
       const nextDate = moment(entry.dateState?.date, dateFormat)
         .utc()
         .add(-moment().utcOffset(), 'm')
@@ -84,7 +84,7 @@ export class Home extends React.Component<IProps> {
     const event = convertFormValuesToLifeEvent(value as ILifeEventFormValues);
 
     try {
-      await this.props.lifeEventStore?.saveLifeEvent(event);
+      await this.props.lifeEventStore?.save(event);
     } catch (error) {
       message.error('Could not save entry');
       console.error(error);
@@ -104,7 +104,7 @@ export class Home extends React.Component<IProps> {
 
   private saveCalorieForm = async (entry: ICalorieEntry) => {
     try {
-      await this.props.calorieStore?.saveCalorieEntry(entry);
+      await this.props.calorieStore?.save(entry);
     } catch (error) {
       message.error('Could not save entry');
       console.error(error);

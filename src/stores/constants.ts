@@ -17,9 +17,10 @@ export const CALORIE_FROM_FILE_URL = Constants.CALORIE_ENTRY_URL+'/upload';
 export const LOCAL_URL = Constants.DATABASE_URL;
 
 const generateStores = () => {
-  const calorieStore = new CalorieStore();
-  const logEntryStore = new LogEntryStore();
-  const lifeEventStore = new LifeEventStore();
+  const baseProps = {mock: process.env.REACT_APP_MOCK};
+  const calorieStore = new CalorieStore(baseProps);
+  const logEntryStore = new LogEntryStore(baseProps);
+  const lifeEventStore = new LifeEventStore(baseProps);
 
   return {
     calorieStore,

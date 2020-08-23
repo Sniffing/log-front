@@ -4,6 +4,8 @@ import { KEYWORD_URL, TEXT_URL, WEIGHT_URL, LAST_DATES_URL, LOG_ENTRY_URL } from
 import get, { AxiosResponse } from 'axios';
 import { IWeightDTO } from '../App.interfaces';
 import { ILogEntry } from '../entry-modal/log-entry';
+import { BaseStore, BaseStoreProps } from './baseStore';
+import { mockKeywordData, mockMemoryData, mockWeightData, mockLastDateData } from './mockData/logEntryStoreMocks';
 
 export interface KeywordEntry {
   date: string;
@@ -20,7 +22,12 @@ export interface ILastDates {
   last: string;
 }
 
-export class LogEntryStore {
+export class LogEntryStore extends BaseStore<ILogEntry> {
+
+  public constructor(props: BaseStoreProps) {
+    super(props);
+  }
+
   @observable
   public fetchingMemory: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
 
@@ -50,8 +57,12 @@ export class LogEntryStore {
 
   @action
   public async fetchKeywords() {
-    this.fetchingKeywords = fromPromise(get(KEYWORD_URL));
+    if (this.shouldMock) {
+      this.setKeywords(mockKeywordData);
+      return;
+    }
 
+    this.fetchingKeywords = fromPromise(get(KEYWORD_URL));
     await this.fetchingKeywords.then(response => {
       this.setKeywords(response.data);
     });
@@ -59,6 +70,11 @@ export class LogEntryStore {
 
   @action.bound
   public async fetchMemory() {
+    if (this.shouldMock) {
+      this.setMemories(mockMemoryData);
+      return;
+    }
+
     this.fetchingMemory = fromPromise(get(TEXT_URL));
     await this.fetchingMemory.then(response => {
       this.setMemories(response.data);
@@ -67,8 +83,12 @@ export class LogEntryStore {
 
   @action.bound
   public async fetchWeightData() {
-    this.fetchingWeight = fromPromise(get(WEIGHT_URL));
+    if (this.shouldMock) {
+      this.setWeight(mockWeightData);
+      return;
+    }
 
+    this.fetchingWeight = fromPromise(get(WEIGHT_URL));
     await this.fetchingWeight.then(response => {
       this.setWeight(response.data);
     });
@@ -101,15 +121,27 @@ export class LogEntryStore {
 
   @action
   public async fetchLastDates() {
-    console.log('fetchin again');
-    this.fetchingDates = fromPromise(get(LAST_DATES_URL));
+    if (this.shouldMock) {
+      this.setLastDates(mockLastDateData);
+      return;
+    }
 
+    this.fetchingDates = fromPromise(get(LAST_DATES_URL));
     await this.fetchingDates.then((response) => {
       this.setLastDates(response.data as ILastDates);
     });
   }
 
-  public saveEntry = async (data: ILogEntry) => {
+  public fetch = async () => {
+    console.log('sort this out');
+  }
+
+  public save = async (data: ILogEntry) => {
+    if (this.shouldMock) {
+      console.log('Saving log entry', data);
+      return;
+    }
+
     try {
       await fetch(LOG_ENTRY_URL, {
         method: 'POST',

@@ -4,8 +4,14 @@ import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 import { LIFE_EVENTS_URL } from '.';
 import { AxiosResponse } from 'axios';
 import { ILifeEvent } from '../entry-modal/event-entry';
+import { BaseStore, BaseStoreProps } from './baseStore';
+import { mockLifeEventData } from './mockData/lifeEventStoreMocks';
 
-export class LifeEventStore {
+export class LifeEventStore extends BaseStore<ILifeEvent>{
+
+  public constructor(props: BaseStoreProps) {
+    super(props);
+  }
 
   @observable
   public fetchingLifeEvents: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
@@ -27,24 +33,32 @@ export class LifeEventStore {
   }
 
   @action.bound
-  public async saveLifeEvent(event: ILifeEvent) {
-    console.log('saved!', event);
-    // this.savingLifeEvents = fromPromise(fetch(LIFE_EVENTS_URL, {
-    //   method: 'POST',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(event),
-    // }));
+  public async save(event: ILifeEvent) {
+    if (this.shouldMock) {
+      console.log('Saving life event', event);
+      return;
+    }
 
-    // return await this.savingLifeEvents;
+    this.savingLifeEvents = fromPromise(fetch(LIFE_EVENTS_URL, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(event),
+    }));
+
+    await this.savingLifeEvents;
   }
 
   @action.bound
-  public async fetchLifeEvents() {
-    this.fetchingLifeEvents = fromPromise(get(LIFE_EVENTS_URL));
+  public async fetch() {
+    if (this.shouldMock) {
+      this.setLifeEvents(mockLifeEventData);
+      return;
+    }
 
+    this.fetchingLifeEvents = fromPromise(get(LIFE_EVENTS_URL));
     await this.fetchingLifeEvents.then((response) => {
       this.setLifeEvents(response.data as ILifeEvent[]);
     });

@@ -27,4 +27,13 @@
       flex-grow: 1;
     }
   }
+
+  .expandedCard {
+    position: absolute;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    background-color: rgba(0,255,0,0.3);
+  }
 }

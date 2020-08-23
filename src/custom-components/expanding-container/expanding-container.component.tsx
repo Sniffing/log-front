@@ -2,7 +2,8 @@ import React, { CSSProperties, HTMLAttributes } from 'react';
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import { Card } from 'antd';
-import { Transition } from 'react-spring/renderprops';
+import { Transition, animated, interpolate } from 'react-spring/renderprops';
+import Item from 'antd/lib/list/Item';
 
 interface IProps {
   temp?: string;
@@ -20,25 +21,45 @@ export class ExpandingContainer extends React.Component<IProps & HTMLAttributes<
     this.expanded = !this.expanded;
   }
 
-  public render() {
+  private update = (item: any) => {
+    // console.log(item);
+    return item;
+  }
+
+  public render(){
+    //Good enough for now, will have to use animated div and calculate
+    //view port changes and apply them to either enter or update
     return (
       <div onClick={this.toggle} className={this.props.className}>
         <Transition
           from={{ opacity: 0 } as CSSProperties}
-          enter={{ opacity: 1 }}
-          leave={{ opacity: 0 }}
+          enter={{ opacity: 1,}}
+          leave={{ opacity: 0, }}
+          update={this.update}
           items={this.expanded}>
-          {show => props => !show ? (
-            <Card title="minimised" style={props}>
-                Minimised
-            </Card>) : (
-            <Card title="expanded" style={{
-              textAlign: 'center',
-              width: '90%',
-              height: '90%',
-              ...props}}>
-                Expanded
-            </Card>
+          {show => (
+            !show ?
+              (props =>
+                <Card title="minimised" style={props}>
+                    Minimised
+                </Card>
+
+              ) :
+              ( props =>
+                <Card title="expanded"
+                  style={{
+                    ...props,
+                    textAlign: 'center',
+                    width: '90%',
+                    height: '90%',
+                    position: 'absolute',
+                    top: '5%',
+                    left: '5%',
+                    zIndex: 100,
+                  }}>
+                    Expanded
+                </Card>
+              )
           )}
         </Transition>
       </div>);

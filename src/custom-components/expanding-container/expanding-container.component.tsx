@@ -36,11 +36,14 @@ export class ExpandingContainer extends React.Component<IProps & HTMLAttributes<
           enter={{ opacity: 1,}}
           leave={{ opacity: 0, }}
           update={this.update}
+          delay={100}
           items={this.expanded}>
           {show => (
             !show ?
               (props =>
-                <Card title="minimised" style={props}>
+                <Card title="minimised" style={{
+                  ...props,
+                  height: '100%'}}>
                     Minimised
                 </Card>
 

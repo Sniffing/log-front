@@ -21,6 +21,11 @@ import { EntryOptions, EntryType } from './constants';
 import { ExpandingContainer } from '../custom-components/expanding-container/expanding-container.component';
 
 import './home.scss';
+import { KeywordPage } from '../data-vis/keywords';
+import { MemoryPage } from '../data-vis/memory';
+import { LifeEventsPage } from '../data-vis/life-event';
+import CalendarKeyword from '../data-vis/calendar/calendar-keyword';
+import { CalendarPage } from '../data-vis/calendar';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -183,9 +188,33 @@ export class Home extends React.Component<IProps> {
     }
   }
 
-  public render() {
-    const analysisCharts = [1,2,3,4];
+  @computed
+  private get  analysisCharts() {
+    return [
+      {
+        key: 0,
+        title: 'Feelings',
+        component: <KeywordPage/>,
+      },
+      {
+        key: 1,
+        title: 'Feelings Calendar',
+        component: <CalendarPage/>,
+      },
+      {
+        key: 2,
+        title: 'Events',
+        component: <LifeEventsPage/>,
+      },
+      {
+        key: 3,
+        title: 'Memories',
+        component: <MemoryPage/>,
+      },
+    ];
+  }
 
+  public render() {
     return (
       <div className="home">
         {/* <EntryFormSelector options={EntryOptions} onSelect={this.handleEntryFormSelect}/>
@@ -198,8 +227,10 @@ export class Home extends React.Component<IProps> {
         </div>
 
         <div className="analysisCards">
-          {analysisCharts.map(chart => (
-            <ExpandingContainer className="content" key={chart}/>
+          {this.analysisCharts.map(chart => (
+            <ExpandingContainer title={chart.title} className="content" key={chart.key}>
+              {chart.component}
+            </ExpandingContainer>
           ))}
         </div>
       </div>

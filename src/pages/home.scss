@@ -1,5 +1,6 @@
 .home {
   height: 100%;
+  background-color: #5F9EA0;
 
   .mainCard {
     width: 100%;
@@ -15,8 +16,6 @@
   }
 
   .analysisCards {
-    width: 100%;
-    height: 40%;
     padding: 20px 10%;
     display: flex;
     flex-direction: row;
@@ -24,7 +23,7 @@
     justify-content: space-around;
 
     .content {
-      flex-grow: 1;
+      padding: 10px;
     }
   }
 

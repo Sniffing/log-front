@@ -1,0 +1,29 @@
+.containerExpanded {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  width: 90%;
+  height: 90%;
+  max-height: 90%;
+  position: absolute !important;
+  top: 5%;
+  left: 5%;
+  z-index: 100;
+
+
+  .ant-card-body {
+    padding: 10px;
+    height: 90% !important;
+    overflow: auto;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    background: rgba(200,200,200,0.5); /* make scrollbar transparent */
+  }
+
+
+  .containerExpandedBody {
+    max-height: 100%;
+  }
+}

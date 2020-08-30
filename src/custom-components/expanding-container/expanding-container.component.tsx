@@ -6,6 +6,8 @@ import { Transition, animated, interpolate } from 'react-spring/renderprops';
 import { CardProps } from 'antd/lib/card';
 import { CloseCircleOutlined } from '@ant-design/icons';
 
+import './expanding-container.scss';
+
 interface IProps extends CardProps {
   temp?: string;
 }
@@ -62,17 +64,10 @@ export class ExpandingContainer extends React.Component<IProps & HTMLAttributes<
                   </div>}
                   style={{
                     ...props,
-                    margin: 0,
-                    padding: 0,
-                    textAlign: 'center',
-                    width: '90%',
-                    height: '90%',
-                    position: 'absolute',
-                    top: '5%',
-                    left: '5%',
-                    zIndex: 100,
-                  }}>
-                  <div>{children}</div>
+                  }}
+                  className="containerExpanded"
+                >
+                  <div className="containerExpandedBody">{children}</div>
                 </Card>
               )
           )}

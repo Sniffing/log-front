@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Timeline, Spin, Affix, PageHeader, Button } from 'antd';
 import { inject, observer } from 'mobx-react';
-import { computed } from 'mobx';
+import { computed, observable, action } from 'mobx';
 import { LifeEventStore } from '../../stores/lifeEventStore';
 import { ILifeEvent } from '../../entry-modal/event-entry';
 import { Utils } from '../../App.utils';
@@ -16,8 +16,16 @@ interface IProps {
 @observer
 export class LifeEventsPage extends React.Component<IProps> {
 
+  @observable
+  private container = null;
+
   public componentDidMount() {
     this.props.lifeEventStore?.fetch();
+  }
+
+  @action.bound
+  private setContainer(ref: any) {
+    this.container = ref;
   }
 
   @computed
@@ -30,24 +38,30 @@ export class LifeEventsPage extends React.Component<IProps> {
 
   public render() {
     const { lifeEventStore } = this.props;
+
     if (lifeEventStore?.fetchingLifeEvents?.state === 'pending') {
       return <Spin></Spin>;
     }
 
     return (
       <Card>
-        <Affix offsetTop={10}>
-          <PageHeader
-            ghost={false}
-            title={null}
-            extra={[
-              <Button key="good">
+        <div ref={this.setContainer}>
+          <Affix target={() => this.container}>
+            <PageHeader
+              ghost={false}
+              title={null}
+              style={{
+                padding: 0
+              }}
+              extra={[
+                <Button key="good">
                 Affix top
-              </Button>,
-            ]}
-          />
+                </Button>,
+              ]}
+            />
+          </Affix>
+        </div>
 
-        </Affix>
         <Timeline mode="left" reverse className="timeline">
           {this.data.map((event: ILifeEvent) => {
             const good = event.nature === 'good';

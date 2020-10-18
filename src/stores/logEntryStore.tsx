@@ -3,9 +3,11 @@ import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 import { KEYWORD_URL, TEXT_URL, WEIGHT_URL, LAST_DATES_URL, LOG_ENTRY_URL } from '.';
 import get, { AxiosResponse } from 'axios';
 import { IWeightDTO } from '../App.interfaces';
-import { ILogEntry } from '../entry-modal/log-entry';
+import { dateFormat, ILogEntry } from '../entry-modal/log-entry';
 import { BaseStore, BaseStoreProps } from './baseStore';
 import { mockKeywordData, mockMemoryData, mockWeightData, mockLastDateData } from './mockData/logEntryStoreMocks';
+import { Utils } from '../App.utils';
+import moment from 'moment';
 
 export interface KeywordEntry {
   date: string;
@@ -128,7 +130,17 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
 
     this.fetchingDates = fromPromise(get(LAST_DATES_URL));
     await this.fetchingDates.then((response) => {
-      this.setLastDates(response.data as ILastDates);
+
+      const last =  moment(Utils.unreverseDateFromServer(response.data.last), dateFormat)
+        .utc()
+        .add(-moment().utcOffset(), 'm')
+        .add(1, 'day')
+        .format(dateFormat);
+
+      this.setLastDates({
+        first: Utils.unreverseDateFromServer(response.data.first),
+        last,
+      });
     });
   }
 

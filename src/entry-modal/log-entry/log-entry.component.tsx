@@ -1,82 +1,102 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import {
-  entryFormFields,
   EntryFormFieldsConfigs,
   EntryFormFieldsEnum,
   dateFormat,
-  ILogEntry
 } from '.';
 import {
   Form,
   DatePicker,
-  Input,
+  Input, Tag, Spin
 } from 'antd';
 import moment, { Moment } from 'moment';
 import TextArea from 'antd/lib/input/TextArea';
-import TagsInput from 'react-tagsinput';
-import { FormInstance, Rule } from 'antd/lib/form';
-import { action} from 'mobx';
 
-import 'react-tagsinput/react-tagsinput.css';
-import { flatten, isEqual } from 'lodash';
-import { IFormProps } from '../../App.interfaces';
-import { LogEntryStore } from '../../stores/logEntryStore';
-import { RefObject } from 'react';
+import { flatten } from 'lodash';
 import { LogEntryFormStore } from '../../stores/logEntryFormStore';
+import { LogEntryStore } from '../../stores/logEntryStore';
+import { action, observable } from 'mobx';
 
 interface IProps {
   logEntryStore?: LogEntryStore;
-  readonly formObject: ILogEntry;
-  formRef: RefObject<FormInstance>;
+  formFieldStore: LogEntryFormStore;
 }
 
 @inject('logEntryStore')
 @observer
 export class LogEntry extends React.Component<IProps> {
 
-  private formObjectStore!: LogEntryFormStore;
+  @observable
+  private tagInput = '';
 
   public async componentDidMount() {
-    await this.props.logEntryStore?.fetchingDates;
-    this.createObjectStore();
+    const { logEntryStore } = this.props;
+    await logEntryStore?.fetchingDates;
   }
 
-  public componentDidUpdate(prevProps: IProps) {
-    if (!isEqual(prevProps.formObject.dateState, this.props.formObject.dateState)) {
-      this.props.formRef.current?.setFieldsValue({
-        [EntryFormFieldsEnum.DATE]: moment(this.props.formObject.dateState?.date, dateFormat),
-        [EntryFormFieldsEnum.FREE_EMOTIONS]: [],
-        [EntryFormFieldsEnum.THOUGHTS]: undefined,
-        [EntryFormFieldsEnum.WEIGHT]: undefined,
-      });
-    }
-  }
+  public render() {
+    const {DTO} = this.props.formFieldStore;
+    const tags = DTO.keywordsState?.keywords ?? [];
 
-  @action.bound
-  private createObjectStore() {
-    this.formObjectStore = new LogEntryFormStore(this.props.formObject);
-  }
-
-  private cleanFormValues() {
-    return {
-      [EntryFormFieldsEnum.DATE]: moment(this.props.formObject.dateState?.date, dateFormat),
-      [EntryFormFieldsEnum.FREE_EMOTIONS]: [],
-      [EntryFormFieldsEnum.THOUGHTS]: undefined,
-      [EntryFormFieldsEnum.WEIGHT]: undefined,
-    };
+    return (
+      <Form
+        labelCol={{ span: 4 }}
+        labelAlign="right"
+        wrapperCol={{ offset: 1, span: 19 }}
+      >
+        <Form.Item {...EntryFormFieldsConfigs[EntryFormFieldsEnum.DATE]}>
+          <DatePicker
+            value={moment(DTO.dateState?.date, dateFormat)}
+            disabledDate={this.disableDatesAfterLastEntry}
+            onChange={this.handleDateChange}
+          />
+        </Form.Item>
+        <Form.Item {...EntryFormFieldsConfigs[EntryFormFieldsEnum.FREE_EMOTIONS]}>
+          <Input value={this.tagInput} onChange={this.updateTagInput} onPressEnter={this.addTag}/>
+          {tags.map(tag => <Tag key={tag} color='blue'>{tag}</Tag>)}
+        </Form.Item>
+        <Form.Item {...EntryFormFieldsConfigs[EntryFormFieldsEnum.WEIGHT]}>
+          <Input
+            value={DTO.entryMetricState?.weight}
+            onChange={this.handleWeightChange}
+          />
+        </Form.Item>
+        <Form.Item {...EntryFormFieldsConfigs[EntryFormFieldsEnum.THOUGHTS]}>
+          <TextArea
+            value={DTO.textState?.data}
+            maxLength={1500}
+            onChange={this.handleThoughtsChange}
+            rows={6}
+          />
+        </Form.Item>
+      </Form>
+    );
   }
 
   private handleDateChange = (value: Moment | null) => {
     if (value) {
-      this.formObjectStore.setDate(value.format(dateFormat));
+      this.props.formFieldStore.setDate(value.format(dateFormat));
     }
   };
 
   private handleWeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const cryAndThenKeto = event.target?.value;
-    this.formObjectStore.setWeight(cryAndThenKeto);
+    this.props.formFieldStore.setWeight(cryAndThenKeto);
   };
+
+  @action.bound
+  private updateTagInput(event: React.ChangeEvent<HTMLInputElement>) {
+    this.tagInput = event.target.value;
+  }
+
+  @action
+  private addTag = () => {
+    const tags = (this.props.formFieldStore.DTO.keywordsState?.keywords || []).slice();
+    tags.push(this.tagInput);
+    this.tagInput = '';
+    this.handleTagChange(tags);
+  }
 
   private handleTagChange = (value: string[]) => {
     const emotions = value ? flatten(
@@ -85,94 +105,18 @@ export class LogEntry extends React.Component<IProps> {
       })
     ) : [];
 
-    this.formObjectStore.setKeywords(emotions);
+    this.props.formFieldStore.setKeywords(emotions);
   };
 
   private handleThoughtsChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const text = event.target?.value;
-    this.formObjectStore.setThoughts(text);
+    console.log('updated');
+    this.props.formFieldStore.setThoughts(text);
   };
 
   private disableDatesAfterLastEntry = (current: Moment) => {
     return current && current > moment(this.props.logEntryStore?.lastDates.last).endOf('day');
   };
-
-  private getFormField = (field: EntryFormFieldsEnum) => {
-    const config: IFormProps = EntryFormFieldsConfigs[field];
-    let component = <Input></Input>;
-
-    switch (field) {
-    case EntryFormFieldsEnum.DATE:
-      component = (
-        <DatePicker
-          value={moment(this.props.formObject.dateState?.date, dateFormat)}
-          disabledDate={this.disableDatesAfterLastEntry}
-          onChange={this.handleDateChange}
-        />
-      );
-      break;
-    case EntryFormFieldsEnum.FREE_EMOTIONS:
-      component = (
-        <TagsInput
-          value={this.props.formObject.keywordsState?.keywords || []}
-          inputProps={{ placeholder: 'Add another emotion...' }}
-          onChange={this.handleTagChange}
-        />
-      );
-      break;
-    case EntryFormFieldsEnum.WEIGHT:
-      component = <Input
-        value={this.props.formObject.entryMetricState?.weight}
-        onChange={this.handleWeightChange}
-      />;
-      break;
-    case EntryFormFieldsEnum.THOUGHTS:
-      component = <TextArea value={this.props.formObject.textState?.data} maxLength={1500} onChange={this.handleThoughtsChange} rows={6} />;
-      break;
-    }
-
-    const rules: Rule[] = [];
-
-    if (config.required) {
-      rules.push({
-        required: true,
-        message: 'Mandatory field'
-      });
-    }
-
-    if (config.validator) {
-      rules.push({
-        validator: config.validator
-      });
-    }
-
-    return (
-      <Form.Item
-        {...config}
-        rules={rules}
-      >
-        {component}
-      </Form.Item>
-    );
-  };
-
-  private getFormFields = (fields: EntryFormFieldsEnum[]) => {
-    return fields.map(this.getFormField);
-  };
-
-  public render() {
-    return (
-      <Form
-        ref={this.props.formRef}
-        labelCol={{ span: 4 }}
-        labelAlign="right"
-        wrapperCol={{ offset: 1, span: 19 }}
-        initialValues={this.cleanFormValues()}
-      >
-        {this.getFormFields(entryFormFields)}
-      </Form>
-    );
-  }
 }

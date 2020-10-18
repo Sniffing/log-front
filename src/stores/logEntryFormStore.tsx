@@ -1,5 +1,5 @@
+import { action, computed, observable } from 'mobx';
 import { ILogEntry } from '../entry-modal/log-entry';
-import { LogEntryStore } from './logEntryStore';
 
 export const logEntryDefaults: ILogEntry = {
   dateState: {},
@@ -11,36 +11,54 @@ export const logEntryDefaults: ILogEntry = {
 };
 
 export class LogEntryFormStore {
-  public logEntry: ILogEntry = logEntryDefaults;
-
-  private logEntryStore: LogEntryStore | undefined = undefined;
+  @observable
+  private logEntry: ILogEntry;
 
   public constructor(logEntry?: ILogEntry) {
-    if (logEntry)
+    if (logEntry) {
       this.logEntry = logEntry;
+    } else {
+      this.logEntry = logEntryDefaults;
+    }
   }
 
+  @computed
+  public get DTO(): ILogEntry {
+    return this.logEntry;
+  }
+
+  @action
   public setDate = (date: string) => {
     this.logEntry.dateState = {
       date: date.trim()
     };
   }
 
+  @action
   public setWeight = (weight: string) => {
     this.logEntry.entryMetricState = {
       weight: weight.trim()
     };
   }
 
+  @action
   public setKeywords = (keywords: string[]) => {
     this.logEntry.keywordsState = {
-      keywords
+      keywords: keywords?.map(word => word.trim().toLowerCase())
     };
   }
 
+  @action
   public setThoughts = (thoughts: string) => {
     this.logEntry.textState = {
       data: thoughts.trim()
     };
+  }
+
+  public clear() {
+    // this.setDate(moment(this.props.formObject.dateState?.date, dateFormat));
+    this.setWeight('');
+    this.setKeywords([]);
+    this.setThoughts('');
   }
 }

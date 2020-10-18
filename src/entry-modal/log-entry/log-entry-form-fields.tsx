@@ -1,6 +1,5 @@
-import { IFormProps } from '../../App.interfaces';
+import { FormItemProps } from 'antd/lib/form';
 import { generateFormLabel } from '../../App.utils';
-
 
 export enum EntryFormFieldsEnum {
   DATE = 'DATE',
@@ -9,30 +8,33 @@ export enum EntryFormFieldsEnum {
   THOUGHTS = 'THOUGHTS'
 }
 
-export const entryFormFields = Object.values(EntryFormFieldsEnum);
-
-const getBaseConfig = (field: EntryFormFieldsEnum): IFormProps => {
-  return {
-    key: field,
-    name: field,
-    label: generateFormLabel(field)
-  };
-};
-
-export const EntryFormFieldsConfigs: Record<EntryFormFieldsEnum, IFormProps> = {
+export const EntryFormFieldsConfigs: Record<EntryFormFieldsEnum, FormItemProps> = {
   [EntryFormFieldsEnum.DATE]: {
-    ...getBaseConfig(EntryFormFieldsEnum.DATE),
-    required: true
+    id: EntryFormFieldsEnum.DATE,
+    label: generateFormLabel(EntryFormFieldsEnum.DATE),
+    rules: [
+      {
+        required: true,
+        message: 'Mandatory field'
+      }
+    ]
   },
   [EntryFormFieldsEnum.FREE_EMOTIONS]: {
-    ...getBaseConfig(EntryFormFieldsEnum.FREE_EMOTIONS),
+    id: EntryFormFieldsEnum.FREE_EMOTIONS,
     label: 'Feelings'
   },
   [EntryFormFieldsEnum.WEIGHT]: {
-    ...getBaseConfig(EntryFormFieldsEnum.WEIGHT)
+    id: EntryFormFieldsEnum.WEIGHT,
+    label: generateFormLabel(EntryFormFieldsEnum.WEIGHT),
   },
   [EntryFormFieldsEnum.THOUGHTS]: {
-    ...getBaseConfig(EntryFormFieldsEnum.THOUGHTS),
-    required: true
+    id: EntryFormFieldsEnum.THOUGHTS,
+    label: generateFormLabel(EntryFormFieldsEnum.THOUGHTS),
+    rules: [
+      {
+        required: true,
+        message: 'Mandatory field'
+      }
+    ]
   }
 };

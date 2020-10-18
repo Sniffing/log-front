@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { IFormProps } from '../../App.interfaces';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 import { generateFormLabel } from '../../App.utils';
+import { FormItemProps } from 'antd/lib/form';
 
 
 export enum LifeEventFormFieldsEnum {
@@ -13,42 +13,37 @@ export enum LifeEventFormFieldsEnum {
   DESCRIPTION = 'DESCRIPTION',
 }
 
-export const eventFormFields = [
-  LifeEventFormFieldsEnum.DATE,
-  LifeEventFormFieldsEnum.NAME,
-  LifeEventFormFieldsEnum.NATURE,
-  LifeEventFormFieldsEnum.INTENSITY,
-  LifeEventFormFieldsEnum.DESCRIPTION,
-];
-
-const getBaseConfig = (field: LifeEventFormFieldsEnum): IFormProps => {
-  return {
-    key: field,
-    name: field,
-    label: generateFormLabel(field)
-  };
-};
-
-export const EntryFormFieldsConfigs: Record<LifeEventFormFieldsEnum, IFormProps> = {
+export const EntryFormFieldsConfigs: Record<LifeEventFormFieldsEnum, FormItemProps> = {
   [LifeEventFormFieldsEnum.DATE]: {
-    ...getBaseConfig(LifeEventFormFieldsEnum.DATE),
-    required: true
+    id: LifeEventFormFieldsEnum.DATE,
+    label: generateFormLabel(LifeEventFormFieldsEnum.DATE),
+    rules: [
+      {
+        required: true,
+        message: 'Mandatory field'
+      }
+    ]
   },
   [LifeEventFormFieldsEnum.NAME]: {
-    ...getBaseConfig(LifeEventFormFieldsEnum.NAME),
+    id: LifeEventFormFieldsEnum.NAME,
     label: 'Event name',
-    required: true
+    rules: [
+      {
+        required: true,
+        message: 'Mandatory field'
+      }
+    ]
   },
   [LifeEventFormFieldsEnum.DESCRIPTION]: {
-    ...getBaseConfig(LifeEventFormFieldsEnum.DESCRIPTION),
+    id: LifeEventFormFieldsEnum.DESCRIPTION,
     label: 'Description'
   },
   [LifeEventFormFieldsEnum.NATURE]: {
-    ...getBaseConfig(LifeEventFormFieldsEnum.NATURE),
-    label: 'Nature'
+    id: LifeEventFormFieldsEnum.NATURE,
+    label: generateFormLabel(LifeEventFormFieldsEnum.NATURE)
   },
   [LifeEventFormFieldsEnum.INTENSITY]: {
-    ...getBaseConfig(LifeEventFormFieldsEnum.INTENSITY),
+    id: LifeEventFormFieldsEnum.INTENSITY,
     label:
       <Tooltip title={'10 should be huge say hospitalised vs getting married 5 is medium such as switched jobs 1 is a minor struggle that would cause stress, e.g. moving house'}>
         <span>
@@ -56,6 +51,11 @@ export const EntryFormFieldsConfigs: Record<LifeEventFormFieldsEnum, IFormProps>
           <InfoCircleOutlined />
         </span>
       </Tooltip>,
-    required: true
+    rules: [
+      {
+        required: true,
+        message: 'Mandatory field'
+      }
+    ]
   }
 };

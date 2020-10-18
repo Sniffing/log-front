@@ -1,8 +1,8 @@
 import React, { RefObject } from 'react';
 import { inject, observer } from 'mobx-react';
 import Form, { FormInstance } from 'antd/lib/form';
-import { calorieFormFields, createFormItem, ECalorieEntryTabs, CalorieFormFieldsEnum } from '.';
-import { Tabs } from 'antd';
+import { calorieFormFields, createFormItem, ECalorieEntryTabs, CalorieFormFieldsEnum, CalorieFormFieldsConfigs } from '.';
+import { Input, Tabs } from 'antd';
 import { RcFile } from 'antd/lib/upload';
 import { observable, action } from 'mobx';
 import { CalorieStore } from '../../stores/calorieStore';
@@ -47,7 +47,12 @@ export class CalorieEntry extends React.Component<IProps> {
       <Form ref={this.props.formRef} labelCol={{span: 4}}>
         <Tabs defaultActiveKey={ECalorieEntryTabs.FORM} animated onChange={this.handleTabChange}>
           <TabPane tab="Entry" key={ECalorieEntryTabs.FORM}>
-            {calorieFormFields.map(createFormItem)}
+            <Form.Item {...CalorieFormFieldsConfigs[CalorieFormFieldsEnum.DATE]}>
+              <Input/>
+            </Form.Item>
+            <Form.Item {...CalorieFormFieldsConfigs[CalorieFormFieldsEnum.CALORIES]}>
+              <Input/>
+            </Form.Item>
           </TabPane>
           <TabPane tab="Upload CSV" key={ECalorieEntryTabs.CSV}>
             <div style={{margin: '20px', textAlign: 'center'}}>

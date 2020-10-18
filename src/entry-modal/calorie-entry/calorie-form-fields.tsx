@@ -1,4 +1,4 @@
-import { IFormProps } from '../../App.interfaces';
+import { FormItemProps } from 'antd/lib/form';
 import { generateFormLabel } from '../../App.utils';
 
 export enum CalorieFormFieldsEnum {
@@ -12,27 +12,30 @@ export const eventFormFields = [
   CalorieFormFieldsEnum.CALORIES
 ];
 
-const getBaseConfig = (field: CalorieFormFieldsEnum): IFormProps => {
-  return {
-    key: field,
-    name: field,
-    label: generateFormLabel(field)
-  };
-};
 
-export const CalorieFormFieldsConfigs: Record<CalorieFormFieldsEnum, IFormProps> = {
+export const CalorieFormFieldsConfigs: Record<CalorieFormFieldsEnum, FormItemProps> = {
   [CalorieFormFieldsEnum.DATE]: {
-    ...getBaseConfig(CalorieFormFieldsEnum.DATE),
-    required: true
+    id: CalorieFormFieldsEnum.DATE,
+    label: generateFormLabel(CalorieFormFieldsEnum.DATE),
+    rules: [
+      {
+        required: true,
+        message: 'Mandatory field'
+      }
+    ]
   },
   [CalorieFormFieldsEnum.CALORIES]: {
-    ...getBaseConfig(CalorieFormFieldsEnum.CALORIES),
-    label: 'Calories',
-    required: true
+    id: CalorieFormFieldsEnum.CALORIES,
+    label: generateFormLabel(CalorieFormFieldsEnum.DATE),
+    rules: [
+      {
+        required: true,
+        message: 'Mandatory field'
+      }
+    ]
   },
   [CalorieFormFieldsEnum.CSV]: {
-    key: CalorieFormFieldsEnum.CALORIES,
-    name: CalorieFormFieldsEnum.CALORIES,
+    id: CalorieFormFieldsEnum.CSV,
     label: undefined,
   }
 };

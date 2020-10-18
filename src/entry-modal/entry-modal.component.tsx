@@ -6,12 +6,14 @@ import { observable, action } from 'mobx';
 import Title from 'antd/lib/typography/Title';
 import { FormInstance } from 'antd/lib/form';
 import { Store } from 'antd/lib/form/interface';
+import { LogEntryFormStore } from '../stores/logEntryFormStore';
 
 export interface IEntryFormModalProps extends ModalProps {
   keepOpen?: boolean;
   onOk: (fieldValues: Store | undefined, callback?: () => void) => void;
   onCancel: (e: React.MouseEvent<HTMLElement>) => void;
   formRef: RefObject<FormInstance>;
+  formFieldStore?: LogEntryFormStore;
 }
 
 @observer

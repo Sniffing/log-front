@@ -26,6 +26,14 @@ export class Utils {
     return new Date(`${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`);
   }
 
+  public static unreverseDateFromServer(date: string) {
+    const dateParts = date.split('-');
+    //TODO: This shouldn't ever hit this is lazy solution
+    if (dateParts.length !== 3) return new Date().toString();
+
+    return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+  }
+
   public static toReversedDate(date: Date) {
     return `${date.getFullYear()}-${('0' + date.getMonth()+1).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
   }

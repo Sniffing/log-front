@@ -15,7 +15,7 @@ import { RcFile } from 'antd/lib/upload';
 import { LogEntry, dateFormat } from '../entry-modal/log-entry';
 import { LogEntryStore } from '../stores/logEntryStore';
 import moment from 'moment';
-import { logEntryDefaults } from '../stores/logEntryFormStore';
+import { LogEntryFormStore } from '../stores/logEntryFormStore';
 import { EntryFormSelector } from '../custom-components/entry-form-select/entry-form-selector.component';
 import { EntryOptions, EntryType } from './constants';
 import { ExpandingContainer } from '../custom-components/expanding-container/expanding-container.component';
@@ -41,12 +41,24 @@ export class Home extends React.Component<IProps> {
   private logEntryForm = React.createRef<FormInstance>();
 
   @observable
+  private logEntryFormStore: LogEntryFormStore = new LogEntryFormStore();
+
+  @observable
   private entryModalVisible = false;
 
-  public constructor(props: IProps) {
-    super(props);
+  public async componentDidMount() {
+    const {logEntryStore} = this.props;
 
-    props.logEntryStore?.fetchLastDates();
+    await logEntryStore?.fetchLastDates();
+
+    this.logEntryFormStore = new LogEntryFormStore({
+      dateState: {
+        date: logEntryStore?.lastDates.last
+      },
+      keywordsState: {
+        keywords:[]
+      }
+    });
   }
 
   @action.bound
@@ -58,7 +70,7 @@ export class Home extends React.Component<IProps> {
 
   private handleSaveLog = async () => {
     const {logEntryStore} = this.props;
-    const entry = this.latestLogEntry;
+    const entry = this.logEntryFormStore.DTO;
 
     if (!logEntryStore) {
       return;
@@ -72,6 +84,8 @@ export class Home extends React.Component<IProps> {
         .add(1, 'day')
         .format(dateFormat);
       this.props.logEntryStore?.setLatestDate(nextDate);
+      this.logEntryFormStore.clear();
+      this.logEntryFormStore.setDate(nextDate);
     } catch (error) {
       message.error(`Error saving data for ${entry.dateState?.date}`);
       console.error(error);
@@ -122,16 +136,6 @@ export class Home extends React.Component<IProps> {
     }
   }
 
-  @computed
-  private get latestLogEntry() {
-    return {
-      ...logEntryDefaults,
-      dateState: {
-        date: this.props.logEntryStore?.lastDates.last,
-      },
-    };
-  }
-
   @observable
   private selectedForm: EntryType = EntryType.LOG;
 
@@ -141,7 +145,6 @@ export class Home extends React.Component<IProps> {
     this.setEntryModalVisible(true);
   }
 
-  @computed
   private get entryFormModalProps(): IEntryFormModalProps {
     const onOk = {
       [EntryType.LOG]:this.handleSaveLog,
@@ -161,12 +164,19 @@ export class Home extends React.Component<IProps> {
       [EntryType.EVENT]:'Life Event entry',
     };
 
+    const formFieldStore = {
+      [EntryType.LOG]: this.logEntryFormStore,
+      [EntryType.CALORIE]: this.logEntryFormStore,
+      [EntryType.EVENT]: this.logEntryFormStore,
+    };
+
     return {
       title: title[this.selectedForm],
       keepOpen: this.selectedForm === EntryType.LOG,
       onCancel: () => this.setEntryModalVisible(false),
       onOk: onOk[this.selectedForm],
       formRef: formRef[this.selectedForm],
+      formFieldStore: formFieldStore[this.selectedForm],
     };
   }
 
@@ -175,7 +185,7 @@ export class Home extends React.Component<IProps> {
     switch(this.selectedForm) {
     case EntryType.LOG:
       return this.props.logEntryStore?.fetchingDates?.case({
-        fulfilled:() => <LogEntry formRef={this.logEntryForm} formObject={this.latestLogEntry}/>,
+        fulfilled:() => <LogEntry formFieldStore={this.logEntryFormStore}/>,
         pending: () => <Spin/>,
         rejected: () =><Spin/>,
       });
@@ -217,10 +227,10 @@ export class Home extends React.Component<IProps> {
   public render() {
     return (
       <div className="home">
-        {/* <EntryFormSelector options={EntryOptions} onSelect={this.handleEntryFormSelect}/>
+        <EntryFormSelector options={EntryOptions} onSelect={this.handleEntryFormSelect}/>
         <EntryFormModal  visible={this.entryModalVisible} {...this.entryFormModalProps}>
           {this.entryFormModalContent}
-        </EntryFormModal> */}
+        </EntryFormModal>
 
         <div className="mainCard">
           <ExpandingContainer className="content" />

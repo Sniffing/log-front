@@ -51,7 +51,7 @@ export class LogEntryFormStore {
   @action
   public setThoughts = (thoughts: string) => {
     this.logEntry.textState = {
-      data: thoughts.trim()
+      data: thoughts
     };
   }
 

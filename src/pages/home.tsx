@@ -105,12 +105,12 @@ export class Home extends React.Component<IProps> {
     }
   }
 
-  private handleSaveCalories = (value: Store | undefined) => {
+  private handleSaveCalories = async (value: Store | undefined) => {
     if (!value) return;
 
     const formValues = value as ICalorieEntryFormValues;
     if (!formValues[CalorieFormFieldsEnum.CSV]) {
-      this.saveCalorieForm(convertFormValuesToCalorieEntry(formValues));
+      await this.saveCalorieForm(convertFormValuesToCalorieEntry(formValues));
     } else {
       this.uploadCalorieCSVFile(formValues[CalorieFormFieldsEnum.CSV]);
     }

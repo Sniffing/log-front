@@ -7,10 +7,11 @@ import Title from 'antd/lib/typography/Title';
 import { FormInstance } from 'antd/lib/form';
 import { Store } from 'antd/lib/form/interface';
 import { LogEntryFormStore } from '../stores/logEntryFormStore';
+import { IPromiseBasedObservable, fromPromise, PENDING } from 'mobx-utils';
 
 export interface IEntryFormModalProps extends ModalProps {
   keepOpen?: boolean;
-  onOk: (fieldValues: Store | undefined, callback?: () => void) => void;
+  onOk: (fieldValues: Store | undefined, callback?: () => Promise<void>) => Promise<void>;
   onCancel: (e: React.MouseEvent<HTMLElement>) => void;
   formRef: RefObject<FormInstance>;
   formFieldStore?: LogEntryFormStore;
@@ -21,6 +22,9 @@ export class EntryFormModal extends React.Component<IEntryFormModalProps> {
 
   @observable
   private keepOpen = false;
+
+  @observable
+  private saving: IPromiseBasedObservable<void> = fromPromise(Promise.resolve());
 
   public constructor(props: IEntryFormModalProps) {
     super(props);
@@ -37,12 +41,14 @@ export class EntryFormModal extends React.Component<IEntryFormModalProps> {
     this.keepOpen = state;
   }
 
+  @action
   private handleSubmit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     const { onOk, formRef } = this.props;
     const formFields = formRef.current?.getFieldsValue();
 
-    if (onOk)
-      onOk(formFields);
+    if (onOk) {
+      this.saving = fromPromise(onOk(formFields));
+    }
 
     this.handleCancel(event);
   }
@@ -67,7 +73,7 @@ export class EntryFormModal extends React.Component<IEntryFormModalProps> {
           Keep open?
       </Checkbox>,
       <Button key="cancel" onClick={this.handleCancel}>Close</Button>,
-      <Button key="submit" type="primary" onClick={this.handleSubmit}>Save</Button>,
+      <Button key="submit" type="primary" loading={this.saving.state === PENDING} onClick={this.handleSubmit}>Save</Button>,
     ];
   }
 

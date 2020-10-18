@@ -149,8 +149,15 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   }
 
   public save = async (data: ILogEntry) => {
+    const preparedData: ILogEntry = {
+      ...data,
+      textState: {
+        data: data.textState?.data?.trim()
+      }
+    };
+
     if (this.shouldMock) {
-      console.log('Saving log entry', data);
+      console.log('Saving log entry', preparedData);
       return;
     }
 
@@ -161,7 +168,7 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
           Accept: 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(preparedData)
       });
     } catch (error) {
       throw new Error(error);

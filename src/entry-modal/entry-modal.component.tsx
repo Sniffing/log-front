@@ -13,7 +13,7 @@ export interface IEntryFormModalProps extends ModalProps {
   keepOpen?: boolean;
   onOk: (fieldValues: Store | undefined, callback?: () => Promise<void>) => Promise<void>;
   onCancel: (e: React.MouseEvent<HTMLElement>) => void;
-  formRef: RefObject<FormInstance>;
+  formRef?: RefObject<FormInstance>;
   formFieldStore?: LogEntryFormStore;
 }
 

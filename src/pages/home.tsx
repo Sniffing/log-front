@@ -8,10 +8,8 @@ import { LifeEventStore } from '../stores/lifeEventStore';
 import { convertFormValuesToLifeEvent } from '../entry-modal/event-entry/life-event.helper';
 import { FormInstance } from 'antd/lib/form';
 import { Store } from 'antd/lib/form/interface';
-import {  ICalorieEntryFormValues, CalorieFormFieldsEnum, ICalorieEntry, CalorieEntry } from '../entry-modal/calorie-entry';
-import { convertFormValuesToCalorieEntry } from '../entry-modal/calorie-entry';
+import { CalorieEntry, ICalorieEntry } from '../entry-modal/calorie-entry';
 import { CalorieStore } from '../stores/calorieStore';
-import { RcFile } from 'antd/lib/upload';
 import { LogEntry, dateFormat } from '../entry-modal/log-entry';
 import { LogEntryStore } from '../stores/logEntryStore';
 import moment from 'moment';
@@ -26,6 +24,8 @@ import { MemoryPage } from '../data-vis/memory';
 import { LifeEventsPage } from '../data-vis/life-event';
 import CalendarKeyword from '../data-vis/calendar/calendar-keyword';
 import { CalendarPage } from '../data-vis/calendar';
+import { CalorieFormObject } from '../entry-modal/calorie-entry/CalorieFormObject';
+import { CalorieFormErrorObject } from '../entry-modal/calorie-entry/CalorieFormErrorObject';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -37,7 +37,12 @@ interface IProps {
 @observer
 export class Home extends React.Component<IProps> {
   private lifeEventForm = React.createRef<FormInstance>();
-  private calorieEntryForm = React.createRef<FormInstance>();
+
+  @observable
+  private calorieFormObject = new CalorieFormObject();
+  @observable
+  private calorieFormErrorObject = new CalorieFormErrorObject();
+
   private logEntryForm = React.createRef<FormInstance>();
 
   @observable
@@ -105,35 +110,38 @@ export class Home extends React.Component<IProps> {
     }
   }
 
-  private handleSaveCalories = async (value: Store | undefined) => {
-    if (!value) return;
+  private handleSaveCalories = async () => {
+    const {calorieStore} = this.props;
 
-    const formValues = value as ICalorieEntryFormValues;
-    if (!formValues[CalorieFormFieldsEnum.CSV]) {
-      await this.saveCalorieForm(convertFormValuesToCalorieEntry(formValues));
-    } else {
-      this.uploadCalorieCSVFile(formValues[CalorieFormFieldsEnum.CSV]);
+    this.validateCalorieObject();
+    if (this.calorieFormErrorObject.hasErrors) {
+      return;
     }
-  }
 
-  private saveCalorieForm = async (entry: ICalorieEntry) => {
     try {
-      await this.props.calorieStore?.save(entry);
+      if (this.calorieFormObject.calories) {
+        await calorieStore?.save(this.calorieFormObject.calorieEntry);
+      } else {
+        await calorieStore?.saveCaloriesFromCSV(this.calorieFormObject.csvFile);
+      }
     } catch (error) {
-      message.error('Could not save entry');
+      message.error('Error saving calories');
       console.error(error);
     }
   }
 
-  private uploadCalorieCSVFile = async (csv: RcFile) => {
-    if (!csv) return;
+  private validateCalorieObject = () => {
+    this.calorieFormErrorObject.clear();
+    const entry = this.calorieFormObject.calorieEntry;
+    const csv = this.calorieFormObject.csvFile;
 
-    try {
-      await this.props.calorieStore?.saveCaloriesFromCSV(csv);
-    } catch (error) {
-      message.error('Could not save CSV');
-      console.error(error);
+    if (csv || entry.date && entry.calories) {
+      return;
     }
+
+    this.calorieFormErrorObject.setError('calories', entry.calories ? undefined : 'Mandatory');
+    this.calorieFormErrorObject.setError('date', entry.date ? undefined: 'Mandatory');
+    this.calorieFormErrorObject.setError('csvFile', csv ? undefined: 'No file uploaded');
   }
 
   @observable
@@ -154,7 +162,7 @@ export class Home extends React.Component<IProps> {
 
     const formRef = {
       [EntryType.LOG]:this.logEntryForm,
-      [EntryType.CALORIE]:this.calorieEntryForm,
+      [EntryType.CALORIE]: this.lifeEventForm,
       [EntryType.EVENT]:this.lifeEventForm,
     };
 
@@ -190,7 +198,7 @@ export class Home extends React.Component<IProps> {
         rejected: () =><Spin/>,
       });
     case EntryType.CALORIE:
-      return <CalorieEntry formRef={this.calorieEntryForm}/>;
+      return <CalorieEntry formObject={this.calorieFormObject} formErrorObject={this.calorieFormErrorObject}/>;
     case EntryType.EVENT:
       return <LifeEventEntry formRef={this.lifeEventForm}/>;
     default:

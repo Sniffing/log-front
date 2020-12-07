@@ -1,3 +1,5 @@
+import { FormItemProps } from 'antd/lib/form';
+
 export interface IDummy {
   dummy: string;
 }
@@ -17,3 +19,5 @@ export interface IWeightDTO extends IEntryDTO {
 export interface ITextDTO extends IEntryDTO {
   text: string;
 }
+
+export type IFormItemError = Pick<FormItemProps, 'validateStatus' | 'help'>

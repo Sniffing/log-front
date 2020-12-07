@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, Timeline, Spin, Affix, PageHeader, Button } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { computed, observable, action } from 'mobx';
@@ -17,7 +17,7 @@ interface IProps {
 export class LifeEventsPage extends React.Component<IProps> {
 
   @observable
-  private container = null;
+  private container: Window | HTMLElement | null = null;
 
   public componentDidMount() {
     this.props.lifeEventStore?.fetch();

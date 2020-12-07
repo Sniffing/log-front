@@ -1,9 +1,7 @@
-import { ICalorieEntry, ICalorieEntryFormValues } from '.';
+import moment from 'moment';
+import { Moment } from 'moment';
 
-
-export const convertFormValuesToCalorieEntry = (formValues: ICalorieEntryFormValues): ICalorieEntry => {
-  return {
-    calories: formValues.CALORIES,
-    date: formValues.DATE?.unix(),
-  };
+export const isDateDisabled = (date: Moment) => {
+  const currDate = moment();
+  return currDate < date;
 };

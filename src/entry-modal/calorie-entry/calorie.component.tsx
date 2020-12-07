@@ -1,18 +1,21 @@
-import React, { RefObject } from 'react';
+import React, { ChangeEvent } from 'react';
 import { inject, observer } from 'mobx-react';
-import Form, { FormInstance } from 'antd/lib/form';
-import { calorieFormFields, createFormItem, ECalorieEntryTabs, CalorieFormFieldsEnum, CalorieFormFieldsConfigs } from '.';
-import { Input, Tabs } from 'antd';
-import { RcFile } from 'antd/lib/upload';
-import { observable, action } from 'mobx';
+import Form from 'antd/lib/form';
+import { DatePicker, Input, InputNumber, Spin, Tabs } from 'antd';
 import { CalorieStore } from '../../stores/calorieStore';
 import { CSVUpload } from './csv-upload';
+import { CalorieFormObject } from './CalorieFormObject';
+import { ECalorieEntryTabs, isDateDisabled } from '.';
+import { Moment } from 'moment';
+import moment from 'moment';
+import { CalorieFormErrorObject } from './CalorieFormErrorObject';
 
 const { TabPane } = Tabs;
 
 interface IProps {
   calorieStore?: CalorieStore;
-  formRef: RefObject<FormInstance>;
+  formObject: CalorieFormObject;
+  formErrorObject: CalorieFormErrorObject;
 }
 
 @inject('calorieStore')
@@ -20,44 +23,41 @@ interface IProps {
 export class CalorieEntry extends React.Component<IProps> {
 
   private handleTabChange = (tabKey: string) => {
+    const {formObject} = this.props;
     if (tabKey === ECalorieEntryTabs.CSV) {
-      this.props.formRef.current?.setFieldsValue({
-        [CalorieFormFieldsEnum.CALORIES]: null,
-        [CalorieFormFieldsEnum.DATE]: null,
-      });
+      formObject.clearEntryFields();
     } else if (tabKey === ECalorieEntryTabs.FORM) {
-      this.props.formRef.current?.setFieldsValue({
-        [CalorieFormFieldsEnum.CSV]: null,
-      });
+      formObject.clearCSVFile();
     }
   }
 
-  @observable
-  private csvFile: RcFile | undefined;
-
-  @action.bound
-  private handleCSVupload(file: RcFile | undefined) {
-    this.csvFile = file;
-  }
-
   public render() {
-    if (!this.props.calorieStore) return <></>;
+    const {formObject, formErrorObject} = this.props;
+
+    if (!this.props.calorieStore) return <Spin/>;
 
     return (
-      <Form ref={this.props.formRef} labelCol={{span: 4}}>
+      <Form labelCol={{span: 4}}>
         <Tabs defaultActiveKey={ECalorieEntryTabs.FORM} animated onChange={this.handleTabChange}>
           <TabPane tab="Entry" key={ECalorieEntryTabs.FORM}>
-            <Form.Item {...CalorieFormFieldsConfigs[CalorieFormFieldsEnum.DATE]}>
-              <Input/>
+            <Form.Item label="Date" {...formErrorObject.getFormItemError('date')}>
+              <DatePicker
+                value={formObject.date ? moment(formObject.date * 1000) : undefined}
+                onChange={(date: Moment) => formObject.setDate(date?.unix())}
+                disabledDate={isDateDisabled}/>
             </Form.Item>
-            <Form.Item {...CalorieFormFieldsConfigs[CalorieFormFieldsEnum.CALORIES]}>
-              <Input/>
+            <Form.Item label="Calories" {...formErrorObject.getFormItemError('calories')}>
+              <Input
+                type="number"
+                value={formObject?.calories}
+                onChange={({target : {value}}) => formObject.setCalories(Number(value))}
+              />
             </Form.Item>
           </TabPane>
           <TabPane tab="Upload CSV" key={ECalorieEntryTabs.CSV}>
             <div style={{margin: '20px', textAlign: 'center'}}>
-              <Form.Item name={CalorieFormFieldsEnum.CSV}>
-                <CSVUpload value={this.csvFile} onChange={this.handleCSVupload}/>
+              <Form.Item name="CSV" {...formErrorObject.getFormItemError('csvFile')}>
+                <CSVUpload value={formObject.csvFile} onChange={formObject.setCSV}/>
               </Form.Item>
             </div>
           </TabPane>

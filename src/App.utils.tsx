@@ -1,3 +1,5 @@
+import moment from 'moment';
+import { Moment } from 'moment';
 import React from 'react';
 
 interface IUnixTimeToDateParam {
@@ -42,3 +44,8 @@ export class Utils {
 export const generateFormLabel = (label: string) => (
   <span style={{ textTransform: 'capitalize' }}>{label.toLowerCase()}</span>
 );
+
+export const isDateDisabled = (date: Moment) => {
+  const currDate = moment();
+  return currDate < date;
+};

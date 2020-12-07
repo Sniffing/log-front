@@ -1,14 +1,15 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Form from 'antd/lib/form';
-import { DatePicker, Input, InputNumber, Spin, Tabs } from 'antd';
+import { DatePicker, Input, Spin, Tabs } from 'antd';
 import { CalorieStore } from '../../stores/calorieStore';
 import { CSVUpload } from './csv-upload';
 import { CalorieFormObject } from './CalorieFormObject';
-import { ECalorieEntryTabs, isDateDisabled } from '.';
+import { ECalorieEntryTabs } from '.';
 import { Moment } from 'moment';
 import moment from 'moment';
 import { CalorieFormErrorObject } from './CalorieFormErrorObject';
+import { isDateDisabled } from '../../App.utils';
 
 const { TabPane } = Tabs;
 

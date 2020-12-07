@@ -3,12 +3,10 @@ import { message, Spin } from 'antd';
 import { EntryFormModal, IEntryFormModalProps } from '../entry-modal/entry-modal.component';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import { ILifeEventFormValues, LifeEventEntry } from '../entry-modal/event-entry';
+import { LifeEventEntry } from '../entry-modal/event-entry';
 import { LifeEventStore } from '../stores/lifeEventStore';
-import { convertFormValuesToLifeEvent } from '../entry-modal/event-entry/life-event.helper';
 import { FormInstance } from 'antd/lib/form';
-import { Store } from 'antd/lib/form/interface';
-import { CalorieEntry, ICalorieEntry } from '../entry-modal/calorie-entry';
+import { CalorieEntry } from '../entry-modal/calorie-entry';
 import { CalorieStore } from '../stores/calorieStore';
 import { LogEntry, dateFormat } from '../entry-modal/log-entry';
 import { LogEntryStore } from '../stores/logEntryStore';
@@ -26,6 +24,8 @@ import CalendarKeyword from '../data-vis/calendar/calendar-keyword';
 import { CalendarPage } from '../data-vis/calendar';
 import { CalorieFormObject } from '../entry-modal/calorie-entry/CalorieFormObject';
 import { CalorieFormErrorObject } from '../entry-modal/calorie-entry/CalorieFormErrorObject';
+import { EventFormObject } from '../entry-modal/event-entry/EventFormObject';
+import { EventFormErrorObject } from '../entry-modal/event-entry/EventFormErrorObject';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -36,7 +36,10 @@ interface IProps {
 @inject('lifeEventStore', 'calorieStore', 'logEntryStore')
 @observer
 export class Home extends React.Component<IProps> {
-  private lifeEventForm = React.createRef<FormInstance>();
+  @observable
+  private eventFormObject = new EventFormObject();
+  @observable
+  private eventFormErrorObject = new EventFormErrorObject();
 
   @observable
   private calorieFormObject = new CalorieFormObject();
@@ -97,17 +100,29 @@ export class Home extends React.Component<IProps> {
     }
   }
 
-  private handleSaveLifeEvent = async (value: Store | undefined) => {
-    if (!value) return;
+  private handleSaveLifeEvent = async () => {
+    const { lifeEventStore } = this.props;
 
-    const event = convertFormValuesToLifeEvent(value as ILifeEventFormValues);
+    this.validateEventObject();
+    if (this.eventFormErrorObject.hasErrors) {
+      return;
+    }
 
     try {
-      await this.props.lifeEventStore?.save(event);
+      await lifeEventStore.save(this.eventFormObject.lifeEvent);
     } catch (error) {
-      message.error('Could not save entry');
+      message.error('Error saving event');
       console.error(error);
     }
+  }
+
+  private validateEventObject = () => {
+    this.eventFormErrorObject.clear();
+
+    const entry = this.eventFormObject.lifeEvent;
+    this.eventFormErrorObject.setError('date', entry.date ? undefined : 'Mandatory');
+    this.eventFormErrorObject.setError('name', entry.name ? undefined : 'Mandatory');
+    this.eventFormErrorObject.setError('intensity', entry.intensity ? undefined : 'Mandatory');
   }
 
   private handleSaveCalories = async () => {
@@ -162,8 +177,8 @@ export class Home extends React.Component<IProps> {
 
     const formRef = {
       [EntryType.LOG]:this.logEntryForm,
-      [EntryType.CALORIE]: this.lifeEventForm,
-      [EntryType.EVENT]:this.lifeEventForm,
+      [EntryType.CALORIE]: this.logEntryForm,
+      [EntryType.EVENT]:this.logEntryForm,
     };
 
     const title = {
@@ -200,7 +215,7 @@ export class Home extends React.Component<IProps> {
     case EntryType.CALORIE:
       return <CalorieEntry formObject={this.calorieFormObject} formErrorObject={this.calorieFormErrorObject}/>;
     case EntryType.EVENT:
-      return <LifeEventEntry formRef={this.lifeEventForm}/>;
+      return <LifeEventEntry formObject={this.eventFormObject} formErrorObject={this.eventFormErrorObject}/>;
     default:
       return null;
     }

@@ -1,7 +1,6 @@
 import regression, { Result, DataPoint } from 'regression';
 import { Utils } from '../../App.utils';
-import { IWeightDTO } from '../../App.interfaces';
-
+import { IWeightDTO } from '../analysis';
 
 export const createLineOfBestFitData = (weights: IWeightDTO[], fitCloseness: number) => {
   if (!weights.length) {

@@ -1,20 +1,15 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Modal, Button, Checkbox } from 'antd';
 import { observer } from 'mobx-react';
 import { ModalProps } from 'antd/lib/modal';
 import { observable, action } from 'mobx';
 import Title from 'antd/lib/typography/Title';
-import { FormInstance } from 'antd/lib/form';
-import { Store } from 'antd/lib/form/interface';
-import { LogEntryFormStore } from '../stores/logEntryFormStore';
 import { IPromiseBasedObservable, fromPromise, PENDING } from 'mobx-utils';
 
 export interface IEntryFormModalProps extends ModalProps {
   keepOpen?: boolean;
-  onOk: (fieldValues: Store | undefined, callback?: () => Promise<void>) => Promise<void>;
-  onCancel: (e: React.MouseEvent<HTMLElement>) => void;
-  formRef?: RefObject<FormInstance>;
-  formFieldStore?: LogEntryFormStore;
+  onOk: () => Promise<void>;
+  onCancel: () => void;
 }
 
 @observer
@@ -42,26 +37,23 @@ export class EntryFormModal extends React.Component<IEntryFormModalProps> {
   }
 
   @action
-  private handleSubmit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    const { onOk, formRef } = this.props;
-    const formFields = formRef.current?.getFieldsValue();
+  private handleSubmit = () => {
+    const { onOk } = this.props;
 
     if (onOk) {
-      this.saving = fromPromise(onOk(formFields));
-    }
-
-    this.handleCancel(event);
-  }
-
-  private handleCancel = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    const {onCancel, formRef} = this.props;
-
-    if(onCancel && !this.keepOpen) {
-      onCancel(event);
+      this.saving = fromPromise(onOk());
     }
 
     if (!this.keepOpen) {
-      formRef.current?.resetFields();
+      this.handleCancel();
+    }
+  }
+
+  private handleCancel = () => {
+    const {onCancel} = this.props;
+
+    if (onCancel) {
+      onCancel();
     }
   }
 

@@ -1,12 +1,4 @@
-import { EntryFormFieldsEnum } from '.';
 import { Moment } from 'moment';
-
-export interface IEntryFormValues {
-  [EntryFormFieldsEnum.DATE]: Moment;
-  [EntryFormFieldsEnum.FREE_EMOTIONS]?: string[];
-  [EntryFormFieldsEnum.WEIGHT]?: string;
-  [EntryFormFieldsEnum.THOUGHTS]?: string;
-}
 
 export interface ILogEntry {
   dateState?: IDate;
@@ -15,18 +7,18 @@ export interface ILogEntry {
   textState?: IText;
 }
 
-interface IDate {
+export interface IDate {
   date?: string;
 }
 
-interface IKeyword {
+export interface IKeyword {
   keywords?: string[];
 }
 
-interface IText {
+export interface IText {
   data?: string;
 }
 
-interface IEntryMetric {
+export interface IEntryMetric {
   weight?: string;
 }

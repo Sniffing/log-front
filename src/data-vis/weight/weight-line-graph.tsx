@@ -6,9 +6,9 @@ import { Rejected } from '../../custom-components';
 import { LogEntryStore } from '../../stores/logEntryStore';
 import ReactEcharts from 'echarts-for-react';
 import { EChartOption } from 'echarts';
-import { IWeightDTO } from '../../App.interfaces';
 import { Utils } from '../../App.utils';
 import { createWeightData, createLineOfBestFitData } from './weight.helper';
+import { IWeightDTO } from '../analysis';
 
 interface IProps {
   logEntryStore?: LogEntryStore;

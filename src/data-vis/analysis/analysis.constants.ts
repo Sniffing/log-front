@@ -1,6 +1,11 @@
-import { IWeightDTO } from '../../App.interfaces';
 import { ICalorieEntry } from '../../entry-modal/calorie-entry';
 
+interface IEntryDTO {
+  date: string;
+}
+export interface IWeightDTO extends IEntryDTO {
+  weight: string;
+}
 export interface ICombinedDataSources {
   weightData?: IWeightDTO[];
   calorieData?: ICalorieEntry[];

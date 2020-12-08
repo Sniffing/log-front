@@ -5,13 +5,11 @@ import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { LifeEventEntry } from '../entry-modal/event-entry';
 import { LifeEventStore } from '../stores/lifeEventStore';
-import { FormInstance } from 'antd/lib/form';
 import { CalorieEntry } from '../entry-modal/calorie-entry';
 import { CalorieStore } from '../stores/calorieStore';
-import { LogEntry, dateFormat } from '../entry-modal/log-entry';
+import { LogEntry, dateFormat, ILogEntry } from '../entry-modal/log-entry';
 import { LogEntryStore } from '../stores/logEntryStore';
 import moment from 'moment';
-import { LogEntryFormStore } from '../stores/logEntryFormStore';
 import { EntryFormSelector } from '../custom-components/entry-form-select/entry-form-selector.component';
 import { EntryOptions, EntryType } from './constants';
 import { ExpandingContainer } from '../custom-components/expanding-container/expanding-container.component';
@@ -26,6 +24,9 @@ import { CalorieFormObject } from '../entry-modal/calorie-entry/CalorieFormObjec
 import { CalorieFormErrorObject } from '../entry-modal/calorie-entry/CalorieFormErrorObject';
 import { EventFormObject } from '../entry-modal/event-entry/EventFormObject';
 import { EventFormErrorObject } from '../entry-modal/event-entry/EventFormErrorObject';
+import { LogFormObject } from '../entry-modal/log-entry/LogFormObject';
+import { LogFormErrorObject } from '../entry-modal/log-entry/LogFormErrorObject';
+import { FULFILLED } from 'mobx-utils';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -46,58 +47,59 @@ export class Home extends React.Component<IProps> {
   @observable
   private calorieFormErrorObject = new CalorieFormErrorObject();
 
-  private logEntryForm = React.createRef<FormInstance>();
+  @observable
+  private logFormObject;
+  @observable
+  private logFormErrorObject = new LogFormErrorObject();
 
   @observable
-  private logEntryFormStore: LogEntryFormStore = new LogEntryFormStore();
+  private selectedForm: EntryType = EntryType.LOG;
 
   @observable
   private entryModalVisible = false;
 
   public async componentDidMount() {
     const {logEntryStore} = this.props;
-
     await logEntryStore?.fetchLastDates();
-
-    this.logEntryFormStore = new LogEntryFormStore({
-      dateState: {
-        date: logEntryStore?.lastDates.last
-      },
-      keywordsState: {
-        keywords:[]
-      }
-    });
-  }
-
-  @action.bound
-  private setEntryModalVisible(visible: boolean) {
-    this.props.logEntryStore?.fetchLastDates();
-
-    this.entryModalVisible = visible;
+    this.logFormObject = new LogFormObject(logEntryStore?.lastDates.last);
   }
 
   private handleSaveLog = async () => {
     const {logEntryStore} = this.props;
-    const entry = this.logEntryFormStore.DTO;
+    const entry = this.logFormObject.logEntry;
 
-    if (!logEntryStore) {
+    this.validateLogObject();
+
+    if (this.logFormErrorObject.hasErrors) {
       return;
     }
 
     try {
       await logEntryStore.save(entry);
-      const nextDate = moment(entry.dateState?.date, dateFormat)
+      const nextDate: string = moment(entry.dateState?.date, dateFormat)
         .utc()
         .add(-moment().utcOffset(), 'm')
         .add(1, 'day')
         .format(dateFormat);
-      this.props.logEntryStore?.setLatestDate(nextDate);
-      this.logEntryFormStore.clear();
-      this.logEntryFormStore.setDate(nextDate);
+      logEntryStore?.setLatestDate(nextDate);
+      this.createNewLogFormObject(nextDate);
     } catch (error) {
       message.error(`Error saving data for ${entry.dateState?.date}`);
       console.error(error);
     }
+  }
+
+  @action.bound
+  private createNewLogFormObject(date: string) {
+    this.logFormObject = new LogFormObject(date);
+  }
+
+  private validateLogObject = () => {
+    this.logFormErrorObject.clear();
+    const obj: ILogEntry = this.logFormObject.logEntry;
+
+    this.logFormErrorObject.setError('dateState', obj.dateState?.date ? undefined : 'Mandatory');
+    this.logFormErrorObject.setError('textState', obj.textState?.data?.trim() ? undefined : 'Mandatory');
   }
 
   private handleSaveLifeEvent = async () => {
@@ -159,9 +161,6 @@ export class Home extends React.Component<IProps> {
     this.calorieFormErrorObject.setError('csvFile', csv ? undefined: 'No file uploaded');
   }
 
-  @observable
-  private selectedForm: EntryType = EntryType.LOG;
-
   @action
   private handleEntryFormSelect = (entry: EntryType) => {
     this.selectedForm = entry;
@@ -175,22 +174,10 @@ export class Home extends React.Component<IProps> {
       [EntryType.EVENT]:this.handleSaveLifeEvent,
     };
 
-    const formRef = {
-      [EntryType.LOG]:this.logEntryForm,
-      [EntryType.CALORIE]: this.logEntryForm,
-      [EntryType.EVENT]:this.logEntryForm,
-    };
-
     const title = {
       [EntryType.LOG]:'Log entry',
       [EntryType.CALORIE]:'Calorie entry',
       [EntryType.EVENT]:'Life Event entry',
-    };
-
-    const formFieldStore = {
-      [EntryType.LOG]: this.logEntryFormStore,
-      [EntryType.CALORIE]: this.logEntryFormStore,
-      [EntryType.EVENT]: this.logEntryFormStore,
     };
 
     return {
@@ -198,8 +185,6 @@ export class Home extends React.Component<IProps> {
       keepOpen: this.selectedForm === EntryType.LOG,
       onCancel: () => this.setEntryModalVisible(false),
       onOk: onOk[this.selectedForm],
-      formRef: formRef[this.selectedForm],
-      formFieldStore: formFieldStore[this.selectedForm],
     };
   }
 
@@ -207,11 +192,9 @@ export class Home extends React.Component<IProps> {
   private get entryFormModalContent() {
     switch(this.selectedForm) {
     case EntryType.LOG:
-      return this.props.logEntryStore?.fetchingDates?.case({
-        fulfilled:() => <LogEntry formFieldStore={this.logEntryFormStore}/>,
-        pending: () => <Spin/>,
-        rejected: () =><Spin/>,
-      });
+      return this.props.logEntryStore?.fetchingDates?.state === FULFILLED ?
+        <LogEntry formObject={this.logFormObject} formErrorObject={this.logFormErrorObject}/> :
+        <Spin/>;
     case EntryType.CALORIE:
       return <CalorieEntry formObject={this.calorieFormObject} formErrorObject={this.calorieFormErrorObject}/>;
     case EntryType.EVENT:
@@ -222,7 +205,7 @@ export class Home extends React.Component<IProps> {
   }
 
   @computed
-  private get  analysisCharts() {
+  private get analysisCharts() {
     return [
       {
         key: 0,
@@ -268,5 +251,11 @@ export class Home extends React.Component<IProps> {
         </div>
       </div>
     );
+  }
+
+  @action.bound
+  private setEntryModalVisible(visible: boolean) {
+    this.props.logEntryStore?.fetchLastDates();
+    this.entryModalVisible = visible;
   }
 }

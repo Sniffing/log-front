@@ -2,12 +2,12 @@ import { observable, action } from 'mobx';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 import { KEYWORD_URL, TEXT_URL, WEIGHT_URL, LAST_DATES_URL, LOG_ENTRY_URL } from '.';
 import get, { AxiosResponse } from 'axios';
-import { IWeightDTO } from '../App.interfaces';
 import { dateFormat, ILogEntry } from '../entry-modal/log-entry';
 import { BaseStore, BaseStoreProps } from './baseStore';
 import { mockKeywordData, mockMemoryData, mockWeightData, mockLastDateData } from './mockData/logEntryStoreMocks';
 import { Utils } from '../App.utils';
 import moment from 'moment';
+import { IWeightDTO } from '../data-vis/analysis';
 
 export interface KeywordEntry {
   date: string;
@@ -31,16 +31,16 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   }
 
   @observable
-  public fetchingMemory: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
+  public fetchingMemory: IPromiseBasedObservable<AxiosResponse<any>>;
 
   @observable
-  public fetchingWeight: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
+  public fetchingWeight: IPromiseBasedObservable<AxiosResponse<any>>;
 
   @observable
-  public fetchingKeywords: IPromiseBasedObservable<AxiosResponse<any>> | undefined;
+  public fetchingKeywords: IPromiseBasedObservable<AxiosResponse<any>>;
 
   @observable
-  public fetchingDates: IPromiseBasedObservable<AxiosResponse<ILastDates>> | undefined;
+  public fetchingDates: IPromiseBasedObservable<AxiosResponse<ILastDates>>;
 
   @observable
   public keywords: KeywordEntry[] = [];
@@ -125,6 +125,14 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   public async fetchLastDates() {
     if (this.shouldMock) {
       this.setLastDates(mockLastDateData);
+      const fake: AxiosResponse<ILastDates> = {
+        data: mockLastDateData,
+        status: 200,
+        statusText: '',
+        headers: '',
+        config: {}
+      };
+      this.fetchingDates = fromPromise(Promise.resolve(fake));
       return;
     }
 

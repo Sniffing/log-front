@@ -1,10 +1,11 @@
 import React from 'react';
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { observer } from 'mobx-react';
 import { Card, Modal } from 'antd';
 import { CardProps } from 'antd/lib/card';
 
 import './expanding-container.scss';
+import Title from 'antd/lib/typography/Title';
 
 @observer
 export class ExpandingContainer extends React.Component<CardProps> {
@@ -17,6 +18,15 @@ export class ExpandingContainer extends React.Component<CardProps> {
     this.visible = !this.visible;
   }
 
+  @computed
+  private get title() {
+    return (
+      <Title className="title" level={2}>
+        {this.props.title}
+      </Title>
+    );
+  }
+
   public render() {
     const {title, children, ...rest} = this.props;
     return (
@@ -27,7 +37,7 @@ export class ExpandingContainer extends React.Component<CardProps> {
           onClick={this.toggleModal}
           className="minimised"
         >
-          <span>{title}</span>
+          {title}
         </Card>
         <Modal
           keyboard
@@ -36,6 +46,7 @@ export class ExpandingContainer extends React.Component<CardProps> {
           onCancel={this.toggleModal}
           footer={null}
           className="expanded"
+          title={this.title}
         >
           {children}
         </Modal>

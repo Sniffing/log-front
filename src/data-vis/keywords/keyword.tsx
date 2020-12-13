@@ -12,6 +12,9 @@ import {
 import { Rejected } from '../../custom-components';
 import { LogEntryStore, KeywordEntry } from '../../stores/logEntryStore';
 
+import './keyword.scss';
+import { PENDING } from 'mobx-utils';
+
 interface IProps {
   logEntryStore?: LogEntryStore;
 }
@@ -29,7 +32,7 @@ export class KeywordPage extends React.Component<IProps> {
   private filterAmount= 5;
 
   public async componentDidMount() {
-    this.props.logEntryStore?.fetchKeywords();
+    await this.props.logEntryStore.fetchKeywords();
   }
 
   @computed
@@ -79,10 +82,16 @@ export class KeywordPage extends React.Component<IProps> {
   }
 
   public render() {
+    const {logEntryStore} = this.props;
     const data = this.props.logEntryStore?.keywords || [];
+
+    if (logEntryStore.fetchingKeywords?.state === PENDING) {
+      return <Spin/>;
+    }
+
     return (
-      <div className="keyword-page">
-        {this.props.logEntryStore?.fetchingKeywords?.case({
+      <div className="keyword">
+        {logEntryStore.fetchingKeywords?.case({
           fulfilled: () => <>
             <h2>Number of days recorded: {data?.length} </h2>
             <KeywordTreemap data={this.activeWords} minCount={this.filterAmount} />
@@ -93,7 +102,6 @@ export class KeywordPage extends React.Component<IProps> {
               minCount={this.filterAmount}
             />
           </>,
-          pending: () => <Spin/>,
           rejected: () => <Rejected message={'Error fetching Keywords'}/>,
         })}
       </div>

@@ -8,6 +8,7 @@ import { mockKeywordData, mockMemoryData, mockWeightData, mockLastDateData } fro
 import { Utils } from '../App.utils';
 import moment from 'moment';
 import { IWeightDTO } from '../data-vis/analysis';
+import { generateMockAxisResponse } from './mockData/mockHelpers';
 
 export interface KeywordEntry {
   date: string;
@@ -61,6 +62,7 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   public async fetchKeywords() {
     if (this.shouldMock) {
       this.setKeywords(mockKeywordData);
+      this.fetchingKeywords = fromPromise(generateMockAxisResponse<any>());
       return;
     }
 
@@ -74,6 +76,7 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   public async fetchMemory() {
     if (this.shouldMock) {
       this.setMemories(mockMemoryData);
+      this.fetchingMemory = fromPromise(generateMockAxisResponse<any>());
       return;
     }
 
@@ -87,6 +90,7 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   public async fetchWeightData() {
     if (this.shouldMock) {
       this.setWeight(mockWeightData);
+      this.fetchingWeight = fromPromise(generateMockAxisResponse<any>());
       return;
     }
 
@@ -125,14 +129,7 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   public async fetchLastDates() {
     if (this.shouldMock) {
       this.setLastDates(mockLastDateData);
-      const fake: AxiosResponse<ILastDates> = {
-        data: mockLastDateData,
-        status: 200,
-        statusText: '',
-        headers: '',
-        config: {}
-      };
-      this.fetchingDates = fromPromise(Promise.resolve(fake));
+      this.fetchingDates = fromPromise(generateMockAxisResponse<ILastDates>(mockLastDateData));
       return;
     }
 

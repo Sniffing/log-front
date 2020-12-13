@@ -37,7 +37,7 @@ export class MemoryPage extends Component<IProps> {
     const memories = this.props.logEntryStore?.memories;
     const memory = memories ? memories[this.currentIndex] : undefined;
 
-    return memory ? memory : {date: '', text: ''};
+    return memory;
   }
 
   @computed
@@ -65,34 +65,41 @@ export class MemoryPage extends Component<IProps> {
     this.currentIndex = Math.max(this.currentIndex - 1, 0);
   }
 
+  @computed
+  private get memoryDisplayComponent() {
+    return (
+      <Card title={`${Utils.fromReversedDate(this.memory.date)}`} className='card h-5/6'>
+        <p>{this.memory.text}</p>
+      </Card>
+    );
+  }
+
   public render() {
     return (
-      <div className='memory'>
-        <div style={{ minHeight: '500px'}}>
-          {this.props.logEntryStore?.fetchingMemory?.case({
-            fulfilled: () =>
-              <Card title={`${Utils.fromReversedDate(this.memory.date)}`} className='card'>
-                <p>{this.memory.text}</p>
-              </Card>,
-            pending: () => <Spin/>,
-            rejected: () => <Rejected message="Unable to fetch memories"/>,
-          })}
-        </div>
-        <Row className='buttons'>
+      <div className='memory h-full'>
+        {this.props.logEntryStore?.fetchingMemory?.case({
+          fulfilled: () => this.memoryDisplayComponent,
+          pending: () => <Spin/>,
+          rejected: () => <Rejected message="Unable to fetch memories"/>,
+        })}
+
+        <Row className='buttons mt-12'>
           <Button
+            className='mr-4'
             icon={<StepBackwardOutlined />}
             onClick={this.goFirst}
             disabled={this.currentIndex === 0}
           />
-          <Button
+          <Button className='mr-4'
             icon={<CaretLeftOutlined />}
             onClick={this.goPrev}
             disabled={this.currentIndex === 0}
           />
-          <Button className='rollButton' onClick={this.rollNewMemory} disabled={!!this.memory}>
+          <Button className='mr-4' onClick={this.rollNewMemory} disabled={!this.memory}>
           Random Memory
           </Button>
           <Button
+            className='mr-4'
             icon={<CaretRightOutlined />}
             onClick={this.goNext}
             disabled={this.currentIndex === this.memoriesLength}

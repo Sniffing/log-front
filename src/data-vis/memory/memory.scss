@@ -2,18 +2,8 @@
   text-align: center;
 
   .buttons {
-    margin-top: 50px;
     text-align: center;
     display: flex;
     justify-content: center;
-
-    > button {
-      margin: 0 10px;
-    }
-  }
-
-  .card {
-    margin: 50px auto 0 auto;
-    width: 40%;
   }
 }

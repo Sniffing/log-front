@@ -190,18 +190,15 @@ export class Home extends React.Component<IProps> {
 
   @computed
   private get entryFormModalContent() {
-    switch(this.selectedForm) {
-    case EntryType.LOG:
-      return this.props.logEntryStore?.fetchingDates?.state === FULFILLED ?
+    const content = {
+      [EntryType.LOG]: this.props.logEntryStore?.fetchingDates?.state === FULFILLED ?
         <LogEntry formObject={this.logFormObject} formErrorObject={this.logFormErrorObject}/> :
-        <Spin/>;
-    case EntryType.CALORIE:
-      return <CalorieEntry formObject={this.calorieFormObject} formErrorObject={this.calorieFormErrorObject}/>;
-    case EntryType.EVENT:
-      return <LifeEventEntry formObject={this.eventFormObject} formErrorObject={this.eventFormErrorObject}/>;
-    default:
-      return null;
-    }
+        <Spin/>,
+      [EntryType.CALORIE]: <CalorieEntry formObject={this.calorieFormObject} formErrorObject={this.calorieFormErrorObject}/>,
+      [EntryType.EVENT]:  <LifeEventEntry formObject={this.eventFormObject} formErrorObject={this.eventFormErrorObject}/>,
+    };
+
+    return content[this.selectedForm] ?? null;
   }
 
   @computed
@@ -233,10 +230,10 @@ export class Home extends React.Component<IProps> {
   public render() {
     return (
       <div className="home">
-        <EntryFormSelector options={EntryOptions} onSelect={this.handleEntryFormSelect}/>
+        {/* <EntryFormSelector options={EntryOptions} onSelect={this.handleEntryFormSelect}/>
         <EntryFormModal  visible={this.entryModalVisible} {...this.entryFormModalProps}>
           {this.entryFormModalContent}
-        </EntryFormModal>
+        </EntryFormModal> */}
 
         <div className="mainCard">
           <ExpandingContainer className="content" />
@@ -244,7 +241,10 @@ export class Home extends React.Component<IProps> {
 
         <div className="analysisCards">
           {this.analysisCharts.map(chart => (
-            <ExpandingContainer title={chart.title} className="content" key={chart.key}>
+            <ExpandingContainer
+              bordered={false}
+              className="mb-8"
+              title={chart.title} key={chart.key}>
               {chart.component}
             </ExpandingContainer>
           ))}

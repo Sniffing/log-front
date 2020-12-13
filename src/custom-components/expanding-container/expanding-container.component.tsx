@@ -25,6 +25,7 @@ export class ExpandingContainer extends React.Component<CardProps> {
           {...rest}
           hoverable
           onClick={this.toggleModal}
+          className="minimised"
         >
           <span>{title}</span>
         </Card>
@@ -34,6 +35,7 @@ export class ExpandingContainer extends React.Component<CardProps> {
           visible={this.visible}
           onCancel={this.toggleModal}
           footer={null}
+          className="expanded"
         >
           {children}
         </Modal>

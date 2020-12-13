@@ -236,7 +236,7 @@ export class Home extends React.Component<IProps> {
         </EntryFormModal> */}
 
         <div className="mainCard">
-          <ExpandingContainer className="content" />
+          <ExpandingContainer bordered={false}/>
         </div>
 
         <div className="analysisCards">

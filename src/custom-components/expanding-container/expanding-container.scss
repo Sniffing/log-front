@@ -1,1 +1,13 @@
 @import '../../theme-styles.scss';
+
+.minimised {
+  color: white !important;
+  background-color: $colour2 !important;
+  box-shadow: 5px 5px 5px $colour1 !important;
+  margin-right: 2rem !important;
+  margin-bottom: 2rem !important;
+}
+
+.expanded {
+
+}

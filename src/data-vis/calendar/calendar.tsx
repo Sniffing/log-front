@@ -30,8 +30,8 @@ export class CalendarPage extends React.Component<IProps> {
     if (this.props.logEntryStore && this.props.logEntryStore.fetchingDates?.state === 'fulfilled') {
       const {first, last} = this.props.logEntryStore?.lastDates;
 
-      const firstYear = Utils.dateFromString(first).getFullYear();
-      const lastYear = Utils.dateFromString(last).getFullYear();
+      const firstYear = Utils.dateFromReversedDateString(first).getFullYear();
+      const lastYear = Utils.dateFromReversedDateString(last).getFullYear();
 
       Array((lastYear - firstYear) + 1).fill(0).forEach((_,i) => years.push(i + firstYear));
     }

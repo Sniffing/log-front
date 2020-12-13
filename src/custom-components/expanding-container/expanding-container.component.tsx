@@ -31,7 +31,7 @@ export class ExpandingContainer extends React.Component<CardProps> {
         </Card>
         <Modal
           keyboard
-          closable
+          closable={false}
           visible={this.visible}
           onCancel={this.toggleModal}
           footer={null}

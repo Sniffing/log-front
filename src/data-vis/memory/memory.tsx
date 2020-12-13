@@ -6,7 +6,7 @@ import { observer, inject } from 'mobx-react';
 import './memory.scss';
 import { Utils } from '../../App.utils';
 import { Rejected } from '../../custom-components';
-import { LogEntryStore } from '../../stores/logEntryStore';
+import { LogEntryStore, Memory } from '../../stores/logEntryStore';
 import { StepBackwardOutlined, CaretLeftOutlined, CaretRightOutlined, StepForwardOutlined } from '@ant-design/icons/lib/icons';
 
 interface IProps {
@@ -33,7 +33,7 @@ export class MemoryPage extends Component<IProps> {
   };
 
   @computed
-  private get memory() {
+  private get memory(): Memory {
     const memories = this.props.logEntryStore?.memories;
     const memory = memories ? memories[this.currentIndex] : undefined;
 
@@ -68,7 +68,7 @@ export class MemoryPage extends Component<IProps> {
   @computed
   private get memoryDisplayComponent() {
     return (
-      <Card title={`${Utils.fromReversedDate(this.memory.date)}`} className='card h-5/6'>
+      <Card title={`${Utils.displayStringfromReversedDate(this.memory.date)}`} className='card h-5/6'>
         <p>{this.memory.text}</p>
       </Card>
     );

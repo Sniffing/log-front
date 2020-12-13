@@ -29,10 +29,10 @@ class CalendarKeyword extends Component<IProps> {
   private generateHeatMapValues(year: number) {
     return this.props.data
       .filter((k: KeywordEntry) => {
-        return year === Utils.dateFromString(k.date).getFullYear();
+        return year === Utils.dateFromReversedDateString(k.date).getFullYear();
       })
       .map((k: KeywordEntry) => {
-        const date = Utils.dateFromString(k.date);
+        const date = Utils.dateFromReversedDateString(k.date);
         const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
         return [dateVal, 1];
       });

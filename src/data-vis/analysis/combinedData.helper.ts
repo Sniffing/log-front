@@ -31,13 +31,13 @@ function createCalorieData(entries: ICalorieEntry[]): EChartOption.Series {
 
 function createWeightData(weight: IWeightDTO[]) {//}: EChartOption.Series {
   const sortedData = weight?.sort((a: IWeightDTO, b: IWeightDTO) => {
-    const dateA = Utils.dateFromString(a.date);
-    const dateB = Utils.dateFromString(b.date);
+    const dateA = Utils.dateFromReversedDateString(a.date);
+    const dateB = Utils.dateFromReversedDateString(b.date);
     return dateA > dateB ? 1 : -1;
   });
 
   const data = sortedData?.map((weight: IWeightDTO) => {
-    const date = Utils.dateFromString(weight.date);
+    const date = Utils.dateFromReversedDateString(weight.date);
     const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
     const num: number = parseFloat(weight.weight);
 

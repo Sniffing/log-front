@@ -9,5 +9,10 @@
 }
 
 .expanded {
+  background-color: $grey2 !important;
 
+  .ant-modal-content {
+    color: white !important;
+    background-color: $grey2 !important;
+  }
 }

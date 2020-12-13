@@ -42,7 +42,7 @@ export class CalorieList extends React.Component<IProps> {
           <Timeline.Item
             key={d.date}
             color={d.calories > this.CALORIE_LIMIT ? 'red': 'green'}
-            label={Utils.unixTimeToDate({time: d.date * 1000, divider:'/'})}
+            label={Utils.unixTimeToDateString({time: d.date * 1000, divider:'/'})}
           >
             {d.calories}
           </Timeline.Item>

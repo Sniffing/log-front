@@ -152,7 +152,7 @@ export class Home extends React.Component<IProps> {
     const entry = this.calorieFormObject.calorieEntry;
     const csv = this.calorieFormObject.csvFile;
 
-    if (csv || entry.date && entry.calories) {
+    if (csv || (entry.date && entry.calories)) {
       return;
     }
 

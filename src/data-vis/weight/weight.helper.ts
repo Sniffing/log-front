@@ -12,11 +12,11 @@ export const createLineOfBestFitData = (weights: IWeightDTO[], fitCloseness: num
     };
   }
 
-  const base = Utils.dateFromString(weights[0].date).getTime();
+  const base = Utils.dateFromReversedDateString(weights[0].date).getTime();
 
   const line: Result = regression.polynomial(
     weights.map(d => {
-      const date = new Date(Utils.fromReversedDate(d.date));
+      const date = new Date(Utils.displayStringfromReversedDate(d.date));
       return [date.getTime() - base, parseFloat(d.weight)];
     }),
     {
@@ -55,7 +55,7 @@ export const getAverageWeight = (weights: IWeightDTO[]) => {
 export function createWeightData(weights: IWeightDTO[]) {
 
   const data = weights.map((weight: IWeightDTO) => {
-    const date = Utils.dateFromString(weight.date);
+    const date = Utils.dateFromReversedDateString(weight.date);
     const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
     const num: number = parseFloat(weight.weight);
 

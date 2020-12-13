@@ -34,8 +34,8 @@ private handlePrecisionChange = (value: number) => {
 @computed
 private get option(): EChartOption {
   const sortedData = this.props.logEntryStore?.weights?.sort((a: IWeightDTO, b: IWeightDTO) => {
-    const dateA = Utils.dateFromString(a.date);
-    const dateB = Utils.dateFromString(b.date);
+    const dateA = Utils.dateFromReversedDateString(a.date);
+    const dateB = Utils.dateFromReversedDateString(b.date);
     return dateA > dateB ? 1 : -1;
   }) || [];
 

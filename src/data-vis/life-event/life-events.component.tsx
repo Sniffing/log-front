@@ -89,7 +89,7 @@ export class LifeEventsPage extends React.Component<IProps> {
 
             return (
               <Timeline.Item key={event.date} {...timelineDotConfig}
-                label={Utils.unixTimeToDate({time:event.date * 1000})}
+                label={Utils.unixTimeToDateString({time:event.date * 1000})}
                 className="timelineItem">
                 <p className="name">{event.name}</p>
                 <p className="desc">{event.description}</p>

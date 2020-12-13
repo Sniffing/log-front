@@ -50,7 +50,7 @@
     "build:tailwind": "tailwindcss build src/tailwind.css -o src/tailwind.output.css",
     "prestart": "npm run build:tailwind",
     "prebuild": "npm run build:tailwind",
-    "start": "npm run prestart; react-scripts start",
+    "start": "react-scripts start",
     "mock": "REACT_APP_MOCK=true react-scripts start",
     "build": "npm run prebuild; react-scripts build",
     "test": "react-scripts test --env=jsdom",

@@ -175,7 +175,7 @@ export class Home extends React.Component<IProps> {
     };
 
     const title = {
-      [EntryType.LOG]:'Log entry',
+      [EntryType.LOG]: 'Log entry',
       [EntryType.CALORIE]:'Calorie entry',
       [EntryType.EVENT]:'Life Event entry',
     };

@@ -10,6 +10,8 @@ import { IPageConfig } from './pages/page.constants';
 import { Layout } from 'antd';
 import { CalorieList } from './calorie-list';
 
+import './tailwind.output.css';
+
 const { Sider, Content } = Layout;
 
 @observer

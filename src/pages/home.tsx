@@ -240,14 +240,16 @@ export class Home extends React.Component<IProps> {
         </div>
 
         <div className="analysisCards">
-          {this.analysisCharts.filter(c => c.key === 0).map(chart => (
-            <ExpandingContainer
-              bordered={false}
-              className="mb-8"
-              title={chart.title} key={chart.key}>
-              {chart.component}
-            </ExpandingContainer>
-          ))}
+          {this.analysisCharts
+            // .filter(c => c.key === 0)
+            .map(chart => (
+              <ExpandingContainer
+                bordered={false}
+                className="mb-8"
+                title={chart.title} key={chart.key}>
+                {chart.component}
+              </ExpandingContainer>
+            ))}
         </div>
       </div>
     );

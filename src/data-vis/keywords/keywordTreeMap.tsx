@@ -35,9 +35,7 @@ export class KeywordTreemap extends Component<IProps> {
 
   public render() {
     return (
-      <div>
-        <ReactEcharts option={this.option}/>
-      </div>
+      <ReactEcharts option={this.option}/>
     );
   }
 }

@@ -1,0 +1,17 @@
+@import '../../theme-styles.scss';
+
+.keyword {
+  .ant-input {
+    color: white !important;
+    background-color: $grey4 !important;
+    border-color: $grey2 !important;
+  }
+
+  .treemap {
+    width: calc(100% - 300px);
+  }
+
+  .filters {
+    width: 300px;
+  }
+}

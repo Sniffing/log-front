@@ -15,7 +15,7 @@ export const mockKeywordData: KeywordEntry[] = Array.from({length: 50}, x => x).
   return {
     date: `${Utils.toReversedDate(new Date(randDate()))}`,
     keywords: Array.from(wordBank, x => {
-      if (Math.random() > 0.5) {
+      if (Math.random() > 0.3) {
         return x;
       }
     }).filter(x => x !== undefined),

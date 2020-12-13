@@ -4,10 +4,11 @@ import { observable, computed, action } from 'mobx';
 import { chunk } from 'lodash';
 import { observer } from 'mobx-react';
 import { KeywordTag } from '.';
+import { WordCount } from './keyword.interfaces';
 
 interface IProps {
-  list: any[];
-  updateList: (arg: any) => void;
+  list: WordCount[];
+  updateList: (arg: string) => void;
   minCount: number;
 }
 
@@ -16,20 +17,12 @@ export class KeywordList extends React.Component<IProps> {
   @observable
   private checkMap: Record<string, boolean> = {};
 
-  @observable
-  private originalList: any[] = [];
-
-  @action
-  public UNSAFE_componentWillReceiveProps(newProps: IProps) {
-    if (newProps.list && this.originalList.length === 0) {
-      this.originalList = newProps.list;
-    }
-  }
-
   @computed
   private get filteredList() {
-    if (!this.originalList) return [];
-    return this.originalList.filter(item => item.value > this.props.minCount);
+    const {list} = this.props;
+    if (!list?.length) return [];
+
+    return list.filter(item => item.value > this.props.minCount);
   }
 
   private toggleCheck = (item: string) => {
@@ -37,19 +30,19 @@ export class KeywordList extends React.Component<IProps> {
     this.props.updateList(item);
   };
 
-  render() {
-    const columns = 4;
+  public render() {
+    const columns = 2;
     const lists = chunk(this.filteredList, this.filteredList.length / columns);
     const hasRemainder = lists.length % columns !== 0;
     const columnWidth = Math.floor(24 / (columns + (hasRemainder ? 1 : 0)));
 
     return (
       <Row gutter={16}>
-        {lists.map((list: any, index: number) => (
+        {lists.map((list: WordCount[], index: number) => (
           <Col key={`kw-col-${index}`} span={columnWidth}>
-            {(list || []).map((item: any, i: number) => {
+            {(list || []).map((item: WordCount, i: number) => {
               return (
-                <Row key={`kw-col${index}-row${i}`}>
+                <Row key={`kw-col${index}-row${i}`} className="mb-2">
                   <KeywordTag onChange={() => this.toggleCheck(item.key)}>
                     {item.key} - {item.value}
                   </KeywordTag>

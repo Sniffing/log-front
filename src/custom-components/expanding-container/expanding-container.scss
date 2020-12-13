@@ -9,6 +9,8 @@
 }
 
 .expanded {
+  width: 90vw !important;
+
   .ant-modal-header {
     background-color: $grey2 !important;
     border-color: $grey4 !important;

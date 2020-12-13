@@ -1,8 +1,7 @@
 import React from 'react';
-import { Spin } from 'antd';
+import { Col, Input, Row, Spin } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
-import NumericInput from '../../custom-components/numericInput';
 import { pull } from 'lodash';
 import {
   WordCount,
@@ -56,15 +55,27 @@ export class KeywordPage extends React.Component<IProps> {
   @computed
   private get activeWords(): WordCount[] {
     const displayTerms = Object.entries(this.wordCounts)
-      .filter(entry => !this.bannedList.includes(entry[0]))
-      .filter(entry => entry[1] > this.filterAmount)
-      .map(entry => ({ key: entry[0], value: entry[1] }));
+      .filter(([key, _]) => !this.bannedList.includes(key))
+      .filter(([_, value]) => value > this.filterAmount)
+      .map(([key, value]) => ({ key, value }));
 
     displayTerms.sort((a, b) => {
       return -(a.value - b.value);
     });
 
     return displayTerms;
+  }
+
+  @computed
+  private get allWords(): WordCount[] {
+    const words = Object.entries(this.wordCounts)
+      .map(([key, value]) => ({ key, value }));
+
+    words.sort((a, b) => {
+      return -(a.value - b.value);
+    });
+
+    return words;
   }
 
   @action
@@ -77,8 +88,8 @@ export class KeywordPage extends React.Component<IProps> {
   };
 
   @action.bound
-  private setFilterAmount(value: string) {
-    this.filterAmount = Number(value) || 0;
+  private setFilterAmount({target : {value}}) {
+    this.filterAmount = value;
   }
 
   public render() {
@@ -92,16 +103,30 @@ export class KeywordPage extends React.Component<IProps> {
     return (
       <div className="keyword">
         {logEntryStore.fetchingKeywords?.case({
-          fulfilled: () => <>
-            <h2>Number of days recorded: {data?.length} </h2>
-            <KeywordTreemap data={this.activeWords} minCount={this.filterAmount} />
-            <NumericInput value={this.filterAmount} onChange={this.setFilterAmount} />
-            <KeywordList
-              list={this.activeWords}
-              updateList={this.toggleInBlackList}
-              minCount={this.filterAmount}
-            />
-          </>,
+          fulfilled: () => (
+            <Row>
+              <Col className="treemap">
+                <KeywordTreemap data={this.activeWords} minCount={this.filterAmount} />
+              </Col>
+              <Col className="filters">
+                <div className="mb-2">Number of days recorded: {data?.length}
+                </div>
+                <div className="mb-4">
+                  <span>Filter by min occurrence</span>
+                  <Input
+                    type="number"
+                    value={this.filterAmount}
+                    onChange={this.setFilterAmount}
+                  />
+                </div>
+                <KeywordList
+                  list={this.allWords}
+                  updateList={this.toggleInBlackList}
+                  minCount={this.filterAmount}
+                />
+              </Col>
+            </Row>
+          ),
           rejected: () => <Rejected message={'Error fetching Keywords'}/>,
         })}
       </div>

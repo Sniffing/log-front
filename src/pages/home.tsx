@@ -64,6 +64,11 @@ export class Home extends React.Component<IProps> {
     this.logFormObject = new LogFormObject(logEntryStore?.lastDates.last);
   }
 
+  @action.bound
+  private createNewLogFormObject(date: string) {
+    this.logFormObject = new LogFormObject(date);
+  }
+
   private handleSaveLog = async () => {
     const {logEntryStore} = this.props;
     const entry = this.logFormObject.logEntry;
@@ -87,11 +92,6 @@ export class Home extends React.Component<IProps> {
       message.error(`Error saving data for ${entry.dateState?.date}`);
       console.error(error);
     }
-  }
-
-  @action.bound
-  private createNewLogFormObject(date: string) {
-    this.logFormObject = new LogFormObject(date);
   }
 
   private validateLogObject = () => {
@@ -240,7 +240,7 @@ export class Home extends React.Component<IProps> {
         </div>
 
         <div className="analysisCards">
-          {this.analysisCharts.map(chart => (
+          {this.analysisCharts.filter(c => c.key === 0).map(chart => (
             <ExpandingContainer
               bordered={false}
               className="mb-8"

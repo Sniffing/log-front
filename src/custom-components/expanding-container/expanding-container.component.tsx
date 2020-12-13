@@ -11,7 +11,7 @@ import Title from 'antd/lib/typography/Title';
 export class ExpandingContainer extends React.Component<CardProps> {
 
   @observable
-  private visible = false;
+  private visible = true;
 
   @action.bound
   private toggleModal() {

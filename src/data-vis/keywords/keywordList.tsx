@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'antd';
-import { observable, computed, action } from 'mobx';
+import { observable, computed } from 'mobx';
 import { chunk } from 'lodash';
 import { observer } from 'mobx-react';
 import { KeywordTag } from '.';
@@ -30,7 +30,7 @@ export class KeywordList extends React.Component<IProps> {
     this.props.updateList(item);
   };
 
-  public render() {
+  public render(): React.ReactNode {
     const columns = 2;
     const lists = chunk(this.filteredList, this.filteredList.length / columns);
     const hasRemainder = lists.length % columns !== 0;

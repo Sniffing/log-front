@@ -3,7 +3,7 @@ import CheckableTag from 'antd/lib/tag/CheckableTag';
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 
-import './keywordTag.scss';
+import './keywordTag.less';
 
 interface IProps {
   onChange?: () => void;
@@ -23,7 +23,7 @@ export class KeywordTag extends React.Component<IProps> {
     }
   };
 
-  public render() {
+  public render(): React.ReactNode {
     return(
       <CheckableTag
         className={this.checked ? 'keywordTagOn' : 'keywordTagOff'}

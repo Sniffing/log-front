@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './entry-form-selector.scss';
+import './entry-form-selector.less';
 import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import { Transition, animated } from 'react-spring/renderprops';

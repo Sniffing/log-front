@@ -18,7 +18,7 @@ export class CalendarPage extends React.Component<IProps> {
   @observable
   private filterTerms: string[] = [];
 
-  public async componentDidMount() {
+  public async componentDidMount(): Promise<void> {
     this.props.logEntryStore?.fetchLastDates();
     this.props.logEntryStore?.fetchKeywords();
   }
@@ -69,11 +69,11 @@ export class CalendarPage extends React.Component<IProps> {
   }
 
   @action.bound
-  private handleFilterChange(value: string[]) {
+  private handleFilterChange(value: string[]): void {
     this.filterTerms = value;
   }
 
-  public render() {
+  public render(): React.ReactNode {
     return (
       <div className="calendar-page">
         <Select mode="multiple" style={{width: '40%'}} allowClear onChange={this.handleFilterChange}>

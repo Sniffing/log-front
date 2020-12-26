@@ -5,7 +5,7 @@ import App from './App';
 
 import 'antd/dist/antd.css';
 import './index.css';
-import './App.scss';
+import './App.less';
 
 ReactDOM.render(
   <BrowserRouter>

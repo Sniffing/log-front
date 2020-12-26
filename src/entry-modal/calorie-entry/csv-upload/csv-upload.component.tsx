@@ -18,7 +18,7 @@ export class CSVUpload extends React.Component<IProps> {
   private uploadingCSV: IPromiseBasedObservable<Response> | undefined;
 
   @action
-  private setCSV = (file: RcFile | undefined) => {
+  private setCSV = (file: RcFile | undefined): void => {
     if (this.props.onChange)
       this.props.onChange(file);
   }
@@ -34,7 +34,7 @@ export class CSVUpload extends React.Component<IProps> {
   }
 
   @action
-  private removeFile = () => {
+  private removeFile = (): void => {
     this.setCSV(undefined);
   }
 
@@ -62,7 +62,7 @@ export class CSVUpload extends React.Component<IProps> {
     };
   }
 
-  public render() {
+  public render(): React.ReactNode {
     return (
       <Dragger {...this.uploadProps}>
         <p className="ant-upload-drag-icon">

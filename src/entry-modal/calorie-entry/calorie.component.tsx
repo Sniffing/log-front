@@ -23,7 +23,7 @@ interface IProps {
 @observer
 export class CalorieEntry extends React.Component<IProps> {
 
-  private handleTabChange = (tabKey: string) => {
+  private handleTabChange = (tabKey: string): void => {
     const {formObject} = this.props;
     if (tabKey === ECalorieEntryTabs.CSV) {
       formObject.clearEntryFields();
@@ -32,7 +32,7 @@ export class CalorieEntry extends React.Component<IProps> {
     }
   }
 
-  public render() {
+  public render(): React.ReactNode {
     const {formObject, formErrorObject} = this.props;
 
     if (!this.props.calorieStore) return <Spin/>;

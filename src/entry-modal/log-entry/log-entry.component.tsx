@@ -31,12 +31,12 @@ export class LogEntry extends React.Component<IProps> {
   @observable
   private tagInput = '';
 
-  public async componentDidMount() {
+  public async componentDidMount(): Promise<void> {
     const { logEntryStore } = this.props;
     await logEntryStore?.fetchingDates;
   }
 
-  public render() {
+  public render(): React.ReactNode {
     const {formObject, formErrorObject} = this.props;
     return (
       <Form

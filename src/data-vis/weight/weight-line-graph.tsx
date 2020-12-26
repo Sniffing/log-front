@@ -21,13 +21,13 @@ export class WeightLineGraph extends Component<IProps> {
 @observable
 private fitCloseness = 4;
 
-public componentDidMount() {
+public componentDidMount(): void {
   this.props.logEntryStore?.fetchLastDates();
   this.props.logEntryStore?.fetchWeightData();
 }
 
 @action
-private handlePrecisionChange = (value: number) => {
+private handlePrecisionChange = (value: number): void => {
   this.fitCloseness = value;
 };
 
@@ -77,7 +77,7 @@ private get option(): EChartOption {
   };
 }
 
-public render() {
+public render(): React.ReactNode {
 
   const graph = this.props.logEntryStore?.fetchingWeight?.case({
     fulfilled: () => <ReactEcharts option={this.option} />,

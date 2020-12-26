@@ -18,12 +18,12 @@ export class CalorieFormErrorObject {
   }
 
   @action.bound
-  public clear() {
+  public clear(): void {
     this.errors = {};
   }
 
   @action.bound
-  public setError(key: CalorieFormKey, errorMsg: string) {
+  public setError(key: CalorieFormKey, errorMsg: string): void {
     if (!errorMsg) {
       delete this.errors[key];
       return;

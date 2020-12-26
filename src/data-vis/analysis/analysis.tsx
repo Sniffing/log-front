@@ -22,14 +22,14 @@ export class Analysis extends React.Component<IProps> {
   @observable
   private selectedGraph: AnalysisGraph = AnalysisGraph.COMBINED_LINES;
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.props.logEntryStore?.fetchWeightData();
     this.props.calorieStore?.fetch();
     this.props.lifeEventStore?.fetch();
   }
 
   @computed
-  private get combinedGraph() {
+  private get combinedGraph(): React.ReactNode {
     return <ReactEcharts option={generateCombinedDataOption(
       {
         weightData: this.props.logEntryStore?.weights,
@@ -40,18 +40,18 @@ export class Analysis extends React.Component<IProps> {
   }
 
   @action.bound
-  public handleGraphChange(value: AnalysisGraph) {
+  public handleGraphChange(value: AnalysisGraph): void {
     this.selectedGraph = value as AnalysisGraph;
   }
 
   @computed
-  private get loading() {
+  private get loading(): boolean {
     return this.props.logEntryStore?.fetchingWeight?.state === 'pending' ||
     this.props.calorieStore?.fetchingCalories?.state === 'pending' ||
     this.props.lifeEventStore?.fetchingLifeEvents?.state === 'pending';
   }
 
-  public render() {
+  public render(): React.ReactNode {
     return (
       <>
         <div>Analysis page</div>

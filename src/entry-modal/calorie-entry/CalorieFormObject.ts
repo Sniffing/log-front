@@ -20,28 +20,28 @@ export class CalorieFormObject implements ICalorieEntry {
   }
 
   @action.bound
-  public setCSV(csv: RcFile) {
+  public setCSV(csv: RcFile): void {
     this.csvFile = csv;
   }
 
   @action.bound
-  public setCalories(calories: number) {
+  public setCalories(calories: number): void {
     this.calories = calories;
   }
 
   @action.bound
-  public setDate(date: number) {
+  public setDate(date: number): void {
     this.date = date;
   }
 
   @action.bound
-  public clearEntryFields() {
+  public clearEntryFields(): void {
     this.calories = undefined;
     this.date = undefined;
   }
 
   @action.bound
-  public clearCSVFile() {
+  public clearCSVFile(): void {
     this.csvFile = undefined;
   }
 

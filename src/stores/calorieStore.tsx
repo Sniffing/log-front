@@ -22,7 +22,7 @@ export class CalorieStore extends BaseStore<ICalorieEntry>{
   @observable
   public calorieEntries: ICalorieEntry[] = [];
 
-  public async save(entry: ICalorieEntry) {
+  public async save(entry: ICalorieEntry): Promise<void> {
     if (this.shouldMock) {
       console.log('Saving calorie entry', entry);
       return;
@@ -38,7 +38,7 @@ export class CalorieStore extends BaseStore<ICalorieEntry>{
     }));
   }
 
-  public async saveCaloriesFromCSV(csvFile: RcFile) {
+  public async saveCaloriesFromCSV(csvFile: RcFile): Promise<Response> {
     if (this.shouldMock) {
       console.log('saved', csvFile);
       return;
@@ -54,7 +54,7 @@ export class CalorieStore extends BaseStore<ICalorieEntry>{
   }
 
   @action
-  public async fetch() {
+  public async fetch(): Promise<void> {
     if (this.shouldMock) {
       this.setCalorieEntries(mockCalorieData);
       return;
@@ -67,7 +67,7 @@ export class CalorieStore extends BaseStore<ICalorieEntry>{
   }
 
   @action.bound
-  private setCalorieEntries(entries: ICalorieEntry[]) {
+  private setCalorieEntries(entries: ICalorieEntry[]): void {
     this.calorieEntries = entries.sort((a,b) => a.date - b.date);
   }
 }

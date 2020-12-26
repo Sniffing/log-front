@@ -6,7 +6,7 @@ import { Transition, animated, interpolate } from 'react-spring/renderprops';
 import { CardProps } from 'antd/lib/card';
 import { CloseCircleOutlined } from '@ant-design/icons';
 
-import './expanding-container.scss';
+import './expanding-container.less';
 
 interface IProps extends CardProps {
   temp?: string;

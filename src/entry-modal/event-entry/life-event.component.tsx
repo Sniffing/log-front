@@ -20,7 +20,7 @@ interface IProps {
 @observer
 export class LifeEventEntry extends React.Component<IProps> {
 
-  private get intensityLabel() {
+  private get intensityLabel(): React.ReactNode {
     return (
       <Tooltip title={'10 should be huge say hospitalised vs getting married 5 is medium such as switched jobs 1 is a minor struggle that would cause stress, e.g. moving house'}>
         <span>
@@ -31,7 +31,7 @@ export class LifeEventEntry extends React.Component<IProps> {
     );
   }
 
-  public render() {
+  public render(): React.ReactNode {
     const {formObject, formErrorObject} = this.props;
     if (!this.props.lifeEventStore) return <Spin></Spin>;
     return (

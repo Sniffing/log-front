@@ -23,17 +23,17 @@ export class LifeEventStore extends BaseStore<ILifeEvent>{
   public lifeEvents: ILifeEvent[] = [];
 
   @computed
-  public get isSaving() {
+  public get isSaving(): boolean {
     return this.savingLifeEvents?.state === 'pending';
   }
 
   @computed
-  public get isFetching() {
+  public get isFetching(): boolean {
     return this.fetchingLifeEvents?.state === 'pending';
   }
 
   @action.bound
-  public async save(event: ILifeEvent) {
+  public async save(event: ILifeEvent): Promise<void> {
     if (this.shouldMock) {
       console.log('Saving life event', event);
       return;
@@ -52,7 +52,7 @@ export class LifeEventStore extends BaseStore<ILifeEvent>{
   }
 
   @action.bound
-  public async fetch() {
+  public async fetch(): Promise<void> {
     if (this.shouldMock) {
       this.setLifeEvents(mockLifeEventData);
       return;
@@ -65,7 +65,7 @@ export class LifeEventStore extends BaseStore<ILifeEvent>{
   }
 
   @action.bound
-  public setLifeEvents(events: ILifeEvent[]) {
+  public setLifeEvents(events: ILifeEvent[]): void {
     this.lifeEvents = events;
   }
 }

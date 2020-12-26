@@ -24,7 +24,7 @@ export class NumbersOnlySelect extends React.Component<IProps> {
       this.props.onChange(value);
   }
 
-  public render() {
+  public render(): React.ReactNode {
     return (
       <Select optionFilterProp="children" showSearch onSearch={this.handleSearch}
         onChange={this.handleChange}>

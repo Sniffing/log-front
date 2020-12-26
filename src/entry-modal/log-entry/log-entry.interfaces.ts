@@ -1,5 +1,3 @@
-import { Moment } from 'moment';
-
 export interface ILogEntry {
   dateState?: IDate;
   entryMetricState?: IEntryMetric;

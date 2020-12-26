@@ -29,27 +29,27 @@ export class EventFormObject implements ILifeEvent {
   }
 
   @action.bound
-  public setName(name: string) {
+  public setName(name: string): void {
     this.name = name;
   }
 
   @action.bound
-  public setDescription(desc: string) {
+  public setDescription(desc: string): void {
     this.description = desc;
   }
 
   @action.bound
-  public setDate(date: number) {
+  public setDate(date: number): void {
     this.date = date;
   }
 
   @action.bound
-  public setNature(nature: Nature) {
+  public setNature(nature: Nature): void {
     this.nature = nature;
   }
 
   @action.bound
-  public setIntensity(intenstiy: number) {
+  public setIntensity(intenstiy: number): void {
     this.intensity = intenstiy;
   }
 }

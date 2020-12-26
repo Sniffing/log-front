@@ -10,7 +10,7 @@ interface IProps {
 
 @inject('logEntryStore')
 export class WeightPage extends React.Component<IProps> {
-  render() {
+  public render(): React.ReactNode {
     return (
       <div className="weight-page">
         <WeightLineGraph logEntryStore={this.props.logEntryStore} />

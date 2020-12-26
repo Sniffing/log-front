@@ -59,7 +59,7 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   };
 
   @action
-  public async fetchKeywords() {
+  public async fetchKeywords(): Promise<void> {
     if (this.shouldMock) {
       this.setKeywords(mockKeywordData);
       this.fetchingKeywords = fromPromise(generateMockAxisResponse<any>());
@@ -73,7 +73,7 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   }
 
   @action.bound
-  public async fetchMemory() {
+  public async fetchMemory(): Promise<void> {
     if (this.shouldMock) {
       this.setMemories(mockMemoryData);
       this.fetchingMemory = fromPromise(generateMockAxisResponse<any>());
@@ -87,7 +87,7 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   }
 
   @action.bound
-  public async fetchWeightData() {
+  public async fetchWeightData(): Promise<void> {
     if (this.shouldMock) {
       this.setWeight(mockWeightData);
       this.fetchingWeight = fromPromise(generateMockAxisResponse<any>());
@@ -101,32 +101,32 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   }
 
   @action.bound
-  private setKeywords(keywords: any) {
+  private setKeywords(keywords: any): void {
     this.keywords = keywords;
   }
 
   @action.bound
-  private setMemories(memories: any) {
+  private setMemories(memories: any): void {
     this.memories = memories;
   }
 
   @action.bound
-  private setWeight(weights: any) {
+  private setWeight(weights: any): void {
     this.weights = weights;
   }
 
   @action.bound
-  private setLastDates(dates: ILastDates) {
+  private setLastDates(dates: ILastDates): void {
     this.lastDates = dates;
   }
 
   @action.bound
-  public setLatestDate(date: string) {
+  public setLatestDate(date: string): void {
     this.lastDates.last = date;
   }
 
   @action
-  public async fetchLastDates() {
+  public async fetchLastDates(): Promise<void> {
     if (this.shouldMock) {
       this.setLastDates(mockLastDateData);
       this.fetchingDates = fromPromise(generateMockAxisResponse<ILastDates>(mockLastDateData));
@@ -153,7 +153,7 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
     console.log('sort this out');
   }
 
-  public save = async (data: ILogEntry) => {
+  public save = async (data: ILogEntry): Promise<void> => {
     const preparedData: ILogEntry = {
       ...data,
       textState: {

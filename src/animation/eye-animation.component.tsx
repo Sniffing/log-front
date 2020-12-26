@@ -20,7 +20,8 @@ export class EyeAnimation extends React.Component{
   @observable
   private width: number | undefined;
 
-  private stageRef = React.createRef<Stage>();
+  private stageRef = React.createRef<any>();
+  //private stageRef = React.createRef<Stage>();
   private pupilRef = React.createRef<Konva.Circle>();
   private irisRef = React.createRef<Konva.Circle>();
 
@@ -50,7 +51,7 @@ export class EyeAnimation extends React.Component{
   private handleMove = (newX: number, newY: number, ref: React.RefObject<Konva.Circle>) => {
     if (!newX || !newY) return;
     const {x, y} = center;
-    
+
     const xdiff = newX - x;
     const ydiff = newY - y;
 
@@ -119,7 +120,7 @@ export class EyeAnimation extends React.Component{
                 tension={0.35}
                 closed
                 stroke="black"
-              />              
+              />
             </Group>
           </Layer>
         </Stage>

@@ -42,35 +42,35 @@ export class LogFormObject implements ILogEntry {
   }
 
   @action
-  public setDate = (date: string) => {
+  public setDate = (date: string): void => {
     this.dateState = {
       date: date
     };
   }
 
   @action
-  public setWeight = (weight: number) => {
+  public setWeight = (weight: number): void => {
     this.entryMetricState = {
       weight: String(weight)
     };
   }
 
   @action
-  public setKeywords = (keywords: string[]) => {
+  public setKeywords = (keywords: string[]): void => {
     this.keywordsState = {
       keywords: keywords?.map(word => word.trim().toLowerCase())
     };
   }
 
   @action
-  public setThoughts = (thoughts: string) => {
+  public setThoughts = (thoughts: string): void => {
     this.textState = {
       data: thoughts
     };
   }
 
   @action.bound
-  public clear() {
+  public clear(): void {
     this.dateState = {};
     this.entryMetricState = {};
     this.keywordsState = {};

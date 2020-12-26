@@ -14,7 +14,7 @@ import { EntryFormSelector } from '../custom-components/entry-form-select/entry-
 import { EntryOptions, EntryType } from './constants';
 import { ExpandingContainer } from '../custom-components/expanding-container/expanding-container.component';
 
-import './home.scss';
+import './home.less';
 import { KeywordPage } from '../data-vis/keywords';
 import { MemoryPage } from '../data-vis/memory';
 import { LifeEventsPage } from '../data-vis/life-event';
@@ -59,7 +59,7 @@ export class Home extends React.Component<IProps> {
   @observable
   private entryModalVisible = false;
 
-  public async componentDidMount() {
+  public async componentDidMount(): Promise<void> {
     const {logEntryStore} = this.props;
     await logEntryStore?.fetchLastDates();
     this.logFormObject = new LogFormObject(logEntryStore?.lastDates.last);
@@ -190,7 +190,7 @@ export class Home extends React.Component<IProps> {
   }
 
   @computed
-  private get entryFormModalContent() {
+  private get entryFormModalContent(): React.ReactNode {
     const content = {
       [EntryType.LOG]: this.props.logEntryStore?.fetchingDates?.state === FULFILLED ?
         <LogEntry formObject={this.logFormObject} formErrorObject={this.logFormErrorObject}/> :
@@ -228,7 +228,7 @@ export class Home extends React.Component<IProps> {
     ];
   }
 
-  public render() {
+  public render(): React.ReactNode {
     return (
       <div className="home">
         {/* <EntryFormSelector options={EntryOptions} onSelect={this.handleEntryFormSelect}/>

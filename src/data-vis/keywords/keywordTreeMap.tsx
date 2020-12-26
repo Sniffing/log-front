@@ -33,7 +33,7 @@ export class KeywordTreemap extends Component<IProps> {
     };
   }
 
-  public render() {
+  public render(): React.ReactNode {
     return (
       <ReactEcharts option={this.option}/>
     );

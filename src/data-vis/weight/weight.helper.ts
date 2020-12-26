@@ -44,7 +44,7 @@ export const createLineOfBestFitData = (weights: IWeightDTO[], fitCloseness: num
   };
 };
 
-export const getAverageWeight = (weights: IWeightDTO[]) => {
+export const getAverageWeight = (weights: IWeightDTO[]): number => {
   const totalWeight = weights
     .map(d => Number(d.weight))
     .reduce((acc, item) => acc + item, 0);
@@ -53,7 +53,6 @@ export const getAverageWeight = (weights: IWeightDTO[]) => {
 };
 
 export function createWeightData(weights: IWeightDTO[]) {
-
   const data = weights.map((weight: IWeightDTO) => {
     const date = Utils.dateFromReversedDateString(weight.date);
     const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');

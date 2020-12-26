@@ -14,11 +14,6 @@ interface IProps {
   year: number;
 }
 
-interface IInterval {
-  start: Date;
-  end: Date;
-}
-
 @inject('logEntryStore')
 @observer
 class CalendarKeyword extends Component<IProps> {
@@ -74,7 +69,7 @@ class CalendarKeyword extends Component<IProps> {
     };
   }
 
-  public render() {
+  public render(): React.ReactNode {
     return(
       <Card>
         {this.props.logEntryStore?.fetchingKeywords?.case({

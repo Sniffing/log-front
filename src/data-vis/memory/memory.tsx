@@ -3,7 +3,7 @@ import { Button, Card, Spin, Row } from 'antd';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
-import './memory.scss';
+import './memory.less';
 import { Utils } from '../../App.utils';
 import { Rejected } from '../../custom-components';
 import { LogEntryStore, Memory } from '../../stores/logEntryStore';
@@ -19,7 +19,7 @@ export class MemoryPage extends Component<IProps> {
   @observable
   private currentIndex = 0;
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.props.logEntryStore?.fetchMemory();
   }
 
@@ -74,7 +74,7 @@ export class MemoryPage extends Component<IProps> {
     );
   }
 
-  public render() {
+  public render(): React.ReactNode {
     return (
       <div className='memory h-full'>
         {this.props.logEntryStore?.fetchingMemory?.case({

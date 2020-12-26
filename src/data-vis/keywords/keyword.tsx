@@ -11,7 +11,7 @@ import {
 import { Rejected } from '../../custom-components';
 import { LogEntryStore, KeywordEntry } from '../../stores/logEntryStore';
 
-import './keyword.scss';
+import './keyword.less';
 import { PENDING } from 'mobx-utils';
 
 interface IProps {
@@ -30,7 +30,7 @@ export class KeywordPage extends React.Component<IProps> {
   @observable
   private filterAmount= 5;
 
-  public async componentDidMount() {
+  public async componentDidMount(): Promise<void> {
     await this.props.logEntryStore.fetchKeywords();
   }
 
@@ -92,7 +92,7 @@ export class KeywordPage extends React.Component<IProps> {
     this.filterAmount = value;
   }
 
-  public render() {
+  public render(): React.ReactNode {
     const {logEntryStore} = this.props;
     const data = this.props.logEntryStore?.keywords || [];
 

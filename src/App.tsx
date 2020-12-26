@@ -1,15 +1,13 @@
 import React from 'react';
 import { Route, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Provider, observer } from 'mobx-react';
-import './App.scss';
+import './App.less';
 
 import { Home } from './pages';
 import { allStores } from './stores';
 import { Constants } from './App.constants';
 import { IPageConfig } from './pages/page.constants';
 import { Layout } from 'antd';
-
-import './tailwind.output.css';
 
 const { Header, Content } = Layout;
 

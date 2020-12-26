@@ -18,12 +18,12 @@ export class EventFormErrorObject {
   }
 
   @action.bound
-  public clear() {
+  public clear(): void {
     this.errors = {};
   }
 
   @action.bound
-  public setError(key: EventFormKey, errorMsg: string) {
+  public setError(key: EventFormKey, errorMsg: string): void {
     if (!errorMsg) {
       delete this.errors[key];
       return;

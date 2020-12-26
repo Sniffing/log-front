@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { Card, Modal } from 'antd';
 import { CardProps } from 'antd/lib/card';
 
-import './expanding-container.scss';
+import './expanding-container.less';
 import Title from 'antd/lib/typography/Title';
 
 @observer
@@ -27,7 +27,7 @@ export class ExpandingContainer extends React.Component<CardProps> {
     );
   }
 
-  public render() {
+  public render(): React.ReactNode {
     const {title, children, ...rest} = this.props;
     return (
       <>

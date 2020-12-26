@@ -18,12 +18,12 @@ export class LogFormErrorObject {
   }
 
   @action.bound
-  public clear() {
+  public clear(): void {
     this.errors = {};
   }
 
   @action.bound
-  public setError(key: LogFormKey, errorMsg: string) {
+  public setError(key: LogFormKey, errorMsg: string): void {
     if (!errorMsg) {
       delete this.errors[key];
       return;

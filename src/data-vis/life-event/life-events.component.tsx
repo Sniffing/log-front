@@ -6,7 +6,7 @@ import { LifeEventStore } from '../../stores/lifeEventStore';
 import { ILifeEvent } from '../../entry-modal/event-entry';
 import { Utils } from '../../App.utils';
 
-import './life-events.scss';
+import './life-events.less';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -19,24 +19,24 @@ export class LifeEventsPage extends React.Component<IProps> {
   @observable
   private container: Window | HTMLElement | null = null;
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.props.lifeEventStore?.fetch();
   }
 
   @action.bound
-  private setContainer(ref: any) {
+  private setContainer(ref: any): void{
     this.container = ref;
   }
 
   @computed
-  public get data() {
+  public get data(): ILifeEvent[] {
     return (this.props.lifeEventStore?.lifeEvents || [])
       .sort((a: ILifeEvent, b: ILifeEvent) => {
         return a.date - b.date;
       });
   }
 
-  public render() {
+  public render(): React.ReactNode {
     const { lifeEventStore } = this.props;
 
     if (lifeEventStore?.fetchingLifeEvents?.state === 'pending') {

@@ -29,9 +29,12 @@ export const mockMemoryData: Memory[] = Array.from({length: 50}, x => x).map(_ =
   };
 });
 
+let seedDate = randDate();
 export const mockWeightData: IWeightDTO[] = Array.from({length: 50}, x => x).map(_ => {
+  const day = 60 * 60 * 24 * 1000;
+  seedDate += day;
   return {
-    date: `${Utils.toReversedDate(new Date(randDate()))}`,
+    date: `${Utils.toReversedDate(new Date(seedDate))}`,
     weight: `${randWeight()}`,
   };
 });

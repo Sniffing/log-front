@@ -30,7 +30,7 @@ function createCalorieData(entries: ICalorieEntry[]): EChartOption.Series {
 }
 
 function createWeightData(weight: IWeightDTO[]) {//}: EChartOption.Series {
-  const sortedData = weight?.sort((a: IWeightDTO, b: IWeightDTO) => {
+  const sortedData = weight?.slice().sort((a: IWeightDTO, b: IWeightDTO) => {
     const dateA = Utils.dateFromReversedDateString(a.date);
     const dateB = Utils.dateFromReversedDateString(b.date);
     return dateA > dateB ? 1 : -1;

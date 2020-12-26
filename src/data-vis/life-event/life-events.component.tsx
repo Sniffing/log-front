@@ -31,7 +31,7 @@ export class LifeEventsPage extends React.Component<IProps> {
   @computed
   public get data(): ILifeEvent[] {
     return (this.props.lifeEventStore?.lifeEvents || [])
-      .sort((a: ILifeEvent, b: ILifeEvent) => {
+      .slice().sort((a: ILifeEvent, b: ILifeEvent) => {
         return a.date - b.date;
       });
   }

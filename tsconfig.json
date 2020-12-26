@@ -24,6 +24,10 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src"
+    "src",
+    "src/styles.d.ts"
+  ],
+  "includes": [
+    "src/styles.d.ts"
   ]
 }

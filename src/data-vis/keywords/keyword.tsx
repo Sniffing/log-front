@@ -59,7 +59,7 @@ export class KeywordPage extends React.Component<IProps> {
       .filter(([_, value]) => value > this.filterAmount)
       .map(([key, value]) => ({ key, value }));
 
-    displayTerms.sort((a, b) => {
+    displayTerms.slice().sort((a, b) => {
       return -(a.value - b.value);
     });
 
@@ -71,7 +71,7 @@ export class KeywordPage extends React.Component<IProps> {
     const words = Object.entries(this.wordCounts)
       .map(([key, value]) => ({ key, value }));
 
-    words.sort((a, b) => {
+    words.slice().sort((a, b) => {
       return -(a.value - b.value);
     });
 

@@ -3,7 +3,7 @@ import { Button, Card, Spin, Row } from 'antd';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
-import './memory.less';
+import * as styles from './memory.module.less';
 import { Utils } from '../../App.utils';
 import { Rejected } from '../../custom-components';
 import { LogEntryStore, Memory } from '../../stores/logEntryStore';
@@ -68,7 +68,7 @@ export class MemoryPage extends Component<IProps> {
   @computed
   private get memoryDisplayComponent() {
     return (
-      <Card title={`${Utils.displayStringfromReversedDate(this.memory.date)}`} className='card h-5/6'>
+      <Card title={`${Utils.displayStringfromReversedDate(this.memory.date)}`} className={`${styles.memory_card}`}>
         <p>{this.memory.text}</p>
       </Card>
     );
@@ -76,14 +76,14 @@ export class MemoryPage extends Component<IProps> {
 
   public render(): React.ReactNode {
     return (
-      <div className='memory h-full'>
+      <div className={`${styles.memory} h-full`}>
         {this.props.logEntryStore?.fetchingMemory?.case({
           fulfilled: () => this.memoryDisplayComponent,
           pending: () => <Spin/>,
           rejected: () => <Rejected message="Unable to fetch memories"/>,
         })}
 
-        <Row className='buttons mt-12'>
+        <Row className={`${styles.memory_buttons} mt-12`}>
           <Button
             className='mr-4'
             icon={<StepBackwardOutlined />}

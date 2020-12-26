@@ -1,8 +1,9 @@
 import regression, { Result, DataPoint } from 'regression';
 import { Utils } from '../../App.utils';
 import { IWeightDTO } from '../analysis';
+import { EChartOption } from 'echarts';
 
-export const createLineOfBestFitData = (weights: IWeightDTO[], fitCloseness: number) => {
+export const createLineOfBestFitData = (weights: IWeightDTO[], fitCloseness: number): EChartOption.Series => {
   if (!weights.length) {
     return {
       name: 'Line of best fit',
@@ -52,7 +53,7 @@ export const getAverageWeight = (weights: IWeightDTO[]): number => {
   return  totalWeight / weights.length;
 };
 
-export function createWeightData(weights: IWeightDTO[]) {
+export function createWeightData(weights: IWeightDTO[]): EChartOption.Series {
   const data = weights.map((weight: IWeightDTO) => {
     const date = Utils.dateFromReversedDateString(weight.date);
     const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
@@ -69,10 +70,5 @@ export function createWeightData(weights: IWeightDTO[]) {
     type: 'line',
     symbol: 'none',
     data: data,
-    markLine: {
-      data: [
-        {type: 'average', name: 'Average'}
-      ]
-    }
   };
 }

@@ -68,7 +68,7 @@ export class CalorieStore extends BaseStore<ICalorieEntry>{
 
   @action.bound
   private setCalorieEntries(entries: ICalorieEntry[]): void {
-    this.calorieEntries = entries.sort((a,b) => a.date - b.date);
+    this.calorieEntries = entries.slice().sort((a,b) => a.date - b.date);
   }
 }
 

@@ -29,7 +29,7 @@ export class ExpandingContainerV2 extends React.Component<IProps & HTMLAttribute
     return item;
   }
 
-  public render() {
+  public render(): React.ReactNode {
     const { temp, children, ...cardProps } = this.props;
 
     //Good enough for now, will have to use animated div and calculate

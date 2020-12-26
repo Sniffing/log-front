@@ -33,7 +33,7 @@ private handlePrecisionChange = (value: number): void => {
 
 @computed
 private get option(): EChartOption {
-  const sortedData = this.props.logEntryStore?.weights?.sort((a: IWeightDTO, b: IWeightDTO) => {
+  const sortedData = this.props.logEntryStore?.weights?.slice().sort((a: IWeightDTO, b: IWeightDTO) => {
     const dateA = Utils.dateFromReversedDateString(a.date);
     const dateB = Utils.dateFromReversedDateString(b.date);
     return dateA > dateB ? 1 : -1;
@@ -44,16 +44,10 @@ private get option(): EChartOption {
 
   return {
     title: {
-      text: 'Title'
+      text: 'Weight'
     },
     legend: {
       data: ['Weight']
-    },
-    grid: {
-      left: '2%',
-      right: '2%',
-      bottom: '2%',
-      containLabel: true
     },
     xAxis: {
       type: 'time',

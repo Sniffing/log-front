@@ -4,11 +4,11 @@ import { observer, inject } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
 import { Rejected } from '../../custom-components';
 import { LogEntryStore } from '../../stores/logEntryStore';
-import ReactEcharts from 'echarts-for-react';
 import { EChartOption } from 'echarts';
 import { Utils } from '../../App.utils';
 import { createWeightData, createLineOfBestFitData } from './weight.helper';
 import { IWeightDTO } from '../analysis';
+import { ReactEcharts } from '../../custom-components/ReactEcharts';
 
 interface IProps {
   logEntryStore?: LogEntryStore;

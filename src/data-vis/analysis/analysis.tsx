@@ -1,6 +1,5 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import ReactEcharts from 'echarts-for-react';
 
 import { computed, observable, action } from 'mobx';
 import { Spin } from 'antd';
@@ -8,6 +7,7 @@ import { LogEntryStore } from '../../stores/logEntryStore';
 import { CalorieStore } from '../../stores/calorieStore';
 import { generateCombinedDataOption, AnalysisGraph } from '.';
 import { LifeEventStore } from '../../stores/lifeEventStore';
+import { ReactEcharts } from '../../custom-components/ReactEcharts';
 
 interface IProps {
   logEntryStore?: LogEntryStore;

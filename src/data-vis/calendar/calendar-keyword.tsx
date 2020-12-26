@@ -6,8 +6,8 @@ import { Rejected } from '../../custom-components';
 
 import { Utils } from '../../App.utils';
 import { LogEntryStore, KeywordEntry } from '../../stores/logEntryStore';
-import ReactEcharts from 'echarts-for-react';
 import { EChartOption } from 'echarts';
+import { ReactEcharts } from '../../custom-components/ReactEcharts';
 interface IProps {
   logEntryStore?: LogEntryStore;
   data: KeywordEntry[];
@@ -39,18 +39,18 @@ class CalendarKeyword extends Component<IProps> {
         left: 'center',
         text: `${year}`
       },
-      // visualMap: [{
-      //   min: 0,
-      //   max: 1,
-      //   splitNumber: 1,
-      //   type: 'piecewise',
-      //   orient: 'horizontal',
-      //   left: 'center',
-      //   top: 65,
-      //   textStyle: {
-      //     color: '#000'
-      //   }
-      // }],
+      visualMap: [{
+        min: 0,
+        max: 1,
+        splitNumber: 1,
+        type: 'piecewise',
+        orient: 'horizontal',
+        left: 'center',
+        top: 65,
+        textStyle: {
+          color: '#000'
+        }
+      }],
       calendar: {
         left: 30,
         right: 30,

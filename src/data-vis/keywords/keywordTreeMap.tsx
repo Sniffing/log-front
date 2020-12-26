@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { WordCount } from '.';
-import ReactEcharts from 'echarts-for-react';
 import { computed } from 'mobx';
+import { ReactEcharts } from '../../custom-components/ReactEcharts';
 
 interface IProps {
   data: WordCount[];

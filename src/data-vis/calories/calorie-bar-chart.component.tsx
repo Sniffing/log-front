@@ -1,11 +1,11 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { computed, observable, action } from 'mobx';
-import ReactEcharts from 'echarts-for-react';
 import { Card, Spin, Alert, Button, Input } from 'antd';
 import { EChartOption } from 'echarts';
 import { CalorieStore } from '../../stores/calorieStore';
 import { ICalorieEntry } from '../../entry-modal/calorie-entry';
+import { ReactEcharts } from '../../custom-components/ReactEcharts';
 
 interface IProps {
   calorieStore?: CalorieStore;
@@ -21,7 +21,7 @@ export class CalorieBarChart extends React.Component<IProps> {
   @observable
   private maintenance = 2000;
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     this.props.calorieStore?.fetch();
   }
 
@@ -130,7 +130,7 @@ export class CalorieBarChart extends React.Component<IProps> {
     this.maintenance = parseInt(event.target.value) || 0;
   }
 
-  public render() {
+  public render(): React.ReactNode {
     if (!this.props.calorieStore || !this.props.calorieStore.fetchingCalories) {
       return 'Error';
     }

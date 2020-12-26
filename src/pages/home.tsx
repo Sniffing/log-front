@@ -27,6 +27,7 @@ import { EventFormErrorObject } from '../entry-modal/event-entry/EventFormErrorO
 import { LogFormObject } from '../entry-modal/log-entry/LogFormObject';
 import { LogFormErrorObject } from '../entry-modal/log-entry/LogFormErrorObject';
 import { FULFILLED } from 'mobx-utils';
+import { WeightLineGraph } from '../data-vis/weight';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -236,7 +237,7 @@ export class Home extends React.Component<IProps> {
         </EntryFormModal> */}
 
         <div className="mainCard">
-          <ExpandingContainer bordered={false}/>
+          <WeightLineGraph/>
         </div>
 
         <div className="analysisCards">

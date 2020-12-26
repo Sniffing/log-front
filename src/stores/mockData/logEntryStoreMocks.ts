@@ -3,8 +3,8 @@ import { IWeightDTO } from '../../data-vis/analysis';
 import { ILastDates, KeywordEntry, Memory } from '../logEntryStore';
 
 export const mockLastDateData: ILastDates = {
-  last: '07-03-2020',
-  first: '07-03-2019',
+  last: '2020-03-07',
+  first: '2019-03-07',
 };
 
 const wordBank = ['tired', 'happy', 'sad', 'upset', 'excited', 'anxious'];

@@ -27,13 +27,15 @@ export class CalendarPage extends React.Component<IProps> {
   private get calendars() {
     const years: number[] = [];
 
-    if (this.props.logEntryStore && this.props.logEntryStore.fetchingDates?.state === 'fulfilled') {
+    if (this.props.logEntryStore.fetchingDates?.state === 'fulfilled') {
       const {first, last} = this.props.logEntryStore?.lastDates;
 
       const firstYear = Utils.dateFromReversedDateString(first).getFullYear();
       const lastYear = Utils.dateFromReversedDateString(last).getFullYear();
 
-      Array((lastYear - firstYear) + 1).fill(0).forEach((_,i) => years.push(i + firstYear));
+      Array((lastYear - firstYear) + 1)
+        .fill(0)
+        .forEach((_,i) => years.push(i + firstYear));
     }
 
     return (
@@ -44,7 +46,6 @@ export class CalendarPage extends React.Component<IProps> {
   }
 
   private getData(year: number): KeywordEntry[] {
-    if (!this.props.logEntryStore) return [];
 
     return this.props.logEntryStore?.keywords
       .filter((entry: KeywordEntry) =>  Number(entry.date.split('-')[0]) === year)

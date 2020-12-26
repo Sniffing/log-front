@@ -8,11 +8,10 @@ import { allStores } from './stores';
 import { Constants } from './App.constants';
 import { IPageConfig } from './pages/page.constants';
 import { Layout } from 'antd';
-import { CalorieList } from './calorie-list';
 
 import './tailwind.output.css';
 
-const { Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
 @observer
 class App extends React.Component<RouteComponentProps> {
@@ -20,9 +19,7 @@ class App extends React.Component<RouteComponentProps> {
     return (
       <Provider  {...allStores}>
         <Layout className="App">
-          <Sider className="sideBar">
-            <CalorieList/>
-          </Sider>
+          <Header>Header here</Header>
           <Layout>
             <Content>
               <Route exact path="/" component={Home} />

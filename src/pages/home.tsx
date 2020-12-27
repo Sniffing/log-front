@@ -1,5 +1,5 @@
 import React from 'react';
-import { message, Spin } from 'antd';
+import { Col, message, Row, Spin } from 'antd';
 import { EntryFormModal, IEntryFormModalProps } from '../entry-modal/entry-modal.component';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
@@ -202,33 +202,6 @@ export class Home extends React.Component<IProps> {
     return content[this.selectedForm] ?? null;
   }
 
-  @computed
-  private get analysisCharts(): IDataVisCard[] {
-    return [
-      {
-        key: 0,
-        title: 'Feelings',
-        component: <KeywordPage/>,
-        cover: <div/>,
-      },
-      {
-        key: 1,
-        title: 'Feelings Calendar',
-        component: <CalendarPage/>,
-      },
-      {
-        key: 2,
-        title: 'Events',
-        component: <LifeEventsPage/>,
-        cover: <div></div>,
-      },
-      {
-        key: 3,
-        title: 'Memories',
-        component: <MemoryPage/>,
-      },
-    ];
-  }
 
   public render(): React.ReactNode {
     return (
@@ -238,22 +211,51 @@ export class Home extends React.Component<IProps> {
           {this.entryFormModalContent}
         </EntryFormModal> */}
 
-        <div className="mainCard">
-          <WeightLineGraph/>
-        </div>
-
-        <div className="analysisCards">
-          {this.analysisCharts
-            // .filter(c => c.key === 0)
-            .map(chart => (
+        <Row gutter={[24,24]} style={{height: '66%'}}>
+          <Col span={16}>
+            <ExpandingContainer
+              bordered={false}
+              title="Weight" key={0}>
+              <WeightLineGraph/>
+            </ExpandingContainer>
+          </Col>
+          <Col span={8}>
+            <Row>
               <ExpandingContainer
                 bordered={false}
-                className="mb-8"
-                title={chart.title} key={chart.key}>
-                {chart.cover ?? chart.component}
+                title="Keywords" key={1}>
+                {/* <KeywordPage/> */}
+                <div>Keywords</div>
               </ExpandingContainer>
-            ))}
-        </div>
+            </Row>
+            <Row>
+              <ExpandingContainer
+                bordered={false}
+                title="Feelings Calendar" key={2}>
+                <CalendarPage/>
+              </ExpandingContainer>
+            </Row>
+          </Col>
+        </Row>
+
+        <Row gutter={[24,24]} style={{height: '33%'}}>
+          <Col span={8}>
+            <ExpandingContainer
+              bordered={false}
+              title="Events" key={2}>
+              {/* <LifeEventsPage/> */}
+              <div>Events</div>
+            </ExpandingContainer>
+          </Col>
+          <Col span={8}>
+            <ExpandingContainer
+              bordered={false}
+              title="Memories" key={2}>
+              <MemoryPage/>
+            </ExpandingContainer>
+          </Col>
+        </Row>
+
       </div>
     );
   }

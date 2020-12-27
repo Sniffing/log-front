@@ -2,3 +2,5 @@ node_modules
 build
 
 src/tailwind.output.css
+
+.eslintcache

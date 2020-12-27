@@ -1,0 +1,39 @@
+@import '../../../antd.customize.less';
+
+.timeline {
+  &_item {
+    &_desc {
+      color: @description-colour;
+    }
+
+    :global {
+      .ant-timeline-item-label {
+        padding-top: 2px;
+        width: auto !important;
+        text-align: left !important;
+      }
+
+      .ant-timeline-item-tail {
+        left: calc(90px + 18px + 6px) !important;
+        text-align: left !important;
+      }
+
+      .ant-timeline-item-head {
+        left: calc(90px + 18px + 6px) !important;
+        text-align: left !important;
+      }
+
+      .ant-timeline-item-content {
+        left: calc(90px + 18px + 6px) !important;
+        width: 300px;
+        max-width: 300px;
+      }
+
+      .ant-timeline-item-content {
+        > p {
+          margin-bottom: 0.25rem;
+        }
+      }
+    }
+  }
+}

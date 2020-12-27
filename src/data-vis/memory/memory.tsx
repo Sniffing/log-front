@@ -76,7 +76,7 @@ export class MemoryPage extends Component<IProps> {
 
   public render(): React.ReactNode {
     return (
-      <div className={`${styles.memory} h-full`}>
+      <div className={styles.memory}>
         {this.props.logEntryStore?.fetchingMemory?.case({
           fulfilled: () => this.memoryDisplayComponent,
           pending: () => <Spin/>,

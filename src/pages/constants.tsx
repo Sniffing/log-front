@@ -14,6 +14,13 @@ export interface IEntryOption {
   icon: JSX.Element;
 }
 
+export interface IDataVisCard {
+  key?: number;
+  title: string;
+  component: React.ReactNode;
+  cover?: React.ReactNode;
+}
+
 export const EntryOptions: IEntryOption[] = [
   {
     label: EntryType.EVENT,

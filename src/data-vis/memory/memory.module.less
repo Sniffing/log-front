@@ -2,24 +2,25 @@
 
 .memory {
   text-align: center;
-  background-color: @grey2 !important;
-  color: white !important;
+  background-color: @grey2;
+  color: white;
   height: 100%;
   width: 100%;
   max-width: 400px;
   max-height:400px;
 
   &_card {
-    border: 1px solid @colour1 !important;
-
-    .ant-card-head {
-      border-bottom: 1px solid @colour1 !important;
-      background-color: @grey3 !important;
-      color: white !important;
+    :global {
+      .ant-card-head {
+        border-bottom: 1px solid @colour1;
+        background-color: @grey3;
+        color: white;
+      }
     }
 
-    background-color: @grey3 !important;
-    color: white !important;
+    border: 1px solid @colour1;
+    background-color: @grey3;
+    color: white;
   }
 
   &_buttons {

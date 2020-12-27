@@ -3,9 +3,7 @@ const CracoLessPlugin = require('craco-less');
 
 module.exports = {
   plugins: [
-    {
-      plugin: CracoAntDesignPlugin,
-    },
+
     {
       plugin: CracoLessPlugin,
       options: {
@@ -21,6 +19,9 @@ module.exports = {
           }
         }
       }
+    },
+    {
+      plugin: CracoAntDesignPlugin,
     }
   ],
   style: {

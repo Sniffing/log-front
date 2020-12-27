@@ -6,7 +6,7 @@ import { LifeEventStore } from '../../stores/lifeEventStore';
 import { ILifeEvent } from '../../entry-modal/event-entry';
 import { Utils } from '../../App.utils';
 
-import './life-events.less';
+import styles from './life-events.module.less';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -62,7 +62,7 @@ export class LifeEventsPage extends React.Component<IProps> {
           </Affix>
         </div>
 
-        <Timeline mode="left" reverse className="timeline">
+        <Timeline mode="left" reverse className={styles.timeline}>
           {this.data.map((event: ILifeEvent) => {
             const good = event.nature === 'good';
             const nature = event.nature;
@@ -90,9 +90,9 @@ export class LifeEventsPage extends React.Component<IProps> {
             return (
               <Timeline.Item key={event.date} {...timelineDotConfig}
                 label={Utils.unixTimeToDateString({time:event.date * 1000})}
-                className="timelineItem">
-                <p className="name">{event.name}</p>
-                <p className="desc">{event.description}</p>
+                className={styles.timeline_item}>
+                <p>{event.name}</p>
+                <p className={styles.timeline_item_desc}>{event.description}</p>
               </Timeline.Item>
             );}
           )}

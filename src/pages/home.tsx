@@ -11,7 +11,7 @@ import { LogEntry, dateFormat, ILogEntry } from '../entry-modal/log-entry';
 import { LogEntryStore } from '../stores/logEntryStore';
 import moment from 'moment';
 import { EntryFormSelector } from '../custom-components/entry-form-select/entry-form-selector.component';
-import { EntryOptions, EntryType } from './constants';
+import { EntryOptions, EntryType, IDataVisCard } from './constants';
 import { ExpandingContainer } from '../custom-components/expanding-container/expanding-container.component';
 
 import './home.less';
@@ -203,12 +203,13 @@ export class Home extends React.Component<IProps> {
   }
 
   @computed
-  private get analysisCharts() {
+  private get analysisCharts(): IDataVisCard[] {
     return [
       {
         key: 0,
         title: 'Feelings',
         component: <KeywordPage/>,
+        cover: <div/>,
       },
       {
         key: 1,
@@ -219,6 +220,7 @@ export class Home extends React.Component<IProps> {
         key: 2,
         title: 'Events',
         component: <LifeEventsPage/>,
+        cover: <div></div>,
       },
       {
         key: 3,
@@ -248,7 +250,7 @@ export class Home extends React.Component<IProps> {
                 bordered={false}
                 className="mb-8"
                 title={chart.title} key={chart.key}>
-                {chart.component}
+                {chart.cover ?? chart.component}
               </ExpandingContainer>
             ))}
         </div>

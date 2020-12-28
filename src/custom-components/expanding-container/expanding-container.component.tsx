@@ -28,10 +28,11 @@ export class ExpandingContainer extends React.Component<CardProps> {
   }
 
   public render(): React.ReactNode {
-    const {children, ...rest} = this.props;
+    const {children, bordered = false, ...rest} = this.props;
     return (
       <Card
         {...rest}
+        bordered={bordered}
         hoverable
         title={this.title}
         onClick={this.toggleModal}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, message, Row, Spin } from 'antd';
+import { message, Spin } from 'antd';
 import { EntryFormModal, IEntryFormModalProps } from '../entry-modal/entry-modal.component';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
@@ -28,6 +28,11 @@ import { LogFormObject } from '../entry-modal/log-entry/LogFormObject';
 import { LogFormErrorObject } from '../entry-modal/log-entry/LogFormErrorObject';
 import { FULFILLED } from 'mobx-utils';
 import { WeightLineGraph } from '../data-vis/weight';
+import GridLayout from 'react-grid-layout';
+import { Responsive, WidthProvider } from 'react-grid-layout';
+
+const ResponsiveGridLayout = WidthProvider(Responsive);
+
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
@@ -202,7 +207,6 @@ export class Home extends React.Component<IProps> {
     return content[this.selectedForm] ?? null;
   }
 
-
   public render(): React.ReactNode {
     return (
       <div className="home">
@@ -211,54 +215,63 @@ export class Home extends React.Component<IProps> {
           {this.entryFormModalContent}
         </EntryFormModal> */}
 
-        <Row gutter={[24,24]} style={{height: '66%'}}>
-          <Col span={16}>
-            <ExpandingContainer
-              bordered={false}
-              title="Weight" key={0}>
+        <ResponsiveGridLayout layouts={this.gridLayout} style={{height: '100%'}} cols={this.gridColumns}>
+          <div key="main">
+            <ExpandingContainer title="Weight">
               <WeightLineGraph/>
             </ExpandingContainer>
-          </Col>
-          <Col span={8}>
-            <Row>
-              <ExpandingContainer
-                bordered={false}
-                title="Keywords" key={1}>
-                {/* <KeywordPage/> */}
-                <div>Keywords</div>
-              </ExpandingContainer>
-            </Row>
-            <Row>
-              <ExpandingContainer
-                bordered={false}
-                title="Feelings Calendar" key={2}>
-                <CalendarPage/>
-              </ExpandingContainer>
-            </Row>
-          </Col>
-        </Row>
-
-        <Row gutter={[24,24]} style={{height: '33%'}}>
-          <Col span={8}>
-            <ExpandingContainer
-              bordered={false}
-              title="Events" key={2}>
-              {/* <LifeEventsPage/> */}
-              <div>Events</div>
+          </div>
+          <div key="a">
+            <ExpandingContainer title="Keywords">
+              {/* <KeywordPage/> */}
+              <div>Keywords</div>
             </ExpandingContainer>
-          </Col>
-          <Col span={8}>
-            <ExpandingContainer
-              bordered={false}
-              title="Memories" key={2}>
+          </div>
+          <div key="b">
+            <ExpandingContainer title="Feelings Calendar">
+              <CalendarPage/>
+            </ExpandingContainer>
+          </div>
+          <div key="c">
+            <ExpandingContainer title="Events">
+              <LifeEventsPage/>
+            </ExpandingContainer>
+          </div>
+          <div key="d">
+            <ExpandingContainer title="Memories">
               <MemoryPage/>
             </ExpandingContainer>
-          </Col>
-        </Row>
-
+          </div>
+        </ResponsiveGridLayout>
       </div>
     );
   }
+
+  private layout: GridLayout.Layout[] = [
+    {i: 'main', static: true, x:0, y:0, w:4, h:4},
+    {i: 'a', static: true, x:4, y:0, w:2, h:2},
+    {i:'b', static: true,x:4, y:2, w:2, h:2},
+    {i:'c', static: true,x:0, y:4, w:2, h:2},
+    {i:'d', static: true,x:2, y:4, w:2, h:2},
+  ]
+
+  private gridColumns = {
+    lg:6,
+    md:6,
+    sm:6,
+    xs:6,
+    xxs:6,
+  }
+
+  private gridLayout: GridLayout.Layouts = {
+    lg: this.layout,
+    md:this.layout,
+    sm:this.layout,
+    xs:this.layout,
+    xxs:this.layout,
+  }
+
+
 
   @action.bound
   private setEntryModalVisible(visible: boolean) {

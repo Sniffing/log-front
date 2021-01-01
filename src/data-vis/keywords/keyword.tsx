@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Input, Row, Spin } from 'antd';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
 import { pull } from 'lodash';
 import {
@@ -18,9 +18,8 @@ interface IProps {
   logEntryStore?: LogEntryStore;
 }
 
-@inject('logEntryStore')
 @observer
-export class KeywordPage extends React.Component<IProps> {
+export class KeywordView extends React.Component<IProps> {
   @observable
   private bannedList: string[] = [];
 

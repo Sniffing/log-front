@@ -1,18 +1,17 @@
 import React from 'react';
 import { Card, Timeline, Spin, Affix, PageHeader, Button } from 'antd';
-import { inject, observer } from 'mobx-react';
 import { computed, observable, action } from 'mobx';
 import { LifeEventStore } from '../../stores/lifeEventStore';
 import { ILifeEvent } from '../../entry-modal/event-entry';
 import { Utils } from '../../App.utils';
 
 import styles from './life-events.module.less';
+import { observer } from 'mobx-react';
 
 interface IProps {
   lifeEventStore?: LifeEventStore;
 }
 
-@inject('lifeEventStore')
 @observer
 export class LifeEventsPage extends React.Component<IProps> {
 

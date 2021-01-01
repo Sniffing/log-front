@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Slider, Spin } from 'antd';
-import { observer, inject } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { observable, action, computed } from 'mobx';
 import { Rejected } from '../../custom-components';
 import { LogEntryStore } from '../../stores/logEntryStore';
@@ -14,7 +14,6 @@ interface IProps {
   logEntryStore?: LogEntryStore;
 }
 
-@inject('logEntryStore')
 @observer
 export class WeightLineGraph extends Component<IProps> {
 

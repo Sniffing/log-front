@@ -5,8 +5,6 @@ import './App.less';
 
 import { Home } from './pages';
 import { allStores } from './stores';
-import { Constants } from './App.constants';
-import { IPageConfig } from './pages/page.constants';
 import { Layout } from 'antd';
 
 const { Header, Content } = Layout;
@@ -21,13 +19,13 @@ class App extends React.Component<RouteComponentProps> {
           <Layout>
             <Content>
               <Route exact path="/" component={Home} />
-              {Constants.pageConfigs.map((page: IPageConfig) => (
+              {/* {Constants.pageConfigs.map((page: IPageConfig) => (
                 <Route
                   key={page.page}
                   path={page.path}
                   component={page.component}
                 />
-              ))}
+              ))} */}
             </Content>
           </Layout>
         </Layout>

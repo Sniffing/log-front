@@ -15,11 +15,7 @@ import { EntryOptions, EntryType, IDataVisCard } from './constants';
 import { ExpandingContainer } from '../custom-components/expanding-container/expanding-container.component';
 
 import './home.less';
-import { KeywordPage } from '../data-vis/keywords';
-import { MemoryPage } from '../data-vis/memory';
-import { LifeEventsPage } from '../data-vis/life-event';
 import CalendarKeyword from '../data-vis/calendar/calendar-keyword';
-import { CalendarPage } from '../data-vis/calendar';
 import { CalorieFormObject } from '../entry-modal/calorie-entry/CalorieFormObject';
 import { CalorieFormErrorObject } from '../entry-modal/calorie-entry/CalorieFormErrorObject';
 import { EventFormObject } from '../entry-modal/event-entry/EventFormObject';
@@ -27,9 +23,13 @@ import { EventFormErrorObject } from '../entry-modal/event-entry/EventFormErrorO
 import { LogFormObject } from '../entry-modal/log-entry/LogFormObject';
 import { LogFormErrorObject } from '../entry-modal/log-entry/LogFormErrorObject';
 import { FULFILLED } from 'mobx-utils';
-import { WeightLineGraph } from '../data-vis/weight';
 import GridLayout from 'react-grid-layout';
 import { Responsive, WidthProvider } from 'react-grid-layout';
+import { KeywordTile } from '../data-vis/keywords/keyword-tile/keyword-tile.component';
+import { MemoryTile } from '../data-vis/memory/memory-tile/memory-tile.component';
+import { LifeEventTile } from '../data-vis/life-event/life-event-tile/life-event-tile.component';
+import { WeightTile } from '../data-vis/weight/weight-tile/weight-tile.component';
+import { FeelingCalendarTile } from '../data-vis/calendar/feeling-calendar-tile/feeling-calendar-tile.component';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -216,32 +216,11 @@ export class Home extends React.Component<IProps> {
         </EntryFormModal> */}
 
         <ResponsiveGridLayout layouts={this.gridLayout} style={{height: '100%'}} cols={this.gridColumns}>
-          <div key="main">
-            <ExpandingContainer title="Weight">
-              <WeightLineGraph/>
-            </ExpandingContainer>
-          </div>
-          <div key="a">
-            <ExpandingContainer title="Keywords">
-              {/* <KeywordPage/> */}
-              <div>Keywords</div>
-            </ExpandingContainer>
-          </div>
-          <div key="b">
-            <ExpandingContainer title="Feelings Calendar">
-              <CalendarPage/>
-            </ExpandingContainer>
-          </div>
-          <div key="c">
-            <ExpandingContainer title="Events">
-              <LifeEventsPage/>
-            </ExpandingContainer>
-          </div>
-          <div key="d">
-            <ExpandingContainer title="Memories">
-              <MemoryPage/>
-            </ExpandingContainer>
-          </div>
+          <div key="main"><WeightTile/></div>
+          <div key="a"><KeywordTile/></div>
+          <div key="b"><FeelingCalendarTile/></div>
+          <div key="c"><LifeEventTile/></div>
+          <div key="d"><MemoryTile/></div>
         </ResponsiveGridLayout>
       </div>
     );

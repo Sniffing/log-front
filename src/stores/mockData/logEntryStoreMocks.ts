@@ -29,6 +29,16 @@ export const mockMemoryData: Memory[] = Array.from({length: 50}, x => x).map(_ =
   };
 });
 
+const addLastYear = () => {
+  const lastYear = new Date();
+  lastYear.setFullYear(lastYear.getFullYear() -1);
+  mockMemoryData.push({
+    date: `${Utils.toReversedDate(lastYear)}`,
+    text: 'Last year!'
+  });
+};
+addLastYear();
+
 let seedDate = randDate();
 export const mockWeightData: IWeightDTO[] = Array.from({length: 50}, x => x).map(_ => {
   const day = 60 * 60 * 24 * 1000;

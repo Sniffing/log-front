@@ -1,27 +1,22 @@
 import React, { Component } from 'react';
 import { Button, Card, Spin, Row } from 'antd';
 import { observable, action, computed } from 'mobx';
-import { observer, inject } from 'mobx-react';
+import { observer } from 'mobx-react';
 
-import * as styles from './memory.module.less';
-import { Utils } from '../../App.utils';
-import { Rejected } from '../../custom-components';
-import { LogEntryStore, Memory } from '../../stores/logEntryStore';
+import * as styles from './memory-page.module.less';
+import { Utils } from '../../../App.utils';
+import { Rejected } from '../../../custom-components';
+import { LogEntryStore, Memory } from '../../../stores/logEntryStore';
 import { StepBackwardOutlined, CaretLeftOutlined, CaretRightOutlined, StepForwardOutlined } from '@ant-design/icons/lib/icons';
 
 interface IProps {
   logEntryStore?: LogEntryStore;
 }
 
-@inject('logEntryStore')
 @observer
 export class MemoryPage extends Component<IProps> {
   @observable
   private currentIndex = 0;
-
-  public componentDidMount(): void {
-    this.props.logEntryStore?.fetchMemory();
-  }
 
   @action
   private rollNewMemory = () => {

@@ -13,6 +13,10 @@ export class Utils {
     return `${('0' + date.getDate()).slice(-2)}${divider}${('0' + (date.getMonth()+1)).slice(-2)}${divider}${date.getFullYear()}`;
   }
 
+  public static addYearToDateString(date:string, amount: number): string {
+    const [day, month, year] = date.split('-');
+    return `${day}-${month}-${Number(year) + amount}`;
+  }
 
   public static displayStringfromReversedDate(date: string): string {
     const parsedDate: Date = Utils.dateFromReversedDateString(date);

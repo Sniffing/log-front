@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 import { KEYWORD_URL, TEXT_URL, WEIGHT_URL, LAST_DATES_URL, LOG_ENTRY_URL } from '.';
 import get, { AxiosResponse } from 'axios';
@@ -42,6 +42,8 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
 
   @observable
   public fetchingDates: IPromiseBasedObservable<AxiosResponse<ILastDates>>;
+
+  public keywordCounts: Record<string, number> = {};
 
   @observable
   public keywords: KeywordEntry[] = [];
@@ -123,6 +125,24 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
   @action.bound
   public setLatestDate(date: string): void {
     this.lastDates.last = date;
+  }
+
+  @action
+  public setKeywordCounts(): void {
+    const localDictionary: Record<string, number> = {};
+
+    this.keywords.forEach((entry: KeywordEntry) => {
+      entry.keywords.forEach((word: string) => {
+        // eslint-disable-next-line no-prototype-builtins
+        if (!localDictionary.hasOwnProperty(word)) {
+          localDictionary[word] = 1;
+        } else {
+          localDictionary[word] += 1;
+        }
+      });
+    });
+
+    this.keywordCounts = localDictionary;
   }
 
   @action

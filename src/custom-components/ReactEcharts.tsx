@@ -4,6 +4,7 @@ import EChartsNextForReactCore from 'echarts-next-for-react';
 
 interface IProps {
   option: EChartOption;
+  className?: string;
 }
 
 export class ReactEcharts extends React.Component<IProps> {
@@ -18,7 +19,7 @@ export class ReactEcharts extends React.Component<IProps> {
 
   public render(): JSX.Element {
     return (
-      <EChartsNextForReactCore option={this.props.option} />
+      <EChartsNextForReactCore className={this.props.className} option={this.props.option} />
     );
   }
 }

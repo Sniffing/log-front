@@ -7,11 +7,11 @@ import {
   WordCount,
   KeywordList,
   KeywordTreemap,
-} from '.';
-import { Rejected } from '../../custom-components';
-import { LogEntryStore, KeywordEntry } from '../../stores/logEntryStore';
+} from '..';
+import { Rejected } from '../../../custom-components';
+import { LogEntryStore } from '../../../stores/logEntryStore';
 
-import './keyword.less';
+import './keyword-view.less';
 import { PENDING } from 'mobx-utils';
 
 interface IProps {
@@ -34,26 +34,8 @@ export class KeywordView extends React.Component<IProps> {
   }
 
   @computed
-  private get wordCounts(): Record<string, number> {
-    const localDictionary: Record<string, number> = {};
-
-    this.props.logEntryStore?.keywords.forEach((entry: KeywordEntry) => {
-      entry.keywords.forEach((word: string) => {
-        // eslint-disable-next-line no-prototype-builtins
-        if (!localDictionary.hasOwnProperty(word)) {
-          localDictionary[word] = 1;
-        } else {
-          localDictionary[word] += 1;
-        }
-      });
-    });
-
-    return localDictionary;
-  }
-
-  @computed
   private get activeWords(): WordCount[] {
-    const displayTerms = Object.entries(this.wordCounts)
+    const displayTerms = Object.entries(this.props.logEntryStore?.keywordCounts)
       .filter(([key, _]) => !this.bannedList.includes(key))
       .filter(([_, value]) => value > this.filterAmount)
       .map(([key, value]) => ({ key, value }));
@@ -67,7 +49,7 @@ export class KeywordView extends React.Component<IProps> {
 
   @computed
   private get allWords(): WordCount[] {
-    const words = Object.entries(this.wordCounts)
+    const words = Object.entries(this.props.logEntryStore?.keywordCounts)
       .map(([key, value]) => ({ key, value }));
 
     words.slice().sort((a, b) => {

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { WordCount } from '.';
+import { WordCount } from '..';
 import { computed } from 'mobx';
-import { ReactEcharts } from '../../custom-components/ReactEcharts';
+import { ReactEcharts } from '../../../custom-components/ReactEcharts';
+import { LogEntryStore } from '../../../stores/logEntryStore';
 
+import './keyword-treemap.less';
 interface IProps {
   data: WordCount[];
   minCount: number;
+  logEntryStore?: LogEntryStore;
 }
 
 @observer
@@ -28,14 +31,22 @@ export class KeywordTreemap extends Component<IProps> {
     return {
       series: [{
         type: 'treemap',
-        data: keywords
+        data: keywords,
+        nodeClick: false,
+        width: '100%',
+        height: '100%',
+        roam: false,
+        silent: true,
+        breadcrumb: {
+          show: false,
+        }
       }]
     };
   }
 
   public render(): React.ReactNode {
     return (
-      <ReactEcharts option={this.option}/>
+      <ReactEcharts className="treeMap" option={this.option}/>
     );
   }
 }

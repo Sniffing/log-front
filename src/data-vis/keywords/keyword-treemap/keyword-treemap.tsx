@@ -17,6 +17,7 @@ export class KeywordTreemap extends Component<IProps> {
 
   @computed
   private get option() {
+    console.log('data change', this.props.data);
     const keywords = Array.isArray(this.props.data)
       ? this.props.data.filter(({value}: WordCount) => {
         return value > this.props.minCount;

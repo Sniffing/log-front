@@ -50,7 +50,12 @@ export class ExpandingContainer extends React.Component<IProps> {
           {children}
         </Card>
 
-        <Modal title={this.title} visible={this.visible} closable={true} footer={null} onCancel={this.toggleModal}>
+        <Modal
+          title={this.title}
+          visible={this.visible}
+          closable={true} footer={null}
+          className="modal"
+          onCancel={this.toggleModal}>
           {expandedComponent}
         </Modal>
       </>

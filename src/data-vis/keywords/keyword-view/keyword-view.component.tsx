@@ -8,7 +8,6 @@ import {
   KeywordList,
   KeywordTreemap,
 } from '..';
-import { Rejected } from '../../../custom-components';
 import { LogEntryStore } from '../../../stores/logEntryStore';
 
 import './keyword-view.less';
@@ -24,10 +23,7 @@ export class KeywordView extends React.Component<IProps> {
   private bannedList: string[] = [];
 
   @observable
-  private dictionary: Record<string, number> = {};
-
-  @observable
-  private filterAmount= 5;
+  private filterAmount = 5;
 
   public async componentDidMount(): Promise<void> {
     await this.props.logEntryStore.fetchKeywords();
@@ -35,15 +31,17 @@ export class KeywordView extends React.Component<IProps> {
 
   @computed
   private get activeWords(): WordCount[] {
-    const displayTerms = Object.entries(this.props.logEntryStore?.keywordCounts)
-      .filter(([key, _]) => !this.bannedList.includes(key))
-      .filter(([_, value]) => value > this.filterAmount)
-      .map(([key, value]) => ({ key, value }));
+    const displayTerms = this.allWords
+      .filter(({key, value}) => {
+        return !this.bannedList.includes(key) &&
+          value > this.filterAmount;
+      });
 
     displayTerms.slice().sort((a, b) => {
       return -(a.value - b.value);
     });
 
+    console.log('display', displayTerms);
     return displayTerms;
   }
 
@@ -82,35 +80,31 @@ export class KeywordView extends React.Component<IProps> {
     }
 
     return (
-      <div className="keyword">
-        {logEntryStore.fetchingKeywords?.case({
-          fulfilled: () => (
-            <Row>
-              <Col className="treemap">
-                <KeywordTreemap data={this.activeWords} minCount={this.filterAmount} />
-              </Col>
-              <Col className="filters">
-                <div className="mb-2">Number of days recorded: {data?.length}
-                </div>
-                <div className="mb-4">
-                  <span>Filter by min occurrence</span>
-                  <Input
-                    type="number"
-                    value={this.filterAmount}
-                    onChange={this.setFilterAmount}
-                  />
-                </div>
-                <KeywordList
-                  list={this.allWords}
-                  updateList={this.toggleInBlackList}
-                  minCount={this.filterAmount}
-                />
-              </Col>
-            </Row>
-          ),
-          rejected: () => <Rejected message={'Error fetching Keywords'}/>,
-        })}
-      </div>
+      <Row className="keyword">
+        <Col className="treemap">
+          <KeywordTreemap
+            data={this.activeWords}
+            minCount={this.filterAmount}
+          />
+        </Col>
+        <Col className="filters">
+          <div className="mb-2">Number of days recorded: {data?.length}
+          </div>
+          <div className="mb-4">
+            <span>Filter by min occurrence</span>
+            <Input
+              type="number"
+              value={this.filterAmount}
+              onChange={this.setFilterAmount}
+            />
+          </div>
+          <KeywordList
+            list={this.allWords}
+            updateList={this.toggleInBlackList}
+            minCount={this.filterAmount}
+          />
+        </Col>
+      </Row>
     );
   }
 }

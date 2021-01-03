@@ -65,6 +65,7 @@ export class LogEntryStore extends BaseStore<ILogEntry> {
     if (this.shouldMock) {
       this.setKeywords(mockKeywordData);
       this.fetchingKeywords = fromPromise(generateMockAxisResponse<any>());
+      this.setKeywordCounts();
       return;
     }
 

@@ -1,1 +1,1 @@
-export * from './life-events.component';
+export * from './life-event-view/life-events.component';

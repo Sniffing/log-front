@@ -1,11 +1,11 @@
 import React from 'react';
-import { Card, Timeline, Spin, Affix, PageHeader, Button } from 'antd';
-import { computed, observable, action } from 'mobx';
-import { LifeEventStore } from '../../stores/lifeEventStore';
-import { ILifeEvent } from '../../entry-modal/event-entry';
-import { Utils } from '../../App.utils';
+import { Card, Timeline, Spin } from 'antd';
+import { computed } from 'mobx';
+import { LifeEventStore } from '../../../stores/lifeEventStore';
+import { ILifeEvent } from '../../../entry-modal/event-entry';
+import { Utils } from '../../../App.utils';
 
-import styles from './life-events.module.less';
+import styles from './life-event-view.module.less';
 import { observer } from 'mobx-react';
 
 interface IProps {
@@ -13,20 +13,7 @@ interface IProps {
 }
 
 @observer
-export class LifeEventsPage extends React.Component<IProps> {
-
-  @observable
-  private container: Window | HTMLElement | null = null;
-
-  public componentDidMount(): void {
-    this.props.lifeEventStore?.fetch();
-  }
-
-  @action.bound
-  private setContainer(ref: any): void{
-    this.container = ref;
-  }
-
+export class LifeEventView extends React.Component<IProps> {
   @computed
   public get data(): ILifeEvent[] {
     return (this.props.lifeEventStore?.lifeEvents || [])
@@ -44,23 +31,6 @@ export class LifeEventsPage extends React.Component<IProps> {
 
     return (
       <Card>
-        <div ref={this.setContainer}>
-          <Affix target={() => this.container}>
-            <PageHeader
-              ghost={false}
-              title={null}
-              style={{
-                padding: 0
-              }}
-              extra={[
-                <Button key="good">
-                Affix top
-                </Button>,
-              ]}
-            />
-          </Affix>
-        </div>
-
         <Timeline mode="left" reverse className={styles.timeline}>
           {this.data.map((event: ILifeEvent) => {
             const good = event.nature === 'good';

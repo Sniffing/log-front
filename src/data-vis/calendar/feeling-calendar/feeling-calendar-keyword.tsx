@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import {  Spin, Card } from 'antd';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import { Rejected } from '../../custom-components';
+import { Rejected } from '../../../custom-components';
 
-import { Utils } from '../../App.utils';
-import { LogEntryStore, KeywordEntry } from '../../stores/logEntryStore';
+import { Utils } from '../../../App.utils';
+import { LogEntryStore, KeywordEntry } from '../../../stores/logEntryStore';
 import { EChartOption } from 'echarts';
-import { ReactEcharts } from '../../custom-components/ReactEcharts';
+import { ReactEcharts } from '../../../custom-components/ReactEcharts';
 interface IProps {
   logEntryStore?: LogEntryStore;
   data: KeywordEntry[];
@@ -16,7 +16,7 @@ interface IProps {
 
 @inject('logEntryStore')
 @observer
-class CalendarKeyword extends Component<IProps> {
+export class FeelingCalendar extends Component<IProps> {
 
   @observable
   private searchTerm = '';
@@ -81,5 +81,3 @@ class CalendarKeyword extends Component<IProps> {
     );
   }
 }
-
-export default CalendarKeyword;

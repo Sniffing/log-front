@@ -1,18 +1,18 @@
 import React from 'react';
-import CalendarKeyword from './calendar-keyword';
 import { Spin, Select } from 'antd';
 import { Rejected } from '../../custom-components';
 import { computed, action, observable } from 'mobx';
 import { Utils } from '../../App.utils';
 import { KeywordEntry, LogEntryStore } from '../../stores/logEntryStore';
 import { observer } from 'mobx-react';
+import { FeelingCalendar } from './feeling-calendar/feeling-calendar-keyword';
 
 interface IProps {
   logEntryStore?: LogEntryStore;
 }
 
 @observer
-export class CalendarPage extends React.Component<IProps> {
+export class FeelingCalendarView extends React.Component<IProps> {
 
   @observable
   private filterTerms: string[] = [];
@@ -39,7 +39,7 @@ export class CalendarPage extends React.Component<IProps> {
 
     return (
       <div>
-        {years.map(year => <CalendarKeyword key={year} data={this.getData(year)} year={year}/>)}
+        {years.map(year => <FeelingCalendar key={year} data={this.getData(year)} year={year}/>)}
       </div>
     );
   }

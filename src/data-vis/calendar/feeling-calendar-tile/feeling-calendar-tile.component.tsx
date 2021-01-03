@@ -1,6 +1,6 @@
 import { inject, observer } from 'mobx-react';
 import React from 'react';
-import { CalendarPage } from '..';
+import { FeelingCalendarView } from '..';
 import { ExpandingContainer } from '../../../custom-components/expanding-container/expanding-container.component';
 import { LogEntryStore } from '../../../stores/logEntryStore';
 
@@ -16,7 +16,7 @@ export class FeelingCalendarTile extends React.Component<IProps> {
       <ExpandingContainer
         title="Feelings Calendar"
         expandedComponent={
-          <CalendarPage logEntryStore={this.props.logEntryStore}/>
+          <FeelingCalendarView logEntryStore={this.props.logEntryStore}/>
         }>
         <div>Feelings</div>
       </ExpandingContainer>

@@ -15,7 +15,6 @@ import { EntryOptions, EntryType, IDataVisCard } from './constants';
 import { ExpandingContainer } from '../custom-components/expanding-container/expanding-container.component';
 
 import './home.less';
-import CalendarKeyword from '../data-vis/calendar/calendar-keyword';
 import { CalorieFormObject } from '../entry-modal/calorie-entry/CalorieFormObject';
 import { CalorieFormErrorObject } from '../entry-modal/calorie-entry/CalorieFormErrorObject';
 import { EventFormObject } from '../entry-modal/event-entry/EventFormObject';

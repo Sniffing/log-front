@@ -5,7 +5,7 @@ import { ExpandingContainer } from '../../../custom-components/expanding-contain
 import { LogEntryStore } from '../../../stores/logEntryStore';
 import { computed } from 'mobx';
 import { Utils } from '../../../App.utils';
-import { Spin } from 'antd';
+import { Empty, Spin } from 'antd';
 
 interface IProps {
   logEntryStore?: LogEntryStore;
@@ -27,7 +27,19 @@ export class MemoryTile extends React.Component<IProps> {
 
     const reversedLastYear = Utils.unreverseDateFromServer(lastYear);
     const lastYearMemory = memories.find(x => x.date === reversedLastYear);
-    return lastYearMemory?.text ?? 'No memory on this day...';
+
+    if (!lastYearMemory) {
+      return <Empty description="No entry on this date last year"/>;
+    }
+
+    return (
+      <div>
+        <span>
+          {Utils.displayStringfromReversedDate(lastYearMemory.date)}
+        </span>
+        <p>{lastYearMemory.text}</p>
+      </div>
+    );
   }
 
   @computed
@@ -35,8 +47,6 @@ export class MemoryTile extends React.Component<IProps> {
     return (
       <div>
         <p>There are <strong>{this.props.logEntryStore.memories?.length}</strong> records</p>
-        <p>On this day last year:</p>
-
         {this.lastYearMemory}
       </div>
     );

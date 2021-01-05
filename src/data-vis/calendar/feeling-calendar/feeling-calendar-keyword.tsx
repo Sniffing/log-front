@@ -29,6 +29,7 @@ interface IProps {
   logEntryStore?: LogEntryStore;
   data: KeywordEntry[];
   range: ICalendarRange;
+  title?: string;
 }
 
 @inject('logEntryStore')
@@ -43,8 +44,9 @@ export class FeelingCalendar extends Component<IProps> {
 
     return this.props.data
       .filter((k: KeywordEntry) => {
+        //receiving ["date string", count] instead of expected
+        console.log(k, k.date);
         const date = Utils.dateFromReversedDateString(k.date);
-        console.log('hi', from, to, date);
         if (from > date) {
           return false;
         }
@@ -61,12 +63,13 @@ export class FeelingCalendar extends Component<IProps> {
   }
 
   private getOption(range: ICalendarRange): EChartOption<EChartOption.SeriesHeatmap> {
+    const {title} = this.props;
     const mapRange = echartRangeFromCalendarRange(range);
 
     return {
       title: {
         left: 'center',
-        text: `${isArray(mapRange) ? mapRange.join(' - ') : mapRange}`,
+        text: title ?? `${isArray(mapRange) ? mapRange.join(' - ') : mapRange}`,
         textStyle: {
           fontSize: 16
         }

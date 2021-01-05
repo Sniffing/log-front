@@ -1,6 +1,5 @@
 import { Empty } from 'antd';
-import { range } from 'lodash';
-import { computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
@@ -18,13 +17,37 @@ interface IProps {
 @observer
 export class FeelingCalendarTile extends React.Component<IProps> {
 
-  public componentDidMount(): void {
+  @observable
+  private index = 0;
+
+  @observable
+  private key = '';
+
+  @observable
+  private pastDataMap = {};
+
+  @observable
+  private pastData: KeywordEntry[] = [];
+
+  public async componentDidMount(): Promise<void> {
     this.props.logEntryStore.fetchLastDates();
-    this.props.logEntryStore.fetchKeywords();
+    await this.props.logEntryStore.fetchKeywords();
+    this.generatePastData();
+    this.generatePastDataMap();
+
+    setInterval(this.updateIndex, 5000);
   }
 
-  @computed
-  private get monthData() {
+  @action.bound
+  private updateIndex() {
+    const keys = Object.keys(this.pastDataMap);
+    this.index = (this.index + 1) % (keys.length ?? 1);
+    this.key = keys[this.index];
+    console.log('updated index', this.index, this.key);
+  }
+
+  @action.bound
+  private generatePastData() {
     const {logEntryStore} = this.props;
     const now = new Date();
     const { to, from } = dateFromCalendarRange({
@@ -34,8 +57,9 @@ export class FeelingCalendarTile extends React.Component<IProps> {
       }
     });
 
-    return logEntryStore.keywords
+    this.pastData = logEntryStore.keywords
       .filter((k: KeywordEntry) => {
+        console.log(k, k.date);
         const date = Utils.dateFromReversedDateString(k.date);
         if (from > date) {
           return false;
@@ -44,17 +68,33 @@ export class FeelingCalendarTile extends React.Component<IProps> {
           return date <= to;
         }
         return true;
-      })
-      .map((k: KeywordEntry) => {
-        const date = Utils.dateFromReversedDateString(k.date);
-        const dateVal = [date.getFullYear(), date.getMonth()+1, date.getDate()].join('/');
-        return [dateVal, 1];
       });
   }
 
+  @action.bound
+  private generatePastDataMap() {
+    const dataMap = {};
+
+    this.pastData.forEach(({date, keywords}) => {
+      const d = Utils.dateFromReversedDateString(date);
+      const dateVal = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('/');
+      keywords.forEach(kw => {
+        if (dataMap[kw]) {
+          dataMap[kw].push([dateVal, 1]);
+        } else {
+          dataMap[kw] = [[dateVal, 1]];
+        }
+      });
+    });
+
+    this.pastDataMap = dataMap;
+    console.log(this.pastDataMap);
+  }
+
+  @computed
   private get tileView(): React.ReactNode {
     const {logEntryStore: store} = this.props;
-    const from = moment().subtract(3,'months').toDate();
+    const from = moment().subtract(1,'months').toDate();
     const to = new Date();
     const loadFail = !store.keywords.length || !store.lastDates.first || !store.lastDates.last;
 
@@ -62,18 +102,21 @@ export class FeelingCalendarTile extends React.Component<IProps> {
       return <Empty description=""/>;
     }
 
-
     return (
-      <FeelingCalendar logEntryStore={this.props.logEntryStore} data={this.props.logEntryStore.keywords} range={{
-        from: {
-          year: from.getFullYear(),
-          month: from.getMonth(),
-        },
-        to: {
-          year: to.getFullYear(),
-          month: to.getMonth(),
-        }
-      }}/>
+      <FeelingCalendar
+        logEntryStore={this.props.logEntryStore}
+        data={this.pastDataMap[this.key] ?? []}
+        title={this.key}
+        range={{
+          from: {
+            year: from.getFullYear(),
+            month: from.getMonth(),
+          },
+          to: {
+            year: to.getFullYear(),
+            month: to.getMonth()+1,
+          }
+        }}/>
     );
   }
 

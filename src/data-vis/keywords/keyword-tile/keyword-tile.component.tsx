@@ -7,7 +7,7 @@ import React from 'react';
 import { KeywordView, WordCount } from '..';
 import { Utils } from '../../../App.utils';
 import { ExpandingContainer } from '../../../custom-components/expanding-container/expanding-container.component';
-import { KeywordEntry, LogEntryStore } from '../../../stores/logEntryStore';
+import { LogEntryStore } from '../../../stores/logEntryStore';
 import { KeywordTreemap } from '../keyword-treemap/keyword-treemap';
 
 interface IProps {
@@ -25,7 +25,7 @@ export class KeywordTile extends React.Component<IProps> {
   @computed
   private get data(): WordCount[] {
     const data = this.props.logEntryStore.keywords;
-    const monthBoundary = Utils.toReversedDate(moment().subtract(7, 'months').subtract(1, 'years').toDate());
+    const monthBoundary = Utils.toReversedDate(moment().subtract(1, 'months').toDate());
 
     const lastMonthEntries = data.filter(({date}) => date >= monthBoundary);
     const lastMonthData: Record<string, number> = {};

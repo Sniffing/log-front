@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  Spin, Card } from 'antd';
+import {  Spin } from 'antd';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
 
@@ -11,6 +11,8 @@ import { FULFILLED } from 'mobx-utils';
 import { dateFromCalendarRange, echartRangeFromCalendarRange } from './feeling-calendar-helper';
 import { isArray } from 'lodash';
 
+
+import './feeling-calendar-keyword.less';
 export interface ICalendarRange {
   from: {
     year: number,
@@ -38,9 +40,11 @@ export class FeelingCalendar extends Component<IProps> {
 
   private generateHeatMapValues(range: ICalendarRange) {
     const { to, from } = dateFromCalendarRange(range);
+
     return this.props.data
       .filter((k: KeywordEntry) => {
         const date = Utils.dateFromReversedDateString(k.date);
+        console.log('hi', from, to, date);
         if (from > date) {
           return false;
         }
@@ -62,7 +66,10 @@ export class FeelingCalendar extends Component<IProps> {
     return {
       title: {
         left: 'center',
-        text: `${isArray(mapRange) ? mapRange.join(' - ') : mapRange}`
+        text: `${isArray(mapRange) ? mapRange.join(' - ') : mapRange}`,
+        textStyle: {
+          fontSize: 16
+        }
       },
       visualMap: [{
         min: 0,
@@ -71,15 +78,12 @@ export class FeelingCalendar extends Component<IProps> {
         type: 'piecewise',
         orient: 'horizontal',
         left: 'center',
-        top: 65,
-        textStyle: {
-          color: '#000'
-        }
+        show: false,
       }],
       calendar: {
-        left: 30,
-        right: 30,
-        cellSize: ['auto', 14],
+        left: 20,
+        right: 20,
+        top: 45,
         range: mapRange,
         itemStyle: {
           borderWidth: 0.5
@@ -99,9 +103,7 @@ export class FeelingCalendar extends Component<IProps> {
       return <Spin/>;
     }
     return(
-      <Card>
-        <ReactEcharts option={this.getOption(this.props.range)}/>
-      </Card>
+      <ReactEcharts option={this.getOption(this.props.range)} className="calendar"/>
     );
   }
 }

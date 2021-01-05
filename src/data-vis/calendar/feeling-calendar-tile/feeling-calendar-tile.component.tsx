@@ -2,6 +2,7 @@ import { Empty } from 'antd';
 import { range } from 'lodash';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
+import moment from 'moment';
 import React from 'react';
 import { FeelingCalendar, FeelingCalendarView } from '..';
 import { Utils } from '../../../App.utils';
@@ -53,18 +54,24 @@ export class FeelingCalendarTile extends React.Component<IProps> {
 
   private get tileView(): React.ReactNode {
     const {logEntryStore: store} = this.props;
-    const now = new Date();
+    const from = moment().subtract(3,'months').toDate();
+    const to = new Date();
     const loadFail = !store.keywords.length || !store.lastDates.first || !store.lastDates.last;
 
     if (loadFail) {
       return <Empty description=""/>;
     }
 
+
     return (
       <FeelingCalendar logEntryStore={this.props.logEntryStore} data={this.props.logEntryStore.keywords} range={{
         from: {
-          year: now.getFullYear(),
-          month: now.getMonth(),
+          year: from.getFullYear(),
+          month: from.getMonth(),
+        },
+        to: {
+          year: to.getFullYear(),
+          month: to.getMonth(),
         }
       }}/>
     );

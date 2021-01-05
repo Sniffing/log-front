@@ -37,10 +37,17 @@ export class FeelingCalendar extends Component<IProps> {
   private searchTerm = '';
 
   private generateHeatMapValues(range: ICalendarRange) {
-    // const { to, from } = dateFromCalendarRange(range);
+    const { to, from } = dateFromCalendarRange(range);
     return this.props.data
       .filter((k: KeywordEntry) => {
-        return 2000 === Utils.dateFromReversedDateString(k.date).getFullYear();
+        const date = Utils.dateFromReversedDateString(k.date);
+        if (from > date) {
+          return false;
+        }
+        if (to) {
+          return date <= to;
+        }
+        return true;
       })
       .map((k: KeywordEntry) => {
         const date = Utils.dateFromReversedDateString(k.date);

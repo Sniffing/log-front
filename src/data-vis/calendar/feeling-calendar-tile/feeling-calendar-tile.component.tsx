@@ -1,3 +1,4 @@
+import { Empty } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { FeelingCalendarView } from '..';
@@ -11,6 +12,25 @@ interface IProps {
 @inject('logEntryStore')
 @observer
 export class FeelingCalendarTile extends React.Component<IProps> {
+
+  public componentDidMount(): void {
+    this.props.logEntryStore.fetchLastDates();
+    this.props.logEntryStore.fetchKeywords();
+  }
+
+  private get tileView(): React.ReactNode {
+    const {logEntryStore: store} = this.props;
+    const loadFail = !store.keywords.length || !store.lastDates.first || !store.lastDates.last;
+
+    if (loadFail) {
+      return <Empty description=""/>;
+    }
+
+    return (
+      <div>component</div>
+    );
+  }
+
   public render(): React.ReactNode {
     return (
       <ExpandingContainer
@@ -18,7 +38,7 @@ export class FeelingCalendarTile extends React.Component<IProps> {
         expandedComponent={
           <FeelingCalendarView logEntryStore={this.props.logEntryStore}/>
         }>
-        <div>Feelings</div>
+        {this.tileView}
       </ExpandingContainer>
     );
   }

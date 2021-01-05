@@ -2,16 +2,31 @@ import React, { Component } from 'react';
 import {  Spin, Card } from 'antd';
 import { observer, inject } from 'mobx-react';
 import { observable } from 'mobx';
-import { Rejected } from '../../../custom-components';
 
 import { Utils } from '../../../App.utils';
 import { LogEntryStore, KeywordEntry } from '../../../stores/logEntryStore';
 import { EChartOption } from 'echarts';
 import { ReactEcharts } from '../../../custom-components/ReactEcharts';
+import { FULFILLED } from 'mobx-utils';
+import { dateFromCalendarRange, echartRangeFromCalendarRange } from './feeling-calendar-helper';
+import { isArray } from 'lodash';
+
+export interface ICalendarRange {
+  from: {
+    year: number,
+    month?: number,
+    day?: number,
+  },
+  to?: {
+    year: number,
+    month?: number,
+    day?: number,
+  }
+}
 interface IProps {
   logEntryStore?: LogEntryStore;
   data: KeywordEntry[];
-  year: number;
+  range: ICalendarRange;
 }
 
 @inject('logEntryStore')
@@ -21,10 +36,11 @@ export class FeelingCalendar extends Component<IProps> {
   @observable
   private searchTerm = '';
 
-  private generateHeatMapValues(year: number) {
+  private generateHeatMapValues(range: ICalendarRange) {
+    // const { to, from } = dateFromCalendarRange(range);
     return this.props.data
       .filter((k: KeywordEntry) => {
-        return year === Utils.dateFromReversedDateString(k.date).getFullYear();
+        return 2000 === Utils.dateFromReversedDateString(k.date).getFullYear();
       })
       .map((k: KeywordEntry) => {
         const date = Utils.dateFromReversedDateString(k.date);
@@ -33,11 +49,13 @@ export class FeelingCalendar extends Component<IProps> {
       });
   }
 
-  private getOption(year: number): EChartOption<EChartOption.SeriesHeatmap> {
+  private getOption(range: ICalendarRange): EChartOption<EChartOption.SeriesHeatmap> {
+    const mapRange = echartRangeFromCalendarRange(range);
+
     return {
       title: {
         left: 'center',
-        text: `${year}`
+        text: `${isArray(mapRange) ? mapRange.join(' - ') : mapRange}`
       },
       visualMap: [{
         min: 0,
@@ -55,7 +73,7 @@ export class FeelingCalendar extends Component<IProps> {
         left: 30,
         right: 30,
         cellSize: ['auto', 14],
-        range: year,
+        range: mapRange,
         itemStyle: {
           borderWidth: 0.5
         },
@@ -64,19 +82,18 @@ export class FeelingCalendar extends Component<IProps> {
       series: [{
         type: 'heatmap',
         coordinateSystem: 'calendar',
-        data: this.generateHeatMapValues(year),
+        data: this.generateHeatMapValues(range),
       }]
     };
   }
 
   public render(): React.ReactNode {
+    if (this.props.logEntryStore?.fetchingKeywords?.state !== FULFILLED) {
+      return <Spin/>;
+    }
     return(
       <Card>
-        {this.props.logEntryStore?.fetchingKeywords?.case({
-          fulfilled: () => <ReactEcharts option={this.getOption(this.props.year)}/>,
-          pending: () => <Spin/>,
-          rejected: () =>  <Rejected message="Unable to get keywords"/>,
-        })}
+        <ReactEcharts option={this.getOption(this.props.range)}/>
       </Card>
     );
   }

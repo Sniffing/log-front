@@ -6,6 +6,7 @@ import { Utils } from '../../App.utils';
 import { KeywordEntry, LogEntryStore } from '../../stores/logEntryStore';
 import { observer } from 'mobx-react';
 import { FeelingCalendar } from './feeling-calendar/feeling-calendar-keyword';
+import { PENDING } from 'mobx-utils';
 
 interface IProps {
   logEntryStore?: LogEntryStore;
@@ -16,11 +17,6 @@ export class FeelingCalendarView extends React.Component<IProps> {
 
   @observable
   private filterTerms: string[] = [];
-
-  public async componentDidMount(): Promise<void> {
-    this.props.logEntryStore?.fetchLastDates();
-    this.props.logEntryStore?.fetchKeywords();
-  }
 
   @computed
   private get calendars() {
@@ -39,7 +35,7 @@ export class FeelingCalendarView extends React.Component<IProps> {
 
     return (
       <div>
-        {years.map(year => <FeelingCalendar key={year} data={this.getData(year)} year={year}/>)}
+        {years.map(year => <FeelingCalendar key={year} data={this.getData(year)} range={{from: {year}}}/>)}
       </div>
     );
   }
@@ -73,6 +69,10 @@ export class FeelingCalendarView extends React.Component<IProps> {
   }
 
   public render(): React.ReactNode {
+    if (this.props.logEntryStore?.fetchingDates?.state === PENDING) {
+      return <Spin/>;
+    }
+
     return (
       <div className="calendar-page">
         <Select mode="multiple" style={{width: '40%'}} allowClear onChange={this.handleFilterChange}>
@@ -82,11 +82,7 @@ export class FeelingCalendarView extends React.Component<IProps> {
             </Select.Option>
           ))}
         </Select>
-        {this.props.logEntryStore?.fetchingDates?.case({
-          fulfilled: () => this.calendars,
-          pending: () => <Spin/>,
-          rejected: () => <Rejected message="Unable to fetch entries"/>,
-        })}
+        {this.calendars}
       </div>
     );
   }

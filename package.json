@@ -21,7 +21,7 @@
     "ajv": "^6.12.2",
     "antd": "^4.9.2",
     "autoprefixer": "^9.8.6",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "craco-antd": "^1.19.0",
     "craco-less": "^1.17.1",
     "csv-reader": "^1.0.6",
